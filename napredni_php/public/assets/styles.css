@@ -1,0 +1,17 @@
+body{
+    height: 100%;
+}
+
+.table-action-col{
+    width: 7rem;
+}
+
+.vh-100-min{
+    min-height: 100vh !important;
+}
+
+.flex-between{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
