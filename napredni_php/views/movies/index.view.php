@@ -22,8 +22,8 @@
                 <th>Naslov</th>
                 <th>Godina</th>
                 <th>Žanr</th>
-                <th>Tip</th>
                 <th>Medij</th>
+                <th>Tip</th>
                 <th class="table-action-col"></th>
             </tr>
         </thead>

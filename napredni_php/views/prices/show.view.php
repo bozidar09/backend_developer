@@ -42,6 +42,44 @@
         <a href="/prices" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Svi tipovi filma"><i class="bi bi-arrow-return-left"></i></a>
         <a href="/prices/edit?id=<?= $price['id'] ?>" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Uredi tip filma"><i class="bi bi-pencil"></i></a>
     </div>
+    <hr>
+    <h2><?= $price['tip_filma'] ?> filmovi</h2>
+    <div class="overflow-auto">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Naslov</th>
+                    <th>Godina</th>
+                    <th>Žanr</th>
+                    <th>Medij</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($movies as $movie): ?>
+                    <tr>
+                        <td><?= $movie['id'] ?></td>
+                        <td><a href="/movies/show?id=<?= $movie['id'] ?>"><?= $movie['naslov'] ?></a></td>
+                        <td><?= $movie['godina'] ?></td>
+                        <td><?= $movie['zanr'] ?></td>
+                        <td>
+                            <?php foreach ($movie['medij'] as $medij): ?>
+                                <?php 
+                                    $medijIcon = match ($medij) {
+                                        'DVD' => 'disc-fill text-warning',
+                                        'Blu-ray' => 'disc text-primary',
+                                        'VHS' => 'cassette-fill text-success',
+                                        default => ''
+                                    }; 
+                                ?>
+                                <span class="badge text-bg-light float-start"><i class="bi bi-<?= $medijIcon ?> me-1"></i><?= $medij ?></span>
+                            <?php endforeach ?>
+                        </td>
+                    </tr>
+                <?php endforeach ?>
+            </tbody>
+        </table>
+    </div>
 </main>
 
 <?php include_once basePath('views/partials/footer.php') ?>

@@ -68,6 +68,30 @@
         <a href="/movies" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Svi filmovi"><i class="bi bi-arrow-return-left"></i></a>
         <a href="/movies/edit?id=<?= $movie['id'] ?>" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Uredi film"><i class="bi bi-pencil"></i></a>
     </div>
+    <hr>
+    <h2><?= $movie['naslov'] ?> kopije</h2>
+    <div class="overflow-auto">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Barkod</th>
+                    <th>Medij</th>
+                    <th>Dostupan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($copies as $copy): ?>
+                    <tr>
+                        <td><?= $copy['id'] ?></td>
+                        <td><a href="/copies/show?id=<?= $copy['id'] ?>"><?= $copy['barcode'] ?></a></td>
+                        <td><?= $copy['medij'] ?></td>
+                        <td><?= $copy['dostupan'] ?></td>
+                    </tr>
+                <?php endforeach ?>
+            </tbody>
+        </table>
+
 </main>
 
 <?php include_once basePath('views/partials/footer.php') ?>

@@ -66,6 +66,38 @@
         <a href="/members" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Svi članovi"><i class="bi bi-arrow-return-left"></i></a>
         <a href="/members/edit?id=<?= $member['id'] ?>" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Uredi člana"><i class="bi bi-pencil"></i></a>
     </div>
+    <hr>
+    <h2><?= $member['ime'] ?> <?= $member['prezime'] ?> trenutne posudbe</h2>
+    <div class="overflow-auto">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Datum</th>
+                    <th>Naslov</th>
+                    <th>Godina</th>
+                    <th>Žanr</th>
+                    <th>Medij</th>
+                    <th>Cijena</th>
+                    <th>Zakasnina</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($rentals as $rental): ?>
+                    <tr>
+                        <td><?= $rental['id'] ?></td>
+                        <td><a href="/rentals/show?id=<?= $rental['id'] ?>"><?= $rental['datum'] ?></a></td>
+                        <td><?= $rental['naslov'] ?></td>
+                        <td><?= $rental['godina'] ?></td>
+                        <td><?= $rental['zanr'] ?></td>
+                        <td><?= $rental['medij'] ?></td>
+                        <td><?= $rental['cijena'] ?></td>
+                        <td><?= $rental['zakasnina'] ?></td>
+                    </tr>
+                <?php endforeach ?>
+            </tbody>
+        </table>
+    </div>
 </main>
 
 <?php include_once basePath('views/partials/footer.php') ?>

@@ -34,6 +34,34 @@
         <a href="/media" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Svi mediji"><i class="bi bi-arrow-return-left"></i></a>
         <a href="/media/edit?id=<?= $media['id'] ?>" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Uredi medij"><i class="bi bi-pencil"></i></a>
     </div>
+    <hr>
+    <h2><?= $media['tip'] ?> filmovi</h2>
+    <div class="overflow-auto">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Naslov</th>
+                    <th>Godina</th>
+                    <th>Žanr</th>
+                    <th>Tip</th>
+                    <th>Količina</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($movies as $movie): ?>
+                    <tr>
+                        <td><?= $movie['id'] ?></td>
+                        <td><a href="/movies/show?id=<?= $movie['id'] ?>"><?= $movie['naslov'] ?></a></td>
+                        <td><?= $movie['godina'] ?></td>
+                        <td><?= $movie['zanr'] ?></td>
+                        <td><?= $movie['tip'] ?></td>
+                        <td><?= $movie['kolicina'] ?></td>
+                    </tr>
+                <?php endforeach ?>
+            </tbody>
+        </table>
+    </div>
 </main>
 
 <?php include_once basePath('views/partials/footer.php') ?>
