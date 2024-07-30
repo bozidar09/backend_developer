@@ -19,13 +19,13 @@
             <a href="/movies" class="nav-link text-white link-primary <?= setSidebarClass('movies') ?>" aria-current="<?= setAriaCurrent('members') ?>"><i class="bi bi-film me-2"></i>Filmovi</a>
         </li>
         <li class="nav-item">
-            <a href="/prices" class="nav-link text-white link-primary <?= setSidebarClass('prices') ?>" aria-current="<?= setAriaCurrent('members') ?>"><i class="bi bi-receipt me-2"></i>Cjenik</a>
+            <a href="/prices" class="nav-link text-white link-primary <?= setSidebarClass('prices') ?>" aria-current="<?= setAriaCurrent('members') ?>"><i class="bi bi-currency-euro me-2"></i>Cjenik</a>
         </li>
         <li class="nav-item">
             <a href="/media" class="nav-link text-white link-primary <?= setSidebarClass('media') ?>" aria-current="<?= setAriaCurrent('members') ?>"><i class="bi bi-disc me-2"></i>Mediji</a>
         </li>
         <li class="nav-item">
-            <a href="/rentals" class="nav-link text-white link-primary <?= setSidebarClass('rentals') ?>" aria-current="<?= setAriaCurrent('members') ?>"><i class="bi bi-list-ul me-2"></i>Posudbe</a>
+            <a href="/rentals" class="nav-link text-white link-primary <?= setSidebarClass('rentals') ?>" aria-current="<?= setAriaCurrent('members') ?>"><i class="bi bi-credit-card me-2"></i>Posudbe</a>
         </li>
         <li class="nav-item">
             <a href="/amount" class="nav-link text-white link-primary <?= setSidebarClass('amount') ?>" aria-current="<?= setAriaCurrent('members') ?>"><i class="bi bi-stack me-2"></i>Količine</a>

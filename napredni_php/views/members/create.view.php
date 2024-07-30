@@ -50,8 +50,8 @@
             </div>
         </div>
         <div class="col-auto">
-            <a href="/members" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Svi članovi"><i class="bi bi-arrow-return-left"></i></a>
-            <button class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Spremi člana"><i class="bi bi-floppy"></i></button>
+            <a href="/members" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Povratak"><i class="bi bi-arrow-return-left"></i></a>
+            <button class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Spremi"><i class="bi bi-floppy"></i></button>
         </div>
     </form>
 </main>

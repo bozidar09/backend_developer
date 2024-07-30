@@ -65,11 +65,17 @@
     </form>
     <hr>
     <div class="col-2">
-        <a href="/movies" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Svi filmovi"><i class="bi bi-arrow-return-left"></i></a>
-        <a href="/movies/edit?id=<?= $movie['id'] ?>" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Uredi film"><i class="bi bi-pencil"></i></a>
+        <a href="/movies" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Povratak"><i class="bi bi-arrow-return-left"></i></a>
+        <a href="/movies/edit?id=<?= $movie['id'] ?>" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Uredi"><i class="bi bi-pencil"></i></a>
+        <form id="delete-form" class="hidden d-inline" method="POST" action="/movies/destroy">
+            <input type="hidden" name="_method" value="DELETE">
+            <input type="hidden" name="id" value="<?= $movie['id'] ?>">
+            <button class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Izbriši"><i class="bi bi-trash"></i></button>
+        </form>
     </div>
     <hr>
     <h2><?= $movie['naslov'] ?> kopije</h2>
+    <hr>
     <div class="overflow-auto">
         <table class="table table-striped">
             <thead>

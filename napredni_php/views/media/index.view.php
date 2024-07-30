@@ -4,7 +4,7 @@
     <div class="title flex-between">    
         <h1>Mediji</h1>
         <div class="action-buttons">
-            <a href="/media/create" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Dodaj medij"><i class="bi bi-plus-lg"></i></a>
+            <a href="/media/create" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Dodaj"><i class="bi bi-plus-lg"></i></a>
         </div>
     </div>
     <?php if (!empty($message)): ?>
@@ -31,11 +31,11 @@
                     <td><a href="/media/show?id=<?= $media['id'] ?>"><?= $media['tip'] ?></a></td>
                     <td><?= $media['koeficijent'] ?></td>
                     <td>
-                        <a href="/media/edit?id=<?= $media['id'] ?>" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Uredi medij"><i class="bi bi-pencil"></i></a>
+                        <a href="/media/edit?id=<?= $media['id'] ?>" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Uredi"><i class="bi bi-pencil"></i></a>
                         <form id="delete-form" class="hidden d-inline" method="POST" action="/media/destroy">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="id" value="<?= $media['id'] ?>">
-                            <button class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Izbriši medij"><i class="bi bi-trash"></i></button>
+                            <button class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Izbriši"><i class="bi bi-trash"></i></button>
                         </form>
                     </td>
                 </tr>

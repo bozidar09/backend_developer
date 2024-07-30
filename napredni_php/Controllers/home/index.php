@@ -27,6 +27,7 @@ const QUERY = [
         => "SELECT
                 f.naslov AS naslov_filma,
                 f.godina AS godina_filma,
+                z.id AS zanr_id,
                 z.ime AS zanr,
                 c.tip_filma
             FROM

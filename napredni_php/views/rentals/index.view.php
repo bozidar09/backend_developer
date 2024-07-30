@@ -4,7 +4,7 @@
     <div class="title flex-between">    
         <h1>Posudbe</h1>
         <div class="action-buttons">
-            <a href="/rentals/create" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Dodaj posudbu"><i class="bi bi-plus-lg"></i></a>
+            <a href="/rentals/create" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Dodaj"><i class="bi bi-plus-lg"></i></a>
         </div>
     </div>
     <?php if (!empty($message)): ?>
@@ -43,11 +43,11 @@
                     <td><?= $rental['cijena'] ?></td>
                     <td><?= $rental['zakasnina'] ?></td>
                     <td>
-                        <a href="/rentals/edit" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Uredi posudbu"><i class="bi bi-pencil"></i></a>
+                        <a href="/rentals/edit" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Uredi"><i class="bi bi-pencil"></i></a>
                         <form id="delete-form" class="hidden d-inline" method="POST" action="/rentals/destroy">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="id" value="<?= $rental['id'] ?>">
-                            <button class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Izbriši posudbu"><i class="bi bi-trash"></i></button>
+                            <button class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Izbriši"><i class="bi bi-trash"></i></button>
                         </form>
                     </td>
                 </tr>

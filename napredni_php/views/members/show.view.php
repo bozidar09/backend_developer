@@ -63,11 +63,17 @@
     </form>
     <hr>
     <div class="col-2">
-        <a href="/members" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Svi članovi"><i class="bi bi-arrow-return-left"></i></a>
-        <a href="/members/edit?id=<?= $member['id'] ?>" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Uredi člana"><i class="bi bi-pencil"></i></a>
+        <a href="/members" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Povratak"><i class="bi bi-arrow-return-left"></i></a>
+        <a href="/members/edit?id=<?= $member['id'] ?>" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Uredi"><i class="bi bi-pencil"></i></a>
+        <form id="delete-form" class="hidden d-inline" method="POST" action="/members/destroy">
+            <input type="hidden" name="_method" value="DELETE">
+            <input type="hidden" name="id" value="<?= $member['id'] ?>">
+            <button class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Izbriši"><i class="bi bi-trash"></i></button>
+        </form>
     </div>
     <hr>
     <h2><?= $member['ime'] ?> <?= $member['prezime'] ?> trenutne posudbe</h2>
+    <hr>
     <div class="overflow-auto">
         <table class="table table-striped">
             <thead>

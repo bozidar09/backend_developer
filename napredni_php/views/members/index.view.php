@@ -4,7 +4,7 @@
     <div class="title flex-between">
         <h1>Članovi</h1>
         <div class="action-buttons">
-            <a href="/members/create" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Dodaj člana"><i class="bi bi-person-plus"></i></a>
+            <a href="/members/create" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Dodaj"><i class="bi bi-person-plus"></i></a>
         </div>
     </div>
     <?php if (!empty($message)): ?>
@@ -37,11 +37,11 @@
                     <td><?= $member['telefon'] ?></td>
                     <td><?= $member['email'] ?></td>
                     <td>
-                        <a href="/members/edit?id=<?= $member['id'] ?>" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Uredi člana"><i class="bi bi-pencil"></i></a>
+                        <a href="/members/edit?id=<?= $member['id'] ?>" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Uredi"><i class="bi bi-pencil"></i></a>
                         <form id="delete-form" class="hidden d-inline" method="POST" action="/members/destroy">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="id" value="<?= $member['id'] ?>">
-                            <button class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Izbriši člana"><i class="bi bi-trash"></i></button>
+                            <button class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Izbriši"><i class="bi bi-trash"></i></button>
                         </form>
                     </td>
                 </tr>

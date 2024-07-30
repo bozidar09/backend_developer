@@ -66,11 +66,6 @@ class Database
         }
         return $data;
     }
-    
-    public function lastId()
-    {
-        return $this->pdo->lastInsertId();
-    }
 
     public function connection()
     {

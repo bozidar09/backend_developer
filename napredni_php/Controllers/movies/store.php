@@ -13,6 +13,9 @@ $postData = [
     'godina' => $_POST['year'] ?? null,
     'zanr_id' => $_POST['genre'] ?? null,
     'cjenik_id' => $_POST['movie_type'] ?? null,
+    'DVD' => $_POST['dvd'] ?? null,
+    'Blu-ray' => $_POST['blu-ray'] ?? null,
+    'VHS' => $_POST['vhs'] ?? null,
 ];
 
 $rules = [
@@ -20,6 +23,9 @@ $rules = [
     'godina' => ['required', 'numeric', 'max:4', 'min:4'],
     'zanr_id' => ['required', 'exists:zanrovi,id', 'numeric'],
     'cjenik_id' => ['required', 'exists:cjenik,id', 'numeric'],
+    'DVD' => ['numeric', 'max:2'],
+    'Blu-ray' => ['numeric', 'max:2'],
+    'VHS' => ['numeric', 'max:2'],
 ];
 
 $form = new Validator($rules, $postData);
@@ -33,18 +39,55 @@ $data = $form->getData();
 
 $db = Database::get();
 
-$sql = "INSERT INTO filmovi (naslov, godina, zanr_id, cjenik_id) VALUES (:naslov, :godina, :zanr, :tip)";
+$db->connection()->beginTransaction();
 
-$db->query($sql, [
+const QUERY = [
+'movie' => "INSERT INTO filmovi (naslov, godina, zanr_id, cjenik_id) VALUES (:naslov, :godina, :zanr, :tip)",
+'media' => "SELECT * FROM mediji",
+'copy' => "INSERT INTO kopija (barcode, film_id, medij_id) VALUES ",
+];
+
+$db->query(QUERY['movie'], [
     'naslov' => $data['naslov'], 
     'godina' => $data['godina'], 
     'zanr' => $data['zanr_id'], 
     'tip' => $data['cjenik_id'],
 ]);
 
+$movieId = $db->connection()->lastInsertId();
+
+$copies = array_slice($data, 4);
+
+$media = $db->query(QUERY['media'])->all();
+foreach ($media as $key => $elements) {
+    $mediaType[] = $elements['tip'];
+}
+$media = array_combine($mediaType, $media);
+
+foreach ($copies as $key => $amount) {
+    $sql = QUERY['copy'];
+
+    if (isset($copies[$key])) {       
+        $barcode = mb_strtoupper($data['naslov'] . '_' . $key . '1');
+        $mediaId = $media[$key]['id'];
+
+        for ($i=1; $i < $amount; $i++) { 
+            $sql .= "(:barcode, :film, :medij),";
+        }
+        $sql .= "(:barcode, :film, :medij)";
+    }
+    $db->query($sql, [
+        'barcode' => $barcode,
+        'film' => $movieId,
+        'medij' => $mediaId,
+    ]);
+};
+
+$db->connection()->commit();
+
 Session::flash('message', [
     'type' => 'success',
-    'message' => "Uspješno kreiran film {$data['naslov']} {$data['godina']}."
+    'message' => "Uspješno kreiran film {$data['naslov']} {$data['godina']} i sve kopije."
 ]);
 
 redirect('movies');

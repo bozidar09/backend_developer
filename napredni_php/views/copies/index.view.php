@@ -4,7 +4,7 @@
     <div class="title flex-between">    
         <h1>Kopije</h1>
         <div class="action-buttons">
-            <a href="/copies/create" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Dodaj kopiju"><i class="bi bi-plus-lg"></i></a>
+            <a href="/copies/create" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Dodaj"><i class="bi bi-plus-lg"></i></a>
         </div>
     </div>
     <?php if (!empty($message)): ?>
@@ -35,11 +35,11 @@
                     <td><?= $copy['medij'] ?></td>
                     <td><?= $copy['dostupan'] ?></td>
                     <td>
-                        <a href="/copies/edit" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Uredi kopiju"><i class="bi bi-pencil"></i></a>
+                        <a href="/copies/edit" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Uredi"><i class="bi bi-pencil"></i></a>
                         <form id="delete-form" class="hidden d-inline" method="POST" action="/copies/destroy">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="id" value="<?= $copy['id'] ?>">
-                            <button class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Izbriši kopiju"><i class="bi bi-trash"></i></button>
+                            <button class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Izbriši"><i class="bi bi-trash"></i></button>
                         </form>
                     </td>
                 </tr>

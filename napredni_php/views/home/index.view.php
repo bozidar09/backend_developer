@@ -15,7 +15,7 @@
                     <?php endforeach ?>
                 </ul>
                 <div class="action-buttons">
-                    <a href="/home/popular_movies" class="btn btn-outline-secondary">Vidi sve!</a>
+                    <a href="/movies" class="btn btn-outline-secondary">Vidi sve!</a>
                 </div>
             </div>
         </div>             
@@ -42,7 +42,7 @@
                                 <?php endforeach ?>
                             </ul>
                             <div class="action-buttons">
-                                <a href="/home/movies_genre?id=<?= $key ?>" type="submit" class="btn <?= $isEven ? 'btn-outline-light' : 'btn-outline-secondary' ?>">Vidi više!</a>
+                                <a href="/genres/show?id=<?= $movie['zanr_id'] ?>" type="submit" class="btn <?= $isEven ? 'btn-outline-light' : 'btn-outline-secondary' ?>">Vidi više!</a>
                             </div>
                         </div>
                     <?php endforeach ?>

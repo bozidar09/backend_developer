@@ -51,9 +51,37 @@
                 <span class="text-danger small"><?= $errors['cjenik_id'] ?? '' ?></span>
             </div>
         </div>
+        <hr>
+        <div class="row mt-3">
+            <div class="col-1">
+                <label for="dvd" class="mt-1">DVD količina</label>
+            </div>
+            <div class="col-6">
+                <input type="text" class="form-control" id="dvd" name="dvd" value="<?= $data['dvd'] ?? '' ?>">
+                <span class="text-danger small"><?= $errors['dvd'] ?? '' ?></span>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-1">
+                <label for="blu-ray" class="mt-1">Blu-ray količina</label>
+            </div>
+            <div class="col-6">
+                <input type="text" class="form-control" id="blu-ray" name="blu-ray" value="<?= $data['blu-ray'] ?? '' ?>">
+                <span class="text-danger small"><?= $errors['blu-ray'] ?? '' ?></span>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-1">
+                <label for="vhs" class="mt-1">VHS količina</label>
+            </div>
+            <div class="col-6">
+                <input type="text" class="form-control" id="vhs" name="vhs" value="<?= $data['vhs'] ?? '' ?>">
+                <span class="text-danger small"><?= $errors['vhs'] ?? '' ?></span>
+            </div>
+        </div>
         <div class="col-auto">
-            <a href="/movies" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Svi filmovi"><i class="bi bi-arrow-return-left"></i></a>
-            <button class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Spremi film"><i class="bi bi-floppy"></i></button>
+            <a href="/movies" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Povratak"><i class="bi bi-arrow-return-left"></i></a>
+            <button class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Spremi"><i class="bi bi-floppy"></i></button>
         </div>
     </form>
 </main>

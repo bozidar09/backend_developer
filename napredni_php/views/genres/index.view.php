@@ -4,7 +4,7 @@
     <div class="title flex-between">
         <h1>Žanrovi</h1>
         <div class="action-buttons">
-            <a href="/genres/create" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Dodaj žanr"><i class="bi bi-plus-lg"></i></a>
+            <a href="/genres/create" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Dodaj"><i class="bi bi-plus-lg"></i></a>
         </div>
     </div>
     <?php if (!empty($message)): ?>
@@ -29,11 +29,11 @@
                     <td><?= $genre['id'] ?></td>
                     <td><a href="/genres/show?id=<?= $genre['id'] ?>"><?= $genre['ime'] ?></a></td>
                     <td>
-                        <a href="/genres/edit?id=<?= $genre['id'] ?>" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Uredi žanr"><i class="bi bi-pencil"></i></a>
+                        <a href="/genres/edit?id=<?= $genre['id'] ?>" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Uredi"><i class="bi bi-pencil"></i></a>
                         <form id="delete-form" class="hidden d-inline" method="POST" action="/genres/destroy">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="id" value="<?= $genre['id'] ?>">
-                            <button class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Izbriši žanr"><i class="bi bi-trash"></i></button>
+                            <button class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Izbriši"><i class="bi bi-trash"></i></button>
                         </form>
                     </td>
                 </tr>
