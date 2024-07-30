@@ -206,7 +206,7 @@ CREATE TABLE IF NOT EXISTS `kopija` (
   `medij_id` int UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`,`barcode`),
-  FOREIGN KEY (`film_id`) REFERENCES filmovi(id),
+  FOREIGN KEY (`film_id`) REFERENCES filmovi(id) ON DELETE CASCADE,
   FOREIGN KEY (`medij_id`) REFERENCES mediji(id)
 )  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
