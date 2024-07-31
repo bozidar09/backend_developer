@@ -32,6 +32,7 @@
                 <span class="text-danger small"><?= $errors['zakasnina_po_danu'] ?? '' ?></span>
             </div>
         </div>
+        <hr>
         <div class="col-auto">
             <a href="/prices" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Povratak"><i class="bi bi-arrow-return-left"></i></a>
             <button class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Spremi"><i class="bi bi-floppy"></i></button>

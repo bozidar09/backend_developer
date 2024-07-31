@@ -3,6 +3,16 @@
 return [
     // home
     '/' => 'Controllers/home/index.php',
+    // dashboard
+    '/dashboard' => 'Controllers/dashboard/index.php',
+    // rentals
+    '/rentals' => 'Controllers/rentals/index.php',
+    '/rentals/show' => 'Controllers/rentals/show.php',
+    '/rentals/create' => 'Controllers/rentals/create.php',
+    '/rentals/store' => 'Controllers/rentals/store.php',
+    '/rentals/edit' => 'Controllers/rentals/edit.php',
+    '/rentals/update' => 'Controllers/rentals/update.php',
+    '/rentals/destroy' => 'Controllers/rentals/destroy.php',
     // members
     '/members' => 'Controllers/members/index.php',
     '/members/show' => 'Controllers/members/show.php',
@@ -11,14 +21,6 @@ return [
     '/members/edit' => 'Controllers/members/edit.php',
     '/members/update' => 'Controllers/members/update.php',
     '/members/destroy' => 'Controllers/members/destroy.php',
-    // genres
-    '/genres' => 'Controllers/genres/index.php',
-    '/genres/show' => 'Controllers/genres/show.php',
-    '/genres/create' => 'Controllers/genres/create.php',
-    '/genres/store' => 'Controllers/genres/store.php',
-    '/genres/edit' => 'Controllers/genres/edit.php',
-    '/genres/update' => 'Controllers/genres/update.php',
-    '/genres/destroy' => 'Controllers/genres/destroy.php',
     // movies
     '/movies' => 'Controllers/movies/index.php',
     '/movies/show' => 'Controllers/movies/show.php',
@@ -27,6 +29,14 @@ return [
     '/movies/edit' => 'Controllers/movies/edit.php',
     '/movies/update' => 'Controllers/movies/update.php',
     '/movies/destroy' => 'Controllers/movies/destroy.php',
+    // genres
+    '/genres' => 'Controllers/genres/index.php',
+    '/genres/show' => 'Controllers/genres/show.php',
+    '/genres/create' => 'Controllers/genres/create.php',
+    '/genres/store' => 'Controllers/genres/store.php',
+    '/genres/edit' => 'Controllers/genres/edit.php',
+    '/genres/update' => 'Controllers/genres/update.php',
+    '/genres/destroy' => 'Controllers/genres/destroy.php',
     // prices
     '/prices' => 'Controllers/prices/index.php',
     '/prices/show' => 'Controllers/prices/show.php',
@@ -43,22 +53,6 @@ return [
     '/media/edit' => 'Controllers/media/edit.php',
     '/media/update' => 'Controllers/media/update.php',
     '/media/destroy' => 'Controllers/media/destroy.php',
-    // rentals
-    '/rentals' => 'Controllers/rentals/index.php',
-    '/rentals/show' => 'Controllers/rentals/show.php',
-    '/rentals/create' => 'Controllers/rentals/create.php',
-    '/rentals/store' => 'Controllers/rentals/store.php',
-    '/rentals/edit' => 'Controllers/rentals/edit.php',
-    '/rentals/update' => 'Controllers/rentals/update.php',
-    '/rentals/destroy' => 'Controllers/rentals/destroy.php',
-    // amount
-    '/amount' => 'Controllers/amount/index.php',
-    '/amount/show' => 'Controllers/amount/show.php',
-    '/amount/create' => 'Controllers/amount/create.php',
-    '/amount/store' => 'Controllers/amount/store.php',
-    '/amount/edit' => 'Controllers/amount/edit.php',
-    '/amount/update' => 'Controllers/amount/update.php',
-    '/amount/destroy' => 'Controllers/amount/destroy.php',
     // copies
     '/copies' => 'Controllers/copies/index.php',
     '/copies/show' => 'Controllers/copies/show.php',

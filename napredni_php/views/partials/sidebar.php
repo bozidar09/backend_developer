@@ -10,25 +10,28 @@
             <a href="/" class="nav-link text-white link-primary" aria-current=""><i class="bi bi-house me-2"></i>Home</a>
         </li>
         <li class="nav-item">
+            <a href="/dashboard" class="nav-link text-white link-primary <?= setSidebarClass('dashboard') ?>" aria-current="<?= setAriaCurrent('members') ?>"><i class="bi bi-clipboard-pulse me-2"></i>Nadzorna ploča</a>
+        </li>
+        <li class="nav-item">
+            <a href="/rentals" class="nav-link text-white link-primary <?= setSidebarClass('rentals') ?>" aria-current="<?= setAriaCurrent('rentals') ?>"><i class="bi bi-credit-card me-2"></i>Posudbe</a>
+        </li>
+        <li class="nav-item">
             <a href="/members" class="nav-link text-white link-primary <?= setSidebarClass('members') ?>" aria-current="<?= setAriaCurrent('members') ?>"><i class="bi bi-person-circle me-2"></i>Članovi</a>
         </li>
         <li class="nav-item">
-            <a href="/genres" class="nav-link text-white link-primary <?= setSidebarClass('genres') ?>" aria-current="<?= setAriaCurrent('members') ?>"><i class="bi bi-camera-reels me-2"></i>Žanrovi</a>
+            <a href="/movies" class="nav-link text-white link-primary <?= setSidebarClass('movies') ?>" aria-current="<?= setAriaCurrent('movies') ?>"><i class="bi bi-film me-2"></i>Filmovi</a>
         </li>
         <li class="nav-item">
-            <a href="/movies" class="nav-link text-white link-primary <?= setSidebarClass('movies') ?>" aria-current="<?= setAriaCurrent('members') ?>"><i class="bi bi-film me-2"></i>Filmovi</a>
+            <a href="/genres" class="nav-link text-white link-primary <?= setSidebarClass('genres') ?>" aria-current="<?= setAriaCurrent('genres') ?>"><i class="bi bi-camera-reels me-2"></i>Žanrovi</a>
         </li>
         <li class="nav-item">
-            <a href="/prices" class="nav-link text-white link-primary <?= setSidebarClass('prices') ?>" aria-current="<?= setAriaCurrent('members') ?>"><i class="bi bi-currency-euro me-2"></i>Cjenik</a>
+            <a href="/prices" class="nav-link text-white link-primary <?= setSidebarClass('prices') ?>" aria-current="<?= setAriaCurrent('prices') ?>"><i class="bi bi-currency-euro me-2"></i>Cjenik</a>
         </li>
         <li class="nav-item">
-            <a href="/media" class="nav-link text-white link-primary <?= setSidebarClass('media') ?>" aria-current="<?= setAriaCurrent('members') ?>"><i class="bi bi-disc me-2"></i>Mediji</a>
+            <a href="/media" class="nav-link text-white link-primary <?= setSidebarClass('media') ?>" aria-current="<?= setAriaCurrent('media') ?>"><i class="bi bi-disc me-2"></i>Mediji</a>
         </li>
         <li class="nav-item">
-            <a href="/rentals" class="nav-link text-white link-primary <?= setSidebarClass('rentals') ?>" aria-current="<?= setAriaCurrent('members') ?>"><i class="bi bi-credit-card me-2"></i>Posudbe</a>
-        </li>
-        <li class="nav-item">
-            <a href="/amount" class="nav-link text-white link-primary <?= setSidebarClass('amount') ?>" aria-current="<?= setAriaCurrent('members') ?>"><i class="bi bi-stack me-2"></i>Količine</a>
+            <a href="/copies" class="nav-link text-white link-primary <?= setSidebarClass('copies') ?>" aria-current="<?= setAriaCurrent('copies') ?>"><i class="bi bi-stack me-2"></i>Količine</a>
         </li>
     </ul>
 

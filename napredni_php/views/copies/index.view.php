@@ -2,7 +2,7 @@
 
 <main class="container my-3 d-flex flex-column flex-grow-1">
     <div class="title flex-between">    
-        <h1>Kopije</h1>
+        <h1>Količine</h1>
         <div class="action-buttons">
             <a href="/copies/create" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Dodaj"><i class="bi bi-plus-lg"></i></a>
         </div>
@@ -22,26 +22,17 @@
                 <th>Naslov</th>
                 <th>Barkod</th>
                 <th>Medij</th>
-                <th>Dostupan</th>
-                <th class="table-action-col"></th>
+                <th>Količina</th>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($copies as $copy): ?>
+            <?php foreach ($amountAll as $amount): ?>
                 <tr>
-                    <td><?= $copy['id'] ?></td>
-                    <td><a href="/copies/show?id=<?= $copy['id'] ?>"><?= $copy['naslov'] ?></a></td>
-                    <td><?= $copy['barcode'] ?></td>
-                    <td><?= $copy['medij'] ?></td>
-                    <td><?= $copy['dostupan'] ?></td>
-                    <td>
-                        <a href="/copies/edit" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Uredi"><i class="bi bi-pencil"></i></a>
-                        <form id="delete-form" class="hidden d-inline" method="POST" action="/copies/destroy">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <input type="hidden" name="id" value="<?= $copy['id'] ?>">
-                            <button class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Izbriši"><i class="bi bi-trash"></i></button>
-                        </form>
-                    </td>
+                    <td><?= $amount['id'] ?></td>
+                    <td><a href="/copies/show?barcode=<?= $amount['barcode'] ?>&medij=<?= $amount['medij'] ?>"><?= $amount['naslov'] ?></a></td>
+                    <td><?= $amount['barcode'] ?></td>
+                    <td><?= $amount['medij'] ?></td>
+                    <td><?= $amount['kolicina'] ?></td>
                 </tr>
             <?php endforeach ?>
         </tbody>

@@ -9,7 +9,7 @@ $db = Database::get();
 
 $sql = "SELECT * FROM mediji ORDER BY tip";
 
-$media_all = $db->query($sql)->all();
+$mediaAll = $db->query($sql)->all();
 
 $message = Session::all('message');
 Session::unflash();

@@ -9,20 +9,14 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $postData = [
-    'naslov' => $_POST['title'] ?? null,
-    'godina' => $_POST['year'] ?? null,
-    'zanr_id' => $_POST['genre'] ?? null,
-    'cjenik_id' => $_POST['movie_type'] ?? null,
+    'film_id' => $_POST['movie'] ?? null,
     'DVD' => $_POST['dvd'] ?? null,
     'Blu-ray' => $_POST['blu-ray'] ?? null,
     'VHS' => $_POST['vhs'] ?? null,
 ];
 
 $rules = [
-    'naslov' => ['required', 'string', 'max:100', 'uniqueMovie:filmovi,' . $_POST['year']],
-    'godina' => ['required', 'numeric', 'max:4', 'min:4'],
-    'zanr_id' => ['required', 'exists:zanrovi,id', 'numeric'],
-    'cjenik_id' => ['required', 'exists:cjenik,id', 'numeric'],
+    'film_id' => ['required', 'exists:filmovi,id', 'numeric'],
     'DVD' => ['numeric', 'max:2'],
     'Blu-ray' => ['numeric', 'max:2'],
     'VHS' => ['numeric', 'max:2'],
@@ -39,24 +33,12 @@ $data = $form->getData();
 
 $db = Database::get();
 
-$db->connection()->beginTransaction();
-
 const QUERY = [
-'movie' => "INSERT INTO filmovi (naslov, godina, zanr_id, cjenik_id) VALUES (:naslov, :godina, :zanr, :tip)",
-'media' => "SELECT * FROM mediji",
-'copy' => "INSERT INTO kopija (barcode, film_id, medij_id) VALUES ",
+    'media' => "SELECT * FROM mediji",
+    'copy' => "INSERT INTO kopija (barcode, film_id, medij_id) VALUES ",
 ];
 
-$db->query(QUERY['movie'], [
-    'naslov' => $data['naslov'], 
-    'godina' => $data['godina'], 
-    'zanr' => $data['zanr_id'], 
-    'tip' => $data['cjenik_id'],
-]);
-
-$movieId = $db->connection()->lastInsertId();
-
-$copies = array_slice($data, 4);
+$copies = array_slice($data, 1);
 
 $media = $db->query(QUERY['media'])->all();
 foreach ($media as $key => $elements) {
@@ -66,11 +48,11 @@ $media = array_combine($mediaType, $media);
 
 foreach ($copies as $key => $amount) {
     $sql = QUERY['copy'];
-    $barcode = mb_strtoupper($data['naslov'] . '_' . $key . '1');
-    $mediaId = $media[$key]['id'];
 
     if (isset($copies[$key])) {       
-        
+        $barcode = mb_strtoupper($data['naslov'] . '_' . $key . '1');
+        $mediaId = $media[$key]['id'];
+
         for ($i=1; $i < $amount; $i++) { 
             $sql .= "(:barcode, :film, :medij),";
         }
@@ -78,17 +60,15 @@ foreach ($copies as $key => $amount) {
         
         $db->query($sql, [
             'barcode' => $barcode,
-            'film' => $movieId,
+            'film' => $data['film_id'],
             'medij' => $mediaId,
         ]);
     }
 };
 
-$db->connection()->commit();
-
 Session::flash('message', [
     'type' => 'success',
-    'message' => "Uspješno kreiran film {$data['naslov']} {$data['godina']}."
+    'message' => "Uspješno kreirane kopije filma."
 ]);
 
-redirect('movies');
+redirect('copies');

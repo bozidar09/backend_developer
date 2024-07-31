@@ -40,9 +40,10 @@ class Validator {
     private function validate()
     {
         foreach ($this->rules as $field => $rules) {
-            $userInput = $this->form[$field] ?? '';
-            $userInput = trim($userInput);
-            $userInput = empty($userInput) ? null : htmlspecialchars($userInput); // sprjecava XSS napad - cross site scripting
+            $userInput = null;
+            if (isset($this->form[$field]) && $this->form[$field] !== '') {
+                $userInput = htmlspecialchars(trim($this->form[$field])); // htmlspecialchars() -> sprječava XSS napad - cross site scripting
+            }
 
             $this->data[$field] = $userInput;
 
@@ -63,7 +64,7 @@ class Validator {
                     if (str_contains($additional, ',')) {
                         $temp = explode(',', $additional);
                         $additional = $temp[0];
-                        $matchingField = $temp[1];         
+                        $matchingField = $temp[1]; 
                         
                         if(isset($temp[2])) 
                             $movieField = $temp[2];
@@ -111,15 +112,19 @@ class Validator {
 
     private function string($userInput, $field)
     {
-        if(!is_string($userInput) || !preg_match('/^[\pL0-9\s-]+$/u', $userInput)){
+        if(!is_string($userInput) || !preg_match('/^[\pL0-9\s_-]+$/u', $userInput)){
             $this->addError($field, "Polje $field mora sadržavati samo slova i brojeve!");
         }
     }
 
-    private function numeric($userInput, $field)
+    private function numeric($userInput, $field, $low, $high)
     {
-        if(!is_numeric($userInput)){
+        if(!is_numeric($userInput)) {
             $this->addError($field, "Polje $field mora biti brojčana vrijednost!");
+
+            if (isset($low) && isset($high) && ($low > $userInput || $userInput > $high)) {
+                $this->addError($field, "Vrijednost polja $field mora biti između $low i $high!");
+            }
         }
     }
 
