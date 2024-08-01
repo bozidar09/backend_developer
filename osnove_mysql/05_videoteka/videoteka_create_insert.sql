@@ -418,7 +418,7 @@ INSERT INTO `posudba` (`id`, `datum_posudbe`, `datum_povrata`, `clan_id`, `updat
 CREATE TABLE IF NOT EXISTS `posudba_kopija` (
   `posudba_id` int UNSIGNED NOT NULL,
   `kopija_id` int UNSIGNED NOT NULL,
-  FOREIGN KEY (posudba_id) REFERENCES posudba(id),
+  FOREIGN KEY (posudba_id) REFERENCES posudba(id) ON DELETE CASCADE,
   FOREIGN KEY (kopija_id) REFERENCES kopija(id)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
