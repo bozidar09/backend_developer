@@ -19,10 +19,9 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Datum</th>
+                <th>Posudba - povrat</th>
                 <th>Član</th>
                 <th>Naslov</th>
-                <th>Godina</th>
                 <th>Žanr</th>
                 <th>Medij</th>
                 <th>Cijena</th>
@@ -34,19 +33,19 @@
             <?php foreach ($rentals as $rental): ?>
                 <tr>
                     <td><?= $rental['id'] ?></td>
-                    <td><a href="/rentals/show?id=<?= $rental['id'] ?>"><?= $rental['datum'] ?></a></td>
-                    <td><?= $rental['clan'] ?></td>
-                    <td><?= $rental['naslov'] ?></td>
-                    <td><?= $rental['godina'] ?></td>
+                    <td><a href="/rentals/show?id=<?= $rental['id'] ?>&movie=<?= $rental['film_id'] ?>"><?= $rental['datum_posudbe'] ?> - <?= $rental['datum_povrata'] ?? '' ?></a></td>
+                    <td><?= $rental['ime'] . ' ' . $rental['prezime'] . ' (' . $rental['clanski_broj'] . ')' ?></td>
+                    <td><?= $rental['naslov'] . ' (' . $rental['godina'] . ')' ?></td>
                     <td><?= $rental['zanr'] ?></td>
                     <td><?= $rental['medij'] ?></td>
                     <td><?= $rental['cijena'] ?></td>
                     <td><?= $rental['zakasnina'] ?></td>
                     <td>
-                        <a href="/rentals/edit" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Uredi"><i class="bi bi-pencil"></i></a>
+                        <a href="/rentals/edit?id=<?= $rental['id'] ?>&movie=<?= $rental['film_id'] ?>" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Uredi"><i class="bi bi-pencil"></i></a>
                         <form id="delete-form" class="hidden d-inline" method="POST" action="/rentals/destroy">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="id" value="<?= $rental['id'] ?>">
+                            <input type="hidden" name="id" value="<?= $rental['kopija_id'] ?>">
                             <button class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Izbriši"><i class="bi bi-trash"></i></button>
                         </form>
                     </td>

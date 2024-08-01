@@ -3,7 +3,11 @@
 use Core\Database;
 use Core\Session;
 
-$pageTitle = 'Posudbe';
+$pageTitle = 'Uredi posudbu';
+
+if ($_SERVER['REQUEST_METHOD'] !== 'GET' || !isset($_GET['id']) || !is_numeric($_GET['id']) || !isset($_GET['movie']) || !is_numeric($_GET['movie'])) {
+    abort(); 
+}
 
 $db = Database::get();
 
@@ -12,29 +16,27 @@ $sql = "SELECT
         ps.datum_posudbe,
         ps.datum_povrata, 
         cl.ime,
-        cl.prezime, 
+        cl.prezime,
         cl.clanski_broj,
-        k.film_id,
         pk.kopija_id,
+        k.film_id,
         f.naslov, 
         f.godina, 
-        z.ime AS zanr, 
-        m.tip AS medij,
-        ROUND(cj.cijena * m.koeficijent, 2) AS cijena,
-        ROUND(cj.zakasnina_po_danu * m.koeficijent, 2) AS zakasnina
+        m.tip AS medij
     FROM posudba_kopija pk 
         JOIN posudba ps ON pk.posudba_id = ps.id
         JOIN clanovi cl ON ps.clan_id = cl.id 
         JOIN kopija k ON pk.kopija_id = k.id 
         JOIN mediji m ON k.medij_id = m.id
         JOIN filmovi f ON k.film_id = f.id
-        JOIN cjenik cj ON f.cjenik_id = cj.id
-        JOIN zanrovi z ON f.zanr_id = z.id
-    ORDER BY datum_posudbe";
+    WHERE ps.id = :id AND k.film_id = :film_id";
 
-$rentals = $db->query($sql)->all();
+$rental = $db->query($sql, [
+    'id' => $_GET['id'],
+    'film_id' => $_GET['movie'],
+])->findOrFail();
 
-$message = Session::all('message');
+$errors = Session::all('errors');
 Session::unflash();
 
-require basePath('views/rentals/index.view.php');
+require basePath('views/rentals/edit.view.php');

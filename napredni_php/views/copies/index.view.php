@@ -29,7 +29,7 @@
             <?php foreach ($amountAll as $amount): ?>
                 <tr>
                     <td><?= $amount['id'] ?></td>
-                    <td><a href="/copies/show?barcode=<?= $amount['barcode'] ?>&medij=<?= $amount['medij'] ?>"><?= $amount['naslov'] ?></a></td>
+                    <td><a href="/copies/show?barcode=<?= $amount['barcode'] ?>&media=<?= $amount['medij_id'] ?>"><?= $amount['naslov'] ?></a></td>
                     <td><?= $amount['barcode'] ?></td>
                     <td><?= $amount['medij'] ?></td>
                     <td><?= $amount['kolicina'] ?></td>

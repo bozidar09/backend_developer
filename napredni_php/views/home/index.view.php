@@ -5,7 +5,6 @@
         <div class="p-5 mb-4 bg-body-tertiary rounded-3">
             <div class="container-fluid">
                 <h1 class="display-5 fw-bold">Najpopularniji filmovi</h1>
-
                 <ul class="list-group my-5">
                     <?php foreach ($popularMovies as $movie): ?>
                         <li class="list-group-item bg-body-tertiary">

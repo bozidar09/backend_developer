@@ -3,7 +3,6 @@
 <main class="container my-3 d-flex flex-column flex-grow-1 vh-100">
     <h1>Dodaj novi medij</h1>
     <hr>
-    <?php echoMessage('notification') ?>
     <form class="row g-3 mt-3" action="/media/store" method="POST">
         <div class="row mt-3">
             <div class="col-1">

@@ -3,7 +3,6 @@
 <main class="container my-3 d-flex flex-column flex-grow-1 vh-100">
     <h1>Dodaj novi žanr</h1>
     <hr>
-    <?php echoMessage('notification') ?>
     <form class="row g-3 mt-3" action="/genres/store" method="POST">
         <div class="col-1">
             <label for="name" class="mt-1">Naziv žanra</label>

@@ -144,6 +144,24 @@ class Validator {
         }
     }
 
+    private function date($userInput, $field, $current, $other)
+    {
+        if(!preg_match('/^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/', $userInput)){
+            $this->addError($field, "Polje $field mora biti valjani datum!");
+        }
+        if(isset($current) && $userInput > $current){
+            $this->addError($field, "Polje $field ne smije biti budući datum!");
+        }
+        if(isset($other) && $userInput < $other){
+            $this->addError($field, "Polje $field ne smije biti datum raniji od $other!");
+        }
+    }
+
+    // if ($data['datum_posudbe'] > $date) ('Datum posudbe ne smije biti u budućnosti')
+// if (isset($data['datum_povrata']))
+//     if ($data['datum_povrata'] < $data['datum_posudbe']) ('Datum povrata ne smije biti raniji od datuma posudbe')
+//     if ($data['datum_povrata'] > $date) ('Datum povrata ne smije biti u budućnosti');
+
     private function max($userInput, $field, $length)
     {
         if(strlen($userInput) > $length){
