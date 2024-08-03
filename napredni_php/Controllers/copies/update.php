@@ -28,8 +28,6 @@ if ($form->notValid()) {
 
 $data = $form->getData();
 
-dd($data);
-
 $db = Database::get();
 
 $sql = "UPDATE kopija SET barcode = :barcode, dostupan = :dostupan WHERE id = :id";

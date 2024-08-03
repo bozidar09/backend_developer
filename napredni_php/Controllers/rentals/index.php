@@ -30,7 +30,7 @@ $sql = "SELECT
         JOIN filmovi f ON k.film_id = f.id
         JOIN cjenik cj ON f.cjenik_id = cj.id
         JOIN zanrovi z ON f.zanr_id = z.id
-    ORDER BY datum_posudbe";
+    ORDER BY ps.id";
 
 $rentals = $db->query($sql)->all();
 
