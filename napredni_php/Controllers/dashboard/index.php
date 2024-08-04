@@ -63,8 +63,8 @@ $copies = $db->query(QUERY['kopije'])->all();
 
 $rentals = $db->query(QUERY['posudbe'])->all();
 
+$message = Session::all('message');
 $errors = Session::all('errors');
-$data = Session::all('data');
 Session::unflash();
 
 require basePath('views/dashboard/index.view.php');

@@ -69,12 +69,7 @@
                     <td><?= $rental['naslov'] . ' (' . $rental['godina'] . ') - ' . $rental['medij'] ?></td>
                     <td><?= $rental['cijena'] . ' - ' . $rental['zakasnina'] ?></td>
                     <td>
-                        <a href="/rentals/return?id=<?= $rental['id'] ?>" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Vrati"><i class="bi bi-arrow-counterclockwise"></i></a>
-                        <form id="delete-form" class="hidden d-inline" method="POST" action="/rentals/destroy">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <input type="hidden" name="id" value="<?= $rental['id'] ?>">
-                            <button class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Izbriši"><i class="bi bi-trash"></i></button>
-                        </form>
+                        <a href="/dashboard/return?id=<?= $rental['id'] ?>" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Vrati"><i class="bi bi-arrow-counterclockwise"></i></a>
                     </td>
                 </tr>
             <?php endforeach ?>

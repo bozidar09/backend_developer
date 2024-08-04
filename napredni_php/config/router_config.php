@@ -5,13 +5,13 @@ return [
     '/' => 'Controllers/home/index.php',
     // dashboard
     '/dashboard' => 'Controllers/dashboard/index.php',
+    '/dashboard/return' => 'Controllers/dashboard/return.php',
     // rentals
     '/rentals' => 'Controllers/rentals/index.php',
     '/rentals/show' => 'Controllers/rentals/show.php',
     '/rentals/create' => 'Controllers/rentals/create.php',
     '/rentals/store' => 'Controllers/rentals/store.php',
     '/rentals/edit' => 'Controllers/rentals/edit.php',
-    '/rentals/return' => 'Controllers/rentals/return.php',
     '/rentals/update' => 'Controllers/rentals/update.php',
     '/rentals/destroy' => 'Controllers/rentals/destroy.php',
     // members

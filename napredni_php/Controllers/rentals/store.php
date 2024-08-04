@@ -19,7 +19,7 @@ $postData = [
 $rules = [
     'clan_id' => ['required', 'exists:clanovi,id', 'numeric'],
     'film_id' => ['required', 'exists:filmovi,id', 'numeric'],
-    'medij_id' => ['required', 'exists:media,id', 'numeric'],
+    'medij_id' => ['required', 'exists:mediji,id', 'numeric'],
 ];
 
 $form = new Validator($rules, $postData);
@@ -38,12 +38,12 @@ $db->connection()->beginTransaction();
 const QUERY = [
     'posudba' 
         => "INSERT INTO posudba (datum_posudbe, clan_id) VALUES (:datum_posudbe, :clan_id)",
-    'posudba_kopija' 
-        => "INSERT INTO posudba_kopija (posudba_id, kopija_id) VALUES (:posudba_id, :kopija_id)",
     'kopija' 
         => "SELECT k.id FROM kopija k WHERE film_id = :film_id AND medij_id = :medij_id AND dostupan = 1 LIMIT 1",
+    'posudba_kopija' 
+        => "INSERT INTO posudba_kopija (posudba_id, kopija_id) VALUES (:posudba_id, :kopija_id)",
     'update_kopija' 
-        => "UPDATE kopija SET dostupan = :dostupan WHERE id = :id",
+        => "UPDATE kopija SET dostupan = 0 WHERE id = :id",
 ];
 
 $date = date('Y-m-d');
@@ -55,28 +55,28 @@ $db->query(QUERY['posudba'], [
 
 $rentalId = $db->connection()->lastInsertId();
 
-$copyId = $db->query(QUERY['kopija'], [
+$copy = $db->query(QUERY['kopija'], [
     'film_id' => $data['film_id'], 
     'medij_id' => $data['medij_id'], 
 ])->findOrFail();
 
 $db->query(QUERY['posudba_kopija'], [
-    'film_id' => $data['film_id'],  
-    'medij_id' => $data['medij_id'], 
+    'posudba_id' => $rentalId,  
+    'kopija_id' => $copy['id'], 
 ]);
 
 $db->query(QUERY['update_kopija'], [
-    'id' => $copyId, 
+    'id' => $copy['id'], 
 ]);
 
 $db->connection()->commit();
 
 Session::flash('message', [
     'type' => 'success',
-    'message' => "Uspješno kreiran film {$data['naslov']} {$data['godina']}."
+    'message' => "Uspješno kreirana posudba filma."
 ]);
 
-if ($_SERVER['HTTP_REFERER'] === 'dashboard') {
+if (parse_url($_SERVER['HTTP_REFERER'])['path'] === '/dashboard') {
     redirect('dashboard');
 }
 redirect('rentals');
