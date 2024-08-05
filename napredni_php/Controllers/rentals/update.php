@@ -34,7 +34,7 @@ const QUERY = [
     'posudba' 
         => "UPDATE posudba SET datum_posudbe = :datum_posudbe, datum_povrata = :datum_povrata WHERE id = :id",
     'kopije'
-        => "SELECT kopija_id FROM posudba_kopija WHERE id = :id",
+        => "SELECT kopija_id FROM posudba_kopija WHERE posudba_id = :posudba_id",
     'update' 
         => "UPDATE kopija SET dostupan = :dostupan WHERE id = :id",
 ];
@@ -52,14 +52,14 @@ try {
     
     isset($data['datum_povrata']) ? $dostupan = 1 : $dostupan = 0;
     
-    $copies = $db->query(QUERY['kopija'], [
-        'id' => $_POST['copy_id'],
+    $copies = $db->query(QUERY['kopije'], [
+        'posudba_id' => $_POST['id'],
     ])->all();
     
     foreach ($copies as $copy) {
         $db->query(QUERY['update'], [
             'dostupan' => $dostupan,
-            'id' => $copy,
+            'id' => $copy['kopija_id'],
         ]);
     }
     

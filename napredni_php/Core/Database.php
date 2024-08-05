@@ -40,8 +40,11 @@ class Database
             $this->statement->execute($params);
             return $this; 
 
-        } catch (\PDOException $e) {
-            throw $e;
+        } catch (\Exception $e) {
+            if ($e instanceof PDOException) {
+                throw $e;
+            }
+            abort(500);
         }
     }
     

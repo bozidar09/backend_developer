@@ -8,8 +8,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     abort();
 }
 
+isset($_POST['movie']) ? $movie = explode('-', $_POST['movie']) : $movie = '';
+
 $postData = [
-    'film_id' => $_POST['movie'] ?? null,
+    'film_id' => $movie[0] ?? null,
+    'naslov' => $movie[1] ?? null,
     'DVD' => $_POST['dvd'] ?? null,
     'Blu-ray' => $_POST['blu-ray'] ?? null,
     'VHS' => $_POST['vhs'] ?? null,
@@ -17,6 +20,7 @@ $postData = [
 
 $rules = [
     'film_id' => ['required', 'exists:filmovi,id', 'numeric'],
+    'naslov' => ['required', 'exists:filmovi,naslov', 'string', 'max:100'],
     'DVD' => ['numeric', 'max:2'],
     'Blu-ray' => ['numeric', 'max:2'],
     'VHS' => ['numeric', 'max:2'],
@@ -30,7 +34,7 @@ if ($form->notValid()) {
 }
 
 $data = $form->getData();
-$copies = array_slice($data, 1);
+$copies = array_slice($data, 2);
 
 const QUERY = [
     'media' => "SELECT * FROM mediji",
@@ -50,7 +54,7 @@ try {
     
     foreach ($copies as $key => $amount) {
         $sql = QUERY['copy'];
-    
+        
         if (isset($copies[$key])) {       
             $barcode = mb_strtoupper($data['naslov'] . '_' . $key . '1');
             $mediaId = $media[$key]['id'];

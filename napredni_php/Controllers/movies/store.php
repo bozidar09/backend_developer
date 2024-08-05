@@ -53,6 +53,13 @@ $db = Database::get();
 try {
     $db->connection()->beginTransaction();
 
+    $db->query(QUERY['movie'], [
+        'naslov' => $data['naslov'], 
+        'godina' => $data['godina'], 
+        'zanr' => $data['zanr_id'], 
+        'tip' => $data['cjenik_id'],
+    ]);
+
     $movieId = $db->connection()->lastInsertId();
 
     $media = $db->query(QUERY['media'])->all();
@@ -63,11 +70,11 @@ try {
 
     foreach ($copies as $key => $amount) {
         $sql = QUERY['copy'];
-        $barcode = mb_strtoupper($data['naslov'] . '_' . $key . '1');
-        $mediaId = $media[$key]['id'];
-
+        
         if (isset($copies[$key])) {       
-            
+            $barcode = mb_strtoupper($data['naslov'] . '_' . $key . '1');
+            $mediaId = $media[$key]['id'];
+    
             for ($i=1; $i < $amount; $i++) { 
                 $sql .= "(:barcode, :film, :medij),";
             }
@@ -80,13 +87,6 @@ try {
             ]);
         }
     };
-
-    $db->query(QUERY['movie'], [
-        'naslov' => $data['naslov'], 
-        'godina' => $data['godina'], 
-        'zanr' => $data['zanr_id'], 
-        'tip' => $data['cjenik_id'],
-    ]);
 
     $db->connection()->commit();
     

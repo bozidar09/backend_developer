@@ -12,10 +12,11 @@
                 <select class="form-select form-select mb-2" id="movie" name="movie">
                     <option selected>Odaberi</option>
                         <?php foreach ($movies as $movie): ?>
-                            <option value="<?= $movie['id'] ?>"><?= $movie['naslov'] . ' (' . $movie['godina'] . ')' ?></option>
+                            <option value="<?= $movie['id'] . '-' . $movie['naslov'] ?>"><?= $movie['naslov'] . ' (' . $movie['godina'] . ')' ?></option>
                         <?php endforeach ?>
                 </select>
                 <span class="text-danger small"><?= $errors['film_id'] ?? '' ?></span>
+                <span class="text-danger small"><?= $errors['naslov'] ?? '' ?></span>
             </div>
         </div>
         <div class="row mt-3">

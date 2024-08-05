@@ -90,7 +90,7 @@
                 <?php foreach ($copies as $copy): ?>
                     <tr>
                         <td><?= $copy['id'] ?></td>
-                        <td><a href="/copies/show?id=<?= $copy['id'] ?>"><?= $copy['barcode'] ?></a></td>
+                        <td><?= $copy['barcode'] ?></td>
                         <td><?= $copy['medij'] ?></td>
                         <td><?= $copy['dostupan'] ?></td>
                     </tr>

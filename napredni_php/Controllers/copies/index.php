@@ -8,7 +8,7 @@ $pageTitle = 'Količine';
 $db = Database::get();
 
 $sql = "SELECT f.id, f.naslov, 
-        k.barcode, k.medij_id
+        k.barcode, k.medij_id,
         m.tip AS medij, 
         COUNT(f.id) AS kolicina
     FROM kopija k
