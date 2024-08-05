@@ -9,11 +9,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET' || !isset($_GET['id']) || !is_numeric($
     abort(); 
 }
 
-$db = Database::get();
-
 const QUERY = [
     'film'
-        => "SELECT f.*, z.ime AS zanr, c.tip_filma AS tip
+        => "SELECT f.*, 
+            z.ime AS zanr, 
+            c.tip_filma AS tip
         FROM filmovi f
             JOIN zanrovi z ON f.zanr_id = z.id
             JOIN cjenik c ON f.cjenik_id = c.id
@@ -24,15 +24,21 @@ const QUERY = [
         => "SELECT * FROM cjenik",
 ];
 
-$movie = $db->query(QUERY['film'], [
-    'id' => $_GET['id'],
-])->findOrFail();
+$db = Database::get();
 
-$genres = $db->query(QUERY['zanrovi'])->all();
+try {
+    $movie = $db->query(QUERY['film'], [
+        'id' => $_GET['id'],
+    ])->findOrFail();
+    
+    $genres = $db->query(QUERY['zanrovi'])->all();
+    
+    $movieTypes = $db->query(QUERY['cjenik'])->all();
+    
+} catch (\PDOException $e) {
+    abort(500);
+}
 
-$movieTypes = $db->query(QUERY['cjenik'])->all();
-
-$errors = Session::all('errors');
-Session::unflash();
+$errors = Session::get('errors');
 
 require basePath('views/movies/edit.view.php');

@@ -5,13 +5,17 @@ use Core\Session;
 
 $pageTitle = 'Članovi';
 
-$db = Database::get();
-
 $sql = "SELECT * FROM clanovi ORDER BY clanski_broj";
 
-$members = $db->query($sql)->all();
+$db = Database::get();
 
-$message = Session::all('message');
-Session::unflash();
+try {
+    $members = $db->query($sql)->all();
+    
+} catch (\PDOException $e) {
+    abort(500);
+}
+
+$message = Session::get('message');
 
 require basePath('views/members/index.view.php');

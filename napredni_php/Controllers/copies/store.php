@@ -30,41 +30,52 @@ if ($form->notValid()) {
 }
 
 $data = $form->getData();
-
-$db = Database::get();
+$copies = array_slice($data, 1);
 
 const QUERY = [
     'media' => "SELECT * FROM mediji",
     'copy' => "INSERT INTO kopija (barcode, film_id, medij_id) VALUES ",
 ];
 
-$copies = array_slice($data, 1);
+$db = Database::get();
 
-$media = $db->query(QUERY['media'])->all();
-foreach ($media as $key => $elements) {
-    $mediaType[] = $elements['tip'];
-}
-$media = array_combine($mediaType, $media);
+try {
+    $db->connection()->beginTransaction();
 
-foreach ($copies as $key => $amount) {
-    $sql = QUERY['copy'];
-
-    if (isset($copies[$key])) {       
-        $barcode = mb_strtoupper($data['naslov'] . '_' . $key . '1');
-        $mediaId = $media[$key]['id'];
-
-        for ($i=1; $i < $amount; $i++) { 
-            $sql .= "(:barcode, :film, :medij),";
-        }
-        $sql .= "(:barcode, :film, :medij)";
-        
-        $db->query($sql, [
-            'barcode' => $barcode,
-            'film' => $data['film_id'],
-            'medij' => $mediaId,
-        ]);
+    $media = $db->query(QUERY['media'])->all();
+    foreach ($media as $key => $elements) {
+        $mediaType[] = $elements['tip'];
     }
-};
+    $media = array_combine($mediaType, $media);
+    
+    foreach ($copies as $key => $amount) {
+        $sql = QUERY['copy'];
+    
+        if (isset($copies[$key])) {       
+            $barcode = mb_strtoupper($data['naslov'] . '_' . $key . '1');
+            $mediaId = $media[$key]['id'];
+    
+            for ($i=1; $i < $amount; $i++) { 
+                $sql .= "(:barcode, :film, :medij),";
+            }
+            $sql .= "(:barcode, :film, :medij)";
+            
+            $db->query($sql, [
+                'barcode' => $barcode,
+                'film' => $data['film_id'],
+                'medij' => $mediaId,
+            ]);
+        }
+    };
+
+    $db->connection()->commit();
+
+} catch (\PDOException $e) {
+    $db->connection()->rollBack();
+
+    abort(500);;
+}
+
 
 Session::flash('message', [
     'type' => 'success',

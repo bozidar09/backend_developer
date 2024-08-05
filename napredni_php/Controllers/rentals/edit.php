@@ -9,19 +9,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET' || !isset($_GET['id']) || !is_numeric($
     abort(); 
 }
 
-$db = Database::get();
-
-$sql = "SELECT 
-        ps.id, 
-        ps.datum_posudbe,
-        ps.datum_povrata, 
-        cl.ime,
-        cl.prezime,
-        cl.clanski_broj,
+$sql = "SELECT ps.id, ps.datum_posudbe, ps.datum_povrata, 
+        cl.ime, cl.prezime, cl.clanski_broj,
         pk.kopija_id,
         k.film_id,
-        f.naslov, 
-        f.godina, 
+        f.naslov, f.godina, 
         m.tip AS medij
     FROM posudba_kopija pk 
         JOIN posudba ps ON pk.posudba_id = ps.id
@@ -31,12 +23,18 @@ $sql = "SELECT
         JOIN filmovi f ON k.film_id = f.id
     WHERE ps.id = :id AND k.film_id = :film_id";
 
-$rental = $db->query($sql, [
-    'id' => $_GET['id'],
-    'film_id' => $_GET['movie'],
-])->findOrFail();
+$db = Database::get();
 
-$errors = Session::all('errors');
-Session::unflash();
+try {
+    $rental = $db->query($sql, [
+        'id' => $_GET['id'],
+        'film_id' => $_GET['movie'],
+    ])->findOrFail();
+    
+} catch (\PDOException $e) {
+    abort(500);
+}
+
+$errors = Session::get('errors');
 
 require basePath('views/rentals/edit.view.php');

@@ -5,13 +5,17 @@ use Core\Session;
 
 $pageTitle = 'Mediji';
 
-$db = Database::get();
-
 $sql = "SELECT * FROM mediji ORDER BY tip";
 
-$mediaAll = $db->query($sql)->all();
+$db = Database::get();
 
-$message = Session::all('message');
-Session::unflash();
+try {
+    $mediaAll = $db->query($sql)->all();
+    
+} catch (\PDOException $e) {
+    abort(500);
+}
+
+$message = Session::get('message');
 
 require basePath('views/media/index.view.php');

@@ -5,8 +5,6 @@ use Core\Session;
 
 $pageTitle = 'Dodaj nove kopije';
 
-$db = Database::get();
-
 const QUERY = [
     'filmovi'
         => "SELECT * FROM filmovi",
@@ -14,12 +12,17 @@ const QUERY = [
         => "SELECT * FROM mediji",
 ];
 
-$movies = $db->query(QUERY['filmovi'])->all();
+$db = Database::get();
 
-$mediaAll = $db->query(QUERY['mediji'])->all();
+try {
+    $movies = $db->query(QUERY['filmovi'])->all();
+    $mediaAll = $db->query(QUERY['mediji'])->all();
+    
+} catch (\PDOException $e) {
+    abort(500);
+}
 
-$errors = Session::all('errors');
-$data = Session::all('data');
-Session::unflash();
+$errors = Session::get('errors');
+$data = Session::get('data');
 
 require basePath('views/copies/create.view.php');

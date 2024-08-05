@@ -34,8 +34,6 @@ if ($form->notValid()) {
 
 $data = $form->getData();
 
-$db = Database::get();
-
 const QUERY = [
     'clanski_broj'
         => "SELECT clanski_broj FROM clanovi 
@@ -45,17 +43,24 @@ const QUERY = [
         => "INSERT INTO clanovi (ime, prezime, adresa, telefon, email, clanski_broj) VALUES (:ime, :prezime, :adresa, :telefon, :email, :clanski_broj)",
 ];
 
-$clanId = $db->query(QUERY['clanski_broj'])->findOrFail();
-$clanId = 'CLAN' . (str_replace('CLAN', '', $clanId['clanski_broj']) + 1);
+$db = Database::get();
 
-$db->query(QUERY['insert'], [
-    'ime' => $data['ime'], 
-    'prezime' => $data['prezime'], 
-    'adresa' => $data['adresa'],
-    'telefon' => $data['telefon'],
-    'email' => $data['email'], 
-    'clanski_broj' => $clanId,
-]);
+try {
+    $clanId = $db->query(QUERY['clanski_broj'])->findOrFail();
+    $clanId = 'CLAN' . (str_replace('CLAN', '', $clanId['clanski_broj']) + 1);
+    
+    $db->query(QUERY['insert'], [
+        'ime' => $data['ime'], 
+        'prezime' => $data['prezime'], 
+        'adresa' => $data['adresa'],
+        'telefon' => $data['telefon'],
+        'email' => $data['email'], 
+        'clanski_broj' => $clanId,
+    ]);
+    
+} catch (\PDOException $e) {
+    abort(500);
+}
 
 Session::flash('message', [
     'type' => 'success',

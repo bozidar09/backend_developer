@@ -9,15 +9,19 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET' || !isset($_GET['id']) || !is_numeric($
     abort(); 
 }
 
-$db = Database::get();
-
 $sql = "SELECT * FROM cjenik WHERE id = :id";
 
-$price = $db->query($sql, [
-    'id' => $_GET['id'],
-])->findOrFail();
+$db = Database::get();
 
-$errors = Session::all('errors');
-Session::unflash();
+try {
+    $price = $db->query($sql, [
+        'id' => $_GET['id'],
+    ])->findOrFail();
+    
+} catch (\PDOException $e) {
+    abort(500);
+}
+
+$errors = Session::get('errors');
 
 require basePath('views/prices/edit.view.php');

@@ -4,7 +4,7 @@
     <div class="title flex-between">
         <h1>Članovi</h1>
         <div class="action-buttons">
-            <a href="/members/create" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Dodaj"><i class="bi bi-person-plus"></i></a>
+            <a href="/members/create" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Dodaj"><i class="bi bi-plus-lg"></i></a>
         </div>
     </div>
     <?php if (!empty($message)): ?>

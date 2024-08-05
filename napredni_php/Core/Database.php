@@ -2,6 +2,7 @@
 
 namespace Core;
 use PDO;
+use PDOException;
 use PDOStatement;
 
 class Database 
@@ -40,10 +41,7 @@ class Database
             return $this; 
 
         } catch (\PDOException $e) {
-            if($e->errorInfo[1] === 1451) {
-                throw new ResourceInUseException();
-            }
-            abort(500);
+            throw $e;
         }
     }
     

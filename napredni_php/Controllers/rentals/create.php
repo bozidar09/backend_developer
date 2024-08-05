@@ -5,23 +5,12 @@ use Core\Session;
 
 $pageTitle = 'Nova posudba';
 
-$db = Database::get();
-
 const QUERY = [
     'clanovi'
-        => "SELECT 
-            c.id AS clan_id, 
-            c.ime, 
-            c.prezime, 
-            c.clanski_broj 
-        FROM clanovi c",
+        => "SELECT id AS clan_id, ime, prezime, clanski_broj FROM clanovi",
     'kopije'
-        => "SELECT 
-            f.id AS film_id, 
-            f.naslov, 
-            f.godina,
-            m.id AS medij_id, 
-            m.tip AS medij, 
+        => "SELECT f.id AS film_id, f.naslov, f.godina,
+            m.id AS medij_id, m.tip AS medij, 
             COUNT(f.id) AS kolicina
         FROM kopija k
             JOIN mediji m ON m.id = k.medij_id
@@ -31,12 +20,18 @@ const QUERY = [
         ORDER BY f.naslov",
 ];
 
-$members = $db->query(QUERY['clanovi'])->all();
+$db = Database::get();
 
-$copies = $db->query(QUERY['kopije'])->all();
+try {
+    $members = $db->query(QUERY['clanovi'])->all();
 
-$errors = Session::all('errors');
-$data = Session::all('data');
-Session::unflash();
+    $copies = $db->query(QUERY['kopije'])->all();
+    
+} catch (\PDOException $e) {
+    abort(500);
+}
+
+$errors = Session::get('errors');
+$data = Session::get('data');
 
 require basePath('views/rentals/create.view.php');

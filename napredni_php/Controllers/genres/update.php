@@ -25,15 +25,19 @@ if ($form->notValid()) {
 }
 
 $data = $form->getData();
+$sql = "UPDATE zanrovi SET ime = :ime WHERE id = :id";
 
 $db = Database::get();
 
-$sql = "UPDATE zanrovi SET ime = :ime WHERE id = :id";
-
-$db->query($sql, [
-    'ime' => $data['ime'], 
-    'id' => $data['id'],
-]);
+try {
+    $db->query($sql, [
+        'ime' => $data['ime'], 
+        'id' => $data['id'],
+    ]);
+    
+} catch (\PDOException $e) {
+    abort(500);
+}
 
 Session::flash('message', [
     'type' => 'success',

@@ -8,23 +8,15 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET' || !isset($_GET['id']) || !is_numeric($
     abort(); 
 }
 
-$db = Database::get();
-
-$sql = "SELECT 
-        ps.id, 
-        ps.datum_posudbe,
-        ps.datum_povrata, 
+$sql = "SELECT ps.id, ps.datum_posudbe, ps.datum_povrata, 
         CASE 
             WHEN ps.datum_povrata IS NULL THEN DATEDIFF(CURDATE(), ps.datum_posudbe)
             ELSE DATEDIFF(ps.datum_povrata, ps.datum_posudbe)
         END AS dani_posudbe,
-        cl.ime,
-        cl.prezime,
-        cl.clanski_broj, 
+        cl.ime, cl.prezime, cl.clanski_broj, 
         k.film_id,
         pk.kopija_id,
-        f.naslov, 
-        f.godina, 
+        f.naslov, f.godina, 
         z.ime AS zanr, 
         m.tip AS medij,
         ROUND(cj.cijena * m.koeficijent, 2) AS cijena,
@@ -39,10 +31,17 @@ $sql = "SELECT
         JOIN zanrovi z ON f.zanr_id = z.id
     WHERE ps.id = :id AND k.film_id = :film_id";
 
-$rental = $db->query($sql, [
-    'id' => $_GET['id'],
-    'film_id' => $_GET['movie'],
-])->findOrFail();
+$db = Database::get();
+
+try {
+    $rental = $db->query($sql, [
+        'id' => $_GET['id'],
+        'film_id' => $_GET['movie'],
+    ])->findOrFail();
+    
+} catch (\PDOException $e) {
+    abort(500);
+}
 
 if ($rental['dani_posudbe'] <= 1) {
     $rental['dani_kasnjenja'] = 0;

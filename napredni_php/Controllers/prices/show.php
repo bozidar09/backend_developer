@@ -8,13 +8,14 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET' || !isset($_GET['id']) || !is_numeric($
     abort(); 
 }
 
-$db = Database::get();
-
 const QUERY = [
     'price' 
-        => "SELECT * from cjenik WHERE id = :id",
+        => "SELECT * FROM cjenik WHERE id = :id",
     'moviesByPrice' 
-        => "SELECT f.*, z.ime AS zanr, GROUP_CONCAT(DISTINCT m.tip) AS medij, c.tip_filma AS tip
+        => "SELECT f.*, 
+            z.ime AS zanr, 
+            GROUP_CONCAT(DISTINCT m.tip) AS medij, 
+            c.tip_filma AS tip
         FROM filmovi f
             JOIN cjenik c ON f.cjenik_id = c.id
             JOIN zanrovi z ON f.zanr_id = z.id
@@ -25,13 +26,20 @@ const QUERY = [
         ORDER BY f.naslov",
 ];
 
-$price = $db->query(QUERY['price'], [
-    'id' => $_GET['id'],
-])->findOrFail();
+$db = Database::get();
 
-$movies = $db->query(QUERY['moviesByPrice'], [
-    'id' => $_GET['id'],
-])->all();
+try {
+    $price = $db->query(QUERY['price'], [
+        'id' => $_GET['id'],
+    ])->findOrFail();
+    
+    $movies = $db->query(QUERY['moviesByPrice'], [
+        'id' => $_GET['id'],
+    ])->all();
+    
+} catch (\PDOException $e) {
+    abort(500);
+}
 
 foreach ($movies as $key => $movie) {
     $movies[$key]['medij'] = explode(',', $movie['medij']);

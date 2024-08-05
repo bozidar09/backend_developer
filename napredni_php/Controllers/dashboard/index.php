@@ -9,19 +9,11 @@ $db = Database::get();
 
 const QUERY = [
     'clanovi'
-        => "SELECT 
-            c.id AS clan_id, 
-            c.ime, 
-            c.prezime, 
-            c.clanski_broj 
+        => "SELECT c.id AS clan_id, c.ime, c.prezime, c.clanski_broj 
         FROM clanovi c",
     'kopije'
-        => "SELECT 
-            f.id AS film_id, 
-            f.naslov, 
-            f.godina,
-            m.id AS medij_id, 
-            m.tip AS medij, 
+        => "SELECT f.id AS film_id, f.naslov, f.godina,
+            m.id AS medij_id, m.tip AS medij, 
             COUNT(f.id) AS kolicina
         FROM kopija k
             JOIN mediji m ON m.id = k.medij_id
@@ -30,17 +22,11 @@ const QUERY = [
         GROUP BY f.id, m.id
         ORDER BY f.naslov",
     'posudbe'
-        => "SELECT 
-            ps.id, 
-            ps.datum_posudbe,
-            ps.datum_povrata, 
-            cl.ime,
-            cl.prezime, 
-            cl.clanski_broj,
+        => "SELECT ps.id, ps.datum_posudbe, ps.datum_povrata, 
+            cl.ime, cl.prezime, cl.clanski_broj,
             k.film_id,
             pk.kopija_id,
-            f.naslov, 
-            f.godina, 
+            f.naslov, f.godina, 
             z.ime AS zanr, 
             m.tip AS medij,
             ROUND(cj.cijena * m.koeficijent, 2) AS cijena,
@@ -57,14 +43,18 @@ const QUERY = [
         ORDER BY ps.id",
 ];
 
-$members = $db->query(QUERY['clanovi'])->all();
+try {
+    $members = $db->query(QUERY['clanovi'])->all();
 
-$copies = $db->query(QUERY['kopije'])->all();
+    $copies = $db->query(QUERY['kopije'])->all();
 
-$rentals = $db->query(QUERY['posudbe'])->all();
+    $rentals = $db->query(QUERY['posudbe'])->all();
+    
+} catch (\PDOException $e) {
+    abort(500);
+}
 
-$message = Session::all('message');
-$errors = Session::all('errors');
-Session::unflash();
+$message = Session::get('message');
+$errors = Session::get('errors');
 
 require basePath('views/dashboard/index.view.php');

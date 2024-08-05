@@ -29,15 +29,20 @@ if ($form->notValid()) {
 
 $data = $form->getData();
 
-$db = Database::get();
-
 $sql = "INSERT INTO cjenik (tip_filma, cijena, zakasnina_po_danu) VALUES (:tip_filma, :cijena, :zakasnina_po_danu)";
 
-$db->query($sql, [
-    'tip_filma' => $data['tip_filma'], 
-    'cijena' => $data['cijena'], 
-    'zakasnina_po_danu' => $data['zakasnina_po_danu'], 
-]);
+$db = Database::get();
+
+try {
+    $db->query($sql, [
+        'tip_filma' => $data['tip_filma'], 
+        'cijena' => $data['cijena'], 
+        'zakasnina_po_danu' => $data['zakasnina_po_danu'], 
+    ]);
+    
+} catch (\PDOException $e) {
+    abort(500);
+}
 
 Session::flash('message', [
     'type' => 'success',

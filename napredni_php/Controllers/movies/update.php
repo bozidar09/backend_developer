@@ -32,17 +32,22 @@ if ($form->notValid()) {
 
 $data = $form->getData();
 
-$db = Database::get();
-
 $sql = "UPDATE filmovi SET naslov = :naslov, godina = :godina, zanr_id = :zanr_id, cjenik_id = :cjenik_id WHERE id = :id";
 
-$db->query($sql, [
-    'naslov' => $data['naslov'], 
-    'godina' => $data['godina'], 
-    'zanr_id' => $data['zanr_id'], 
-    'cjenik_id' => $data['cjenik_id'], 
-    'id' => $data['id'],
-]);
+$db = Database::get();
+
+try {
+    $db->query($sql, [
+        'naslov' => $data['naslov'], 
+        'godina' => $data['godina'], 
+        'zanr_id' => $data['zanr_id'], 
+        'cjenik_id' => $data['cjenik_id'], 
+        'id' => $data['id'],
+    ]);
+    
+} catch (\PDOException $e) {
+    abort(500);
+}
 
 Session::flash('message', [
     'type' => 'success',

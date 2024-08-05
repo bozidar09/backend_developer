@@ -5,13 +5,17 @@ use Core\Session;
 
 $pageTitle = 'Žanrovi';
 
-$db = Database::get();
-
 $sql = "SELECT * FROM zanrovi z ORDER BY z.ime";
 
-$genres = $db->query($sql)->all();
+$db = Database::get();
 
-$message = Session::all('message');
-Session::unflash();
+try {
+    $genres = $db->query($sql)->all();
+    
+} catch (\PDOException $e) {
+    abort(500);
+}
+
+$message = Session::get('message');
 
 require basePath('views/genres/index.view.php');

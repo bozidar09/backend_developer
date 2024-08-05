@@ -28,15 +28,20 @@ if ($form->notValid()) {
 
 $data = $form->getData();
 
-$db = Database::get();
-
 $sql = "UPDATE mediji SET tip = :tip, koeficijent = :koeficijent WHERE id = :id";
 
-$db->query($sql, [
-    'tip' => $data['tip'], 
-    'koeficijent' => $data['koeficijent'], 
-    'id' => $data['id'],
-]);
+$db = Database::get();
+
+try {
+    $db->query($sql, [
+        'tip' => $data['tip'], 
+        'koeficijent' => $data['koeficijent'], 
+        'id' => $data['id'],
+    ]);
+    
+} catch (\PDOException $e) {
+    abort(500);
+}
 
 Session::flash('message', [
     'type' => 'success',

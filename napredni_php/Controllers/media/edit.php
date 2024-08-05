@@ -9,15 +9,19 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET' || !isset($_GET['id']) || !is_numeric($
     abort(); 
 }
 
+$sql = "SELECT * FROM mediji WHERE id = :id";
+
 $db = Database::get();
 
-$sql = "SELECT * from mediji WHERE id = :id";
+try {
+    $media = $db->query($sql, [
+        'id' => $_GET['id'],
+    ])->findOrFail();
+    
+} catch (\PDOException $e) {
+    abort(500);
+}
 
-$media = $db->query($sql, [
-    'id' => $_GET['id'],
-])->findOrFail();
-
-$errors = Session::all('errors');
-Session::unflash();
+$errors = Session::get('errors');
 
 require basePath('views/media/edit.view.php');

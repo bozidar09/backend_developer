@@ -4,8 +4,7 @@ use Core\Session;
 
 $pageTitle = 'Novi tip filma';
 
-$errors = Session::all('errors');
-$data = Session::all('data');
-Session::unflash();
+$errors = Session::get('errors');
+$data = Session::get('data');
 
 require basePath('views/prices/create.view.php');

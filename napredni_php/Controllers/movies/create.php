@@ -5,8 +5,6 @@ use Core\Session;
 
 $pageTitle = 'Novi film';
 
-$db = Database::get();
-
 const QUERY = [
     'zanrovi'
         => "SELECT * FROM zanrovi",
@@ -14,12 +12,18 @@ const QUERY = [
         => "SELECT * FROM cjenik",
 ];
 
-$genres = $db->query(QUERY['zanrovi'])->all();
+$db = Database::get();
 
-$movieTypes = $db->query(QUERY['cjenik'])->all();
+try {
+    $genres = $db->query(QUERY['zanrovi'])->all();
 
-$errors = Session::all('errors');
-$data = Session::all('data');
-Session::unflash();
+    $movieTypes = $db->query(QUERY['cjenik'])->all();
+    
+} catch (\PDOException $e) {
+    abort(500);
+}
+
+$errors = Session::get('errors');
+$data = Session::get('data');
 
 require basePath('views/movies/create.view.php');

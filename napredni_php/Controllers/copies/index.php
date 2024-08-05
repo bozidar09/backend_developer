@@ -7,11 +7,8 @@ $pageTitle = 'Količine';
 
 $db = Database::get();
 
-$sql = "SELECT 
-        f.id, 
-        f.naslov, 
-        k.barcode, 
-        m.id AS medij_id, 
+$sql = "SELECT f.id, f.naslov, 
+        k.barcode, k.medij_id
         m.tip AS medij, 
         COUNT(f.id) AS kolicina
     FROM kopija k
@@ -20,9 +17,13 @@ $sql = "SELECT
     GROUP BY f.id, k.barcode, m.tip
     ORDER BY f.naslov";
 
-$amountAll = $db->query($sql)->all();
+try {
+    $amountAll = $db->query($sql)->all();
 
-$message = Session::all('message');
-Session::unflash();
+} catch (\PDOException $e) {
+    abort(500);
+}
+
+$message = Session::get('message');
 
 require basePath('views/copies/index.view.php');

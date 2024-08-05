@@ -27,14 +27,19 @@ if ($form->notValid()) {
 
 $data = $form->getData();
 
-$db = Database::get();
-
 $sql = "INSERT INTO mediji (tip, koeficijent) VALUES (:tip, :koeficijent)";
 
-$db->query($sql, [
-    'tip' => $data['tip'], 
-    'koeficijent' => $data['koeficijent'],
-]);
+$db = Database::get();
+
+try {
+    $db->query($sql, [
+        'tip' => $data['tip'], 
+        'koeficijent' => $data['koeficijent'],
+    ]);
+    
+} catch (\PDOException $e) {
+    abort(500);
+}
 
 Session::flash('message', [
     'type' => 'success',

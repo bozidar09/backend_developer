@@ -8,18 +8,13 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET' || !isset($_GET['id']) || !is_numeric($
     abort();
 }
 
-$db = Database::get();
-
 const QUERY = [
     'member' 
-        => "SELECT * from clanovi WHERE id = :id",
+        => "SELECT * FROM clanovi WHERE id = :id",
     'rentalsByMember' 
-        => "SELECT 
-            ps.id, 
-            ps.datum_posudbe AS datum, 
+        => "SELECT ps.id, ps.datum_posudbe AS datum, 
             CONCAT(cl.ime, ' ', cl.prezime) AS clan, 
-            f.naslov, 
-            f.godina, 
+            f.naslov, f.godina, 
             z.ime AS zanr, 
             m.tip AS medij,
             ROUND(cj.cijena * m.koeficijent, 2) AS cijena,
@@ -36,12 +31,19 @@ const QUERY = [
         ORDER BY datum",
 ];
 
-$member = $db->query(QUERY['member'], [
-    'id' => $_GET['id'],
-])->findOrFail();
+$db = Database::get();
 
-$rentals = $db->query(QUERY['rentalsByMember'], [
-    'id' => $_GET['id'],
-])->all();
+try {
+    $member = $db->query(QUERY['member'], [
+        'id' => $_GET['id'],
+    ])->findOrFail();
+    
+    $rentals = $db->query(QUERY['rentalsByMember'], [
+        'id' => $_GET['id'],
+    ])->all();
+    
+} catch (\PDOException $e) {
+    abort(500);
+}
 
 require basePath('views/members/show.view.php');

@@ -5,19 +5,11 @@ use Core\Session;
 
 $pageTitle = 'Posudbe';
 
-$db = Database::get();
-
-$sql = "SELECT 
-        ps.id, 
-        ps.datum_posudbe,
-        ps.datum_povrata, 
-        cl.ime,
-        cl.prezime, 
-        cl.clanski_broj,
+$sql = "SELECT ps.id, ps.datum_posudbe, ps.datum_povrata, 
+        cl.ime, cl.prezime, cl.clanski_broj,
         k.film_id,
         pk.kopija_id,
-        f.naslov, 
-        f.godina, 
+        f.naslov, f.godina, 
         z.ime AS zanr, 
         m.tip AS medij,
         ROUND(cj.cijena * m.koeficijent, 2) AS cijena,
@@ -32,9 +24,15 @@ $sql = "SELECT
         JOIN zanrovi z ON f.zanr_id = z.id
     ORDER BY ps.id";
 
-$rentals = $db->query($sql)->all();
+$db = Database::get();
 
-$message = Session::all('message');
-Session::unflash();
+try {
+    $rentals = $db->query($sql)->all();
+    
+} catch (\PDOException $e) {
+    abort(500);
+}
+
+$message = Session::get('message');
 
 require basePath('views/rentals/index.view.php');

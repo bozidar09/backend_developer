@@ -8,11 +8,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET' || !isset($_GET['id']) || !is_numeric($
     abort(); 
 }
 
-$db = Database::get();
-
 const QUERY = [
     'movie' 
-        => "SELECT f.*, z.ime AS zanr, GROUP_CONCAT(DISTINCT m.tip) AS medij, c.tip_filma AS tip
+        => "SELECT f.*, 
+        z.ime AS zanr, 
+        GROUP_CONCAT(DISTINCT m.tip) AS medij, 
+        c.tip_filma AS tip
         FROM filmovi f
             JOIN cjenik c ON f.cjenik_id = c.id
             JOIN zanrovi z ON f.zanr_id = z.id
@@ -21,7 +22,9 @@ const QUERY = [
         WHERE f.id = :id
         GROUP BY f.id",
     'copiesByMovie' 
-        => "SELECT k.id, f.naslov, k.barcode, m.tip AS medij, k.dostupan
+        => "SELECT k.id, k.barcode, k.dostupan,
+        f.naslov, 
+        m.tip AS medij
         FROM kopija k
             JOIN mediji m ON m.id = k.medij_id
             JOIN filmovi f ON f.id = k.film_id
@@ -29,14 +32,22 @@ const QUERY = [
         ORDER BY k.barcode",
 ];
 
-$movie = $db->query(QUERY['movie'], [
-    'id' => $_GET['id'],
-])->findOrFail();
+$db = Database::get();
+
+try {
+    $movie = $db->query(QUERY['movie'], [
+        'id' => $_GET['id'],
+    ])->findOrFail();
+    
+    
+    $copies = $db->query(QUERY['copiesByMovie'], [
+        'id' => $_GET['id'],
+        ])->all();
+        
+} catch (\PDOException $e) {
+    abort(500);
+}
 
 $movie['medij'] = explode(',', $movie['medij']);
-
-$copies = $db->query(QUERY['copiesByMovie'], [
-    'id' => $_GET['id'],
-])->all();
-
+    
 require basePath('views/movies/show.view.php');

@@ -30,35 +30,45 @@ if ($form->notValid()) {
     
 $data = $form->getData();
 
-$db = Database::get();
-
 const QUERY = [
     'posudba' 
         => "UPDATE posudba SET datum_posudbe = :datum_posudbe, datum_povrata = :datum_povrata WHERE id = :id",
     'kopije'
-        => "SELECT kopija_id from posudba_kopija WHERE id = :id",
+        => "SELECT kopija_id FROM posudba_kopija WHERE id = :id",
     'update' 
         => "UPDATE kopija SET dostupan = :dostupan WHERE id = :id",
 ];
 
-$db->query(QUERY['posudba'], [
-    'datum_posudbe' => $data['datum_posudbe'], 
-    'datum_povrata' => $data['datum_povrata'], 
-    'id' => $data['id'],
-]);
+$db = Database::get();
 
-isset($data['datum_povrata']) ? $dostupan = 1 : $dostupan = 0;
+try {
+    $db->connection()->beginTransaction();
 
-
-$copies = $db->query(QUERY['kopija'], [
-    'id' => $_POST['copy_id'],
-])->all();
-
-foreach ($copies as $copy) {
-    $db->query(QUERY['update'], [
-        'dostupan' => $dostupan,
-        'id' => $copy,
+    $db->query(QUERY['posudba'], [
+        'datum_posudbe' => $data['datum_posudbe'], 
+        'datum_povrata' => $data['datum_povrata'], 
+        'id' => $data['id'],
     ]);
+    
+    isset($data['datum_povrata']) ? $dostupan = 1 : $dostupan = 0;
+    
+    $copies = $db->query(QUERY['kopija'], [
+        'id' => $_POST['copy_id'],
+    ])->all();
+    
+    foreach ($copies as $copy) {
+        $db->query(QUERY['update'], [
+            'dostupan' => $dostupan,
+            'id' => $copy,
+        ]);
+    }
+    
+    $db->connection()->commit();
+    
+} catch (\PDOException $e) {
+    $db->connection()->rollBack();
+
+    abort(500);
 }
 
 Session::flash('message', [

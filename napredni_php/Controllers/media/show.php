@@ -8,13 +8,14 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET' && !isset($_GET['id']) || !is_numeric($
     abort();
 }
 
-$db = Database::get();
-
 const QUERY = [
     'media' 
-        => "SELECT * from mediji WHERE id = :id",
+        => "SELECT * FROM mediji WHERE id = :id",
     'moviesByMedia' 
-        => "SELECT f.*, z.ime AS zanr, c.tip_filma AS tip, COUNT(f.id) AS kolicina
+        => "SELECT f.*, 
+        z.ime AS zanr, 
+        c.tip_filma AS tip, 
+        COUNT(f.id) AS kolicina
         FROM filmovi f
             JOIN cjenik c ON f.cjenik_id = c.id
             JOIN zanrovi z ON f.zanr_id = z.id
@@ -25,9 +26,16 @@ const QUERY = [
         ORDER BY f.naslov",
 ];
 
-$media = $db->query(QUERY['media'], [
-    'id' => $_GET['id'],
-])->findOrFail();
+$db = Database::get();
+
+try {
+    $media = $db->query(QUERY['media'], [
+        'id' => $_GET['id'],
+    ])->findOrFail();
+    
+} catch (\PDOException $e) {
+    abort(500);
+}
 
 $movies = $db->query(QUERY['moviesByMedia'], [
     'id' => $_GET['id'],

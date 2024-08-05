@@ -5,13 +5,17 @@ use Core\Session;
 
 $pageTitle = 'Cjenik';
 
-$db = Database::get();
-
 $sql = "SELECT id, tip_filma AS tip, cijena, zakasnina_po_danu AS zakasnina FROM cjenik ORDER BY tip";
 
-$prices = $db->query($sql)->all();
+$db = Database::get();
 
-$message = Session::all('message');
-Session::unflash();
+try {
+    $prices = $db->query($sql)->all();
+    
+} catch (\PDOException $e) {
+    abort(500);
+}
+
+$message = Session::get('message');
 
 require basePath('views/prices/index.view.php');

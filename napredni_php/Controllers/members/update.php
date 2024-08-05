@@ -36,20 +36,24 @@ if ($form->notValid()) {
 
 $data = $form->getData();
 
-$db = Database::get();
-
 $sql = "UPDATE clanovi SET ime = :ime, prezime = :prezime, adresa = :adresa, telefon = :telefon, email = :email, clanski_broj = :clanski_broj WHERE id = :id";
 
-$db->query($sql, [
-    'ime' => $data['ime'], 
-    'prezime' => $data['prezime'], 
-    'adresa' => $data['adresa'],
-    'telefon' => $data['telefon'],
-    'email' => $data['email'], 
-    'clanski_broj' => $data['clanski_broj'], 
-    'id' => $data['id'],
-]);
+$db = Database::get();
 
+try {
+    $db->query($sql, [
+        'ime' => $data['ime'], 
+        'prezime' => $data['prezime'], 
+        'adresa' => $data['adresa'],
+        'telefon' => $data['telefon'],
+        'email' => $data['email'], 
+        'clanski_broj' => $data['clanski_broj'], 
+        'id' => $data['id'],
+    ]);
+    
+} catch (\PDOException $e) {
+    abort(500);
+}
 
 Session::flash('message', [
     'type' => 'success',

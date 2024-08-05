@@ -24,14 +24,18 @@ if ($form->notValid()) {
 }
 
 $data = $form->getData();
+$sql = "INSERT INTO zanrovi (ime) VALUES (:ime)";
 
 $db = Database::get();
 
-$sql = "INSERT INTO zanrovi (ime) VALUES (:ime)";
-
-$db->query($sql, [
-    'ime' => $data['ime'],
-]);
+try {
+    $db->query($sql, [
+        'ime' => $data['ime'],
+    ]);
+    
+} catch (\PDOException $e) {
+    abort(500);
+}
 
 Session::flash('message', [
     'type' => 'success',
