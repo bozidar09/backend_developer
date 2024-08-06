@@ -157,11 +157,6 @@ class Validator {
         }
     }
 
-    // if ($data['datum_posudbe'] > $date) ('Datum posudbe ne smije biti u budućnosti')
-// if (isset($data['datum_povrata']))
-//     if ($data['datum_povrata'] < $data['datum_posudbe']) ('Datum povrata ne smije biti raniji od datuma posudbe')
-//     if ($data['datum_povrata'] > $date) ('Datum povrata ne smije biti u budućnosti');
-
     private function max($userInput, $field, $length)
     {
         if(strlen($userInput) > $length){
