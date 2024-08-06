@@ -23,6 +23,7 @@
                 <th>Barkod</th>
                 <th>Medij</th>
                 <th>Količina</th>
+                <th class="table-action-col"></th>
             </tr>
         </thead>
         <tbody>
@@ -33,6 +34,13 @@
                     <td><?= $amount['barcode'] ?></td>
                     <td><?= $amount['medij'] ?></td>
                     <td><?= $amount['kolicina'] ?></td>
+                    <td>
+                        <form id="delete-form" class="hidden d-inline" method="POST" action="/copies/destroy">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="code" value="<?= $amount['barcode'] ?>">
+                            <button class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Izbriši"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </td>
                 </tr>
             <?php endforeach ?>
         </tbody>

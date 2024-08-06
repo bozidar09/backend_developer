@@ -13,28 +13,12 @@ isset($_POST['movie']) ? $movie = explode('-', $_POST['movie']) : $movie = '';
 $postData = [
     'film_id' => $movie[0] ?? null,
     'naslov' => $movie[1] ?? null,
-    'DVD' => $_POST['dvd'] ?? null,
-    'Blu-ray' => $_POST['blu-ray'] ?? null,
-    'VHS' => $_POST['vhs'] ?? null,
 ];
 
 $rules = [
     'film_id' => ['required', 'exists:filmovi,id', 'numeric'],
     'naslov' => ['required', 'exists:filmovi,naslov', 'string', 'max:100'],
-    'DVD' => ['numeric', 'max:2'],
-    'Blu-ray' => ['numeric', 'max:2'],
-    'VHS' => ['numeric', 'max:2'],
 ];
-
-$form = new Validator($rules, $postData);
-if ($form->notValid()) {
-    Session::flash('errors', $form->errors());
-    Session::flash('data', $form->getData());
-    goBack();
-}
-
-$data = $form->getData();
-$copies = array_slice($data, 2);
 
 const QUERY = [
     'media' => "SELECT * FROM mediji",
@@ -48,16 +32,27 @@ try {
 
     $media = $db->query(QUERY['media'])->all();
     foreach ($media as $key => $elements) {
-        $mediaType[] = $elements['tip'];
+        $mediaByType[$elements['tip']] = $elements;
+        $postData[$elements['tip']] = $_POST[strtolower($elements['tip'])] ?? null;
+        $rules[$elements['tip']] = ['numeric', 'max:2'];
     }
-    $media = array_combine($mediaType, $media);
+
+    $form = new Validator($rules, $postData);
+    if ($form->notValid()) {
+        Session::flash('errors', $form->errors());
+        Session::flash('data', $form->getData());
+        goBack();
+    }
+
+    $data = $form->getData();
+    $copies = array_slice($data, 2);
     
     foreach ($copies as $key => $amount) {
         $sql = QUERY['copy'];
         
         if (isset($copies[$key])) {       
             $barcode = mb_strtoupper($data['naslov'] . '_' . $key . '1');
-            $mediaId = $media[$key]['id'];
+            $mediaId = $mediaByType[$key]['id'];
     
             for ($i=1; $i < $amount; $i++) { 
                 $sql .= "(:barcode, :film, :medij),";

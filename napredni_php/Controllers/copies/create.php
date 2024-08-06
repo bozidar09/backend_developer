@@ -16,6 +16,7 @@ $db = Database::get();
 
 try {
     $movies = $db->query(QUERY['filmovi'])->all();
+    
     $mediaAll = $db->query(QUERY['mediji'])->all();
     
 } catch (\PDOException $e) {

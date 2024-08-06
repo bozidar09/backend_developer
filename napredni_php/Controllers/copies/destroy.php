@@ -3,27 +3,42 @@
 use Core\Database;
 use Core\Session;
 
-if (!isset($_POST['id']) || !is_numeric($_POST['id']) || !isset($_POST['_method']) || $_POST['_method'] !== 'DELETE') {
+if (!isset($_POST['code']) || !isset($_POST['_method']) || $_POST['_method'] !== 'DELETE') {
     abort();
 }
 
 const QUERY = [
-    'select'
+    'selectId'
     => "SELECT * FROM kopija WHERE id = :id",
+    'selectBarcode'
+    => "SELECT COUNT(*) FROM kopija WHERE barcode = :barcode GROUP BY barcode",
     'delete'
     => "DELETE FROM kopija WHERE id = :id",
+    'deleteAll'
+    => "DELETE FROM kopija WHERE barcode = :barcode",
 ];
 
 $db = Database::get();
 
 try {
-    $db->query(QUERY['select'], [
-        'id' => $_POST['id'],
-    ])->findOrFail();
+    if (parse_url($_SERVER['HTTP_REFERER'])['path'] === '/copies/show') {
+        $db->query(QUERY['selectId'], [
+            'id' => $_POST['code'],
+        ])->findOrFail();
 
-    $db->query(QUERY['delete'], [
-        'id' => $_POST['id'],
-    ]);
+        $db->query(QUERY['delete'], [
+            'id' => $_POST['code'],
+        ]);
+
+    } else {
+        $db->query(QUERY['selectBarcode'], [
+            'barcode' => $_POST['code'],
+        ])->findOrFail();
+
+        $db->query(QUERY['deleteAll'], [
+            'barcode' => $_POST['code'],
+        ]);
+    }
 
 } catch (\PDOException $e) { 
     Session::flash('message', [

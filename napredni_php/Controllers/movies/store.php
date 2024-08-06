@@ -13,9 +13,6 @@ $postData = [
     'godina' => $_POST['year'] ?? null,
     'zanr_id' => $_POST['genre'] ?? null,
     'cjenik_id' => $_POST['movie_type'] ?? null,
-    'DVD' => $_POST['dvd'] ?? null,
-    'Blu-ray' => $_POST['blu-ray'] ?? null,
-    'VHS' => $_POST['vhs'] ?? null,
 ];
 
 $rules = [
@@ -23,20 +20,7 @@ $rules = [
     'godina' => ['required', 'numeric', 'max:4', 'min:4'],
     'zanr_id' => ['required', 'exists:zanrovi,id', 'numeric'],
     'cjenik_id' => ['required', 'exists:cjenik,id', 'numeric'],
-    'DVD' => ['numeric', 'max:2'],
-    'Blu-ray' => ['numeric', 'max:2'],
-    'VHS' => ['numeric', 'max:2'],
 ];
-
-$form = new Validator($rules, $postData);
-if ($form->notValid()) {
-    Session::flash('errors', $form->errors());
-    Session::flash('data', $form->getData());
-    goBack();
-}
-
-$data = $form->getData();
-$copies = array_slice($data, 4);
 
 const QUERY = [
     'movie' 
@@ -53,6 +37,23 @@ $db = Database::get();
 try {
     $db->connection()->beginTransaction();
 
+    $media = $db->query(QUERY['media'])->all();
+    foreach ($media as $key => $elements) {
+        $mediaByType[$elements['tip']] = $elements;
+        $postData[$elements['tip']] = $_POST[strtolower($elements['tip'])] ?? null;
+        $rules[$elements['tip']] = ['numeric', 'max:2'];
+    }
+
+    $form = new Validator($rules, $postData);
+    if ($form->notValid()) {
+        Session::flash('errors', $form->errors());
+        Session::flash('data', $form->getData());
+        goBack();
+    }
+
+    $data = $form->getData();
+    $copies = array_slice($data, 4);
+
     $db->query(QUERY['movie'], [
         'naslov' => $data['naslov'], 
         'godina' => $data['godina'], 
@@ -62,18 +63,12 @@ try {
 
     $movieId = $db->connection()->lastInsertId();
 
-    $media = $db->query(QUERY['media'])->all();
-    foreach ($media as $key => $elements) {
-        $mediaType[] = $elements['tip'];
-    }
-    $media = array_combine($mediaType, $media);
-
     foreach ($copies as $key => $amount) {
         $sql = QUERY['copy'];
         
         if (isset($copies[$key])) {       
             $barcode = mb_strtoupper($data['naslov'] . '_' . $key . '1');
-            $mediaId = $media[$key]['id'];
+            $mediaId = $mediaByType[$key]['id'];
     
             for ($i=1; $i < $amount; $i++) { 
                 $sql .= "(:barcode, :film, :medij),";
