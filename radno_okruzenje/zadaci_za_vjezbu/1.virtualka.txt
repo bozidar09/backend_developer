@@ -1,0 +1,2 @@
+1. Samostalno kreirati virtualni stroj i pripremiti ga za Linux Ubuntu OS.
+2. Pokrenuti virtualni stroj i instalirati odabrani OS.

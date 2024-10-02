@@ -1,0 +1,2 @@
+1. Instalirati PHP na instancu Linuxa kreiranog u prvoj vježbi.
+2. U konfiguracijskoj datoteci podesite max_upload_size na 5M.
