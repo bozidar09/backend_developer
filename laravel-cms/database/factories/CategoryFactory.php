@@ -17,7 +17,7 @@ class CategoryFactory extends Factory
      */
     public function definition(): array
     {
-        $key = array_mt_rand(CategorySeeder::CATEGORIES);
+        $key = array_rand(CategorySeeder::CATEGORIES);
 
         return [
             'name' => CategorySeeder::CATEGORIES[$key],

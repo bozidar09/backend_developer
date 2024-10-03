@@ -31,6 +31,10 @@ class ArticleSeeder extends Seeder
                             foreach ($tags as $tag) { 
                                 $article->tags()->attach($tag);
                             }
+
+                            if ($article->id % 10 === 0) {
+                                $article->update(['featured' => 1]);
+                            }
                         });
                 }
             }

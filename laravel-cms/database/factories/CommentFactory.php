@@ -19,7 +19,7 @@ class CommentFactory extends Factory
     public function definition(): array
     {
         return [
-            'comment' => fake()->sentences(mt_rand(1, 3), true),
+            'text' => fake()->sentences(mt_rand(1, 3), true),
             'article_id' => Article::inRandomOrder()->first() ?? Article::factory()->create(),
             'user_id' => User::inRandomOrder()->first() ?? User::factory()->create(),
         ];
