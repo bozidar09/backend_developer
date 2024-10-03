@@ -30,6 +30,7 @@ class ArticleFactory extends Factory
             'body' => fake()->text(mt_rand(500, 1000)),
             'category_id' => Category::inRandomOrder()->first() ?? Category::factory()->create(),
             'user_id' => User::where('role_id', $role)->inRandomOrder()->first() ?? User::factory()->create(['role_id' => $role]),
+            'created_at' => fake()->dateTimeBetween('-1 month', 'now'),
         ];
     }
 }

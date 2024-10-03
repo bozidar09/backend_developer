@@ -1,4 +1,4 @@
-<x-home-master :categories="$categories" :tags="$tags">
+<x-master-layout :$categories :$tags>
 
   <!-- Hero section -->
   <div class="relative pt-14">
@@ -63,7 +63,7 @@
             <div class="absolute inset-0 -z-10 rounded-2xl ring-1 ring-inset ring-gray-900/10"></div>
     
             <div class="flex flex-wrap items-center gap-y-1 overflow-hidden text-sm leading-6 text-gray-300">
-              <time datetime="2020-03-16" class="mr-8">{{ $article->created_at }}</time>
+              <time datetime="2020-03-16" class="mr-8">{{ $article->created_at->toFormattedDateString() }}</time>
               <div class="-ml-4 flex items-center gap-x-4">
                 <svg viewBox="0 0 2 2" class="-ml-0.5 h-0.5 w-0.5 flex-none fill-white/50">
                   <circle cx="1" cy="1" r="1" />
@@ -104,7 +104,7 @@
             </div>
             <div class="max-w-xl">
               <div class="mt-8 flex items-center gap-x-4 text-xs">
-                <time datetime="2020-03-16" class="text-gray-500">Mar 16, 2020</time>
+                <time datetime="2020-03-16" class="text-gray-500">{{ $article->created_at->toFormattedDateString() }}</time>
                 <a href="#" class="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">{{ $article->category->name }}</a>
               </div>
               <div class="group relative">
@@ -131,10 +131,11 @@
             </div>
           </article>
         @endforeach
+        {{ $articles->links() }}
         
         <!-- More posts... -->
       </div>
     </div>
   </div>
 
-</x-home-master>
+</x-master-layout>

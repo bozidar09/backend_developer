@@ -5,7 +5,6 @@
   </head>
   <body class="font-sans antialiased dark:bg-black dark:text-white/50">
     <div class="bg-white">
-
       <header class="absolute inset-x-0 top-0 z-50">
           @include('layouts.home-header')
       </header>

@@ -8,7 +8,7 @@ use Illuminate\Database\Seeder;
 
 class RoleSeeder extends Seeder
 {
-    private const ROLES = ['Member', 'Writer', 'Admin'];
+    private const ROLES = ['Admin', 'Writer', 'Member'];
     /**
      * Run the database seeds.
      */
