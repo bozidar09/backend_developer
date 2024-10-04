@@ -28,8 +28,9 @@ class ArticleFactory extends Factory
             'slug' => Str::slug($title),
             'image' => fake()->imageUrl(),
             'body' => fake()->text(mt_rand(500, 1000)),
+            'views' => mt_rand(0, 1000),
             'category_id' => Category::inRandomOrder()->first() ?? Category::factory()->create(),
-            'user_id' => User::where('role_id', $role)->inRandomOrder()->first() ?? User::factory()->create(['role_id' => $role]),
+            'user_id' => User::where('role_id', $role->id)->inRandomOrder()->first() ?? User::factory()->create(['role_id' => $role->id]),
             'created_at' => fake()->dateTimeBetween('-1 month', 'now'),
         ];
     }

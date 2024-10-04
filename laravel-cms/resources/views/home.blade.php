@@ -1,4 +1,4 @@
-<x-master-layout :$categories :$tags>
+<x-master-layout>
 
   <!-- Hero section -->
   <div class="relative pt-14">

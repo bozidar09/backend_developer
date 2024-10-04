@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('image');
             $table->longText('body');
             $table->boolean('featured')->default(false);
+            $table->integer('views')->unsigned()->default(0);
             $table->foreignIdFor(Category::class)->constrained();
             $table->foreignIdFor(User::class)->constrained();
             $table->timestamps();
