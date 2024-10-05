@@ -107,3 +107,132 @@ sudo php artisan route:clear
 ```
 
 - nakon ovoga bi vam se na dnu stranice vašeg Laravel projekta trebao prikazati Debug bar
+
+
+
+## Instalacija Gravatar i Picsum images faker paketa
+
+- u VS Code otvorite terminal i odradite ove dvije naredbe jednu za drugom:
+
+ ```
+composer require ottaviano/faker-gravatar --dev
+composer require --dev smknstd/fakerphp-picsum-images
+ ```
+
+ - nakon toga u terminalu napravite novi Service Provider sa naredbom:
+
+ ```
+php artisan make:provider FakerServiceProvider
+ ```
+
+ - nakon čega će vam se u direktoriju app/Providers stvoriti novi file 'FakerServiceProvider.php' u kojeg trebate iskopirati ovaj kod:
+
+ ```
+    <?php
+
+    namespace App\Providers;
+
+    use Faker\Factory;
+    use Faker\Generator;
+    use Illuminate\Support\ServiceProvider;
+
+    class FakerServiceProvider extends ServiceProvider
+    {
+        /**
+        * Register services.
+        */
+        public function register(): void
+        {
+            $locale = app('config')->get('app.faker_locale') ?? 'en_US';
+
+            $abstract = Generator::class . ':' . $locale;
+
+            $this->app->singleton($abstract, function () use ($locale) {
+                $faker = Factory::create($locale);
+
+                $faker->addProvider(new \Ottaviano\Faker\Gravatar($faker));
+                $faker->addProvider(new \Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
+
+                return $faker;
+            });
+            
+        }
+
+        /**
+        * Bootstrap services.
+        */
+        public function boot(): void
+        {
+            //
+        }
+    }
+ ```
+
+ - također, u fileu 'AppServiceProvider.php' koji se nalazi unutar istoga direktorija, trebate registrirati taj novovostvoreni service provider na način da unutar vitičastih zagrada {} metode register() dodate ovaj kod:
+
+ ```
+ if (!$this->app->environment('production')) {
+            $faker = fake();
+            $faker->addProvider(new \Ottaviano\Faker\Gravatar($faker));
+            $faker->addProvider(new \Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
+ }
+ ```
+
+- objašnjenje if bloka - ovo će vrijediti samo ako niste u produkcijskom okruženju (naš environment je namješten na 'local'), zatim umjesto $faker za pozivanje funkcija ovih servisa možete koristiti fake(), te zatim dodajemo ta dva nova faker providera sa funkcijom addProvider()
+
+- nakon ovoga prilikom kreiranja factoriesa za pojedine tablice (recimo avatar atribut u tablici users ili image atribut u tablici articles) za kreiranje nešto smislenijih slika možete koristiti naredbe:
+
+ ```
+ avatar => fake()->gravatarUrl()
+ image => fake()->imageUrl()
+ ```
+
+- linkovi na ta dva paketa:
+
+ ```
+  https://github.com/ottaviano/faker-gravatar
+  https://github.com/smknstd/fakerphp-picsum-images
+ ```
+
+
+
+## Stvaranje custom layouta za Blade x-components u /layouts folderu:
+
+- ako želite stvoriti custom layout, primjerice za naš home page, koji ne mora biti spremljen u /components folderu (nego recimo /layouts poput app.blade.php i guest.blade.php layouta) slijedite ove upute
+
+- u VS Code otvorite terminal i napravite novi component (u našem slučaju MasterLayout) sa ovom naredbom:
+
+```
+sudo php artisan make:component MasterLayout
+```
+
+- nakon čega će vam se kreirati MasterLayout.php file sa istoimenom klasom koja nasljeđuje klasu Component, unutar tog filea upišite ovaj kod:
+
+```
+  <?php
+
+  namespace App\View\Components;
+
+  use Illuminate\Database\Eloquent\Collection;
+  use Illuminate\View\Component;
+  use Illuminate\View\View;
+
+  class MasterLayout extends Component
+  {
+      public function __construct(
+          public Collection $categories,
+          public Collection $tags,
+      ) {}
+      /**
+      * Get the view / contents that represents the component.
+      */
+      public function render(): View
+      {
+          return view('layouts.master');
+      }
+  }
+```
+
+- objašnjenje koda - u konstruktoru navodimo podatke koje ćemo prenositi iz body dijela (home.blade.php) u layouts/master.blade.php, a u render() metodi navodimo gdje se nalazi taj master.blade.php file, odnosno gdje ga render metoda može pronaći (layouts folder)
+
+- zatim u resources/views/layouts folderu kreirajte novi file master.blade.php i u njemu izdvojite okvir vašeg home pagea (kojeg će pozivati home.blade.php, i koji će uključivati - include(), header, footer i slične dijelove html stranice)
