@@ -19,7 +19,7 @@ class ArticleSeeder extends Seeder
     {
             $categories = Category::all() ?? Category::factory()->create();
             $role = Role::where('name', 'Writer')->first();
-            $users = User::where('role_id', $role->id)->get() ?? User::factory()->create(['role_id' => $role->id]);
+            $users = User::where('role_id', $role->id)->get() ?? User::factory()->create(['role_id' => $role]);
 
             foreach ($categories as $category) {
                 foreach ($users as $user) {

@@ -16,7 +16,7 @@
     <ul role="list" class="mt-6 space-y-4">
       @foreach($tags as $tag)
         <li>
-          <a href="#" class="text-sm leading-6 text-gray-600 hover:text-gray-900">{{ $tag->name }}</a>
+          <x-category-tag class="text-gray-600 hover:text-gray-900">{{ $tag->name }}</x-category-tag>
         </li>
       @endforeach
     </ul>
@@ -26,7 +26,7 @@
     <ul role="list" class="mt-6 space-y-4">
       @foreach($categories as $category)
         <li>
-          <a href="#" class="text-sm leading-6 text-gray-600 hover:text-gray-900">{{ $category->name }}</a>
+          <x-category-tag class="text-gray-600 hover:text-gray-900">{{ $category->name }}</x-category-tag>
         </li>
       @endforeach
     </ul>

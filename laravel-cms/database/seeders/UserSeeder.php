@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
         $roles = Role::all() ?? Role::factory()->create();
 
         foreach ($roles as $role) {
-            User::factory(mt_rand(2, 3) * $role->id)->create([
+            User::factory($role->id * 3)->create([
                 'role_id' => $role,
             ]);
         }

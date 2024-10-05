@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Request;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\Tag;

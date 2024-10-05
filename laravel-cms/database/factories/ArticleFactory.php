@@ -26,11 +26,11 @@ class ArticleFactory extends Factory
         return [
             'title' => $title,
             'slug' => Str::slug($title),
-            'image' => fake()->imageUrl(),
+            'image' => fake()->imageUrl(width: 800, height: 600),
             'body' => fake()->text(mt_rand(500, 1000)),
             'views' => mt_rand(0, 1000),
             'category_id' => Category::inRandomOrder()->first() ?? Category::factory()->create(),
-            'user_id' => User::where('role_id', $role->id)->inRandomOrder()->first() ?? User::factory()->create(['role_id' => $role->id]),
+            'user_id' => User::where('role_id', $role->id)->inRandomOrder()->first() ?? User::factory()->create(['role_id' => $role]),
             'created_at' => fake()->dateTimeBetween('-1 month', 'now'),
         ];
     }
