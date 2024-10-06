@@ -19,7 +19,7 @@ return new class extends Migration
             $table->id();
             $table->string('title')->unique();
             $table->string('slug')->unique();
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->longText('body');
             $table->boolean('featured')->default(false);
             $table->integer('views')->unsigned()->default(0);

@@ -36,6 +36,7 @@ class UserFactory extends Factory
             'password' => static::$password ??= Hash::make('password'),
             'avatar' => fake()->gravatarUrl(mode: 'retro'),
             'role_id' => Role::inRandomOrder()->first() ?? Role::factory()->create(),
+            'job' => fake()->optional()->jobTitle(),
             'remember_token' => Str::random(10),
         ];
     }

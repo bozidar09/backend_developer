@@ -1,5 +1,9 @@
-<x-master-layout :$categories :$tags>
+<hr class="mx-auto max-w-7xl pb-10">
 
+<x-master-layout :$categories :$tags>
+  <x-slot:title>
+    {{ 'Algebra Blog' }}
+  </x-slot>
   <!-- Hero section -->
   <div class="relative pt-14">
     <div class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80" aria-hidden="true">
@@ -41,13 +45,13 @@
           </blockquote>
           <figcaption class="mt-6 text-base text-white">
             <div class="font-semibold">{{ $featured->author->fullName() }}</div>
-            <div class="mt-1">{{ $featured->author->role->name }}</div>
+            <div class="mt-1">{{ $featured->author->job }}</div>
           </figcaption>
         </figure>
       </div>
     </div>
   </div>
-
+  
   <!-- Recents -->
   <div class="bg-white py-24 sm:py-32">
     <div class="mx-auto max-w-7xl px-6 lg:px-8">

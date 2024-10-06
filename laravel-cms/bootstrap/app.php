@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Middleware\Admin;
+use App\Http\Middleware\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use NunoMaduro\Collision\Writer;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -11,7 +14,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->alias([
+            'admin' => Admin::class, 
+            'writer' => Writer::class,     
+            'user' => User::class,     
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

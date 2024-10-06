@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
 use App\Models\Role;
+use Illuminate\Validation\Rule;
 
 class RoleController extends Controller
 {
@@ -13,7 +14,9 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
+        $roles = Role::paginate(10);
+
+        return view('roles.index', compact('roles'));
     }
 
     /**
@@ -21,7 +24,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        return view('roles.create');
     }
 
     /**
@@ -29,7 +32,13 @@ class RoleController extends Controller
      */
     public function store(StoreRoleRequest $request)
     {
-        //
+        $data = $request->validate([
+            'name' => ['required', 'string', 'unique:roles'],
+        ]);
+
+        Role::create($data);
+
+        return redirect()->route('roles.index')->with('success', 'Succesfully stored role ' . $data['name']);
     }
 
     /**
@@ -37,7 +46,9 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        //
+        $role = Role::where('id', $role->id)->with('users')->first();
+
+        return view('roles.show', compact('role'));
     }
 
     /**
@@ -45,7 +56,9 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        //
+        $role = Role::where('id', $role->id)->first();
+
+        return view('roles.edit', compact('role'));
     }
 
     /**
@@ -53,7 +66,13 @@ class RoleController extends Controller
      */
     public function update(UpdateRoleRequest $request, Role $role)
     {
-        //
+        $data = $request->validate([
+            'name' => ['required', 'string', Rule::unique('roles')->ignore($role)],
+        ]);
+        
+        $role->update($data);
+
+        return redirect()->route('roles.index')->with('success', 'Succesfully updated role ' . $data['name']);
     }
 
     /**
@@ -61,84 +80,13 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        //
-    }
-}
-
-
-<?php
-
-namespace App\Http\Controllers;
-
-use App\Http\Requests\GenreRequest;
-use App\Models\Genre;
-use Illuminate\Validation\Rule;
-
-class GenreController extends Controller
-{
-    public function index()
-    {
-        $genres = Genre::paginate(20);
-
-        return view('admin.genres.index', compact('genres'));
-    }
-
-
-    public function create()
-    {
-        return view('admin.genres.create');
-    }
-
-
-    public function store(GenreRequest $request)
-    {
-        $data = $request->validate([
-            'name' => ['required', 'string', 'unique:genres'],
-        ]);
-
-        Genre::create($data);
-
-        return redirect()->route('genres.index')->with('success', 'Uspješno spremljen žanr ' . $data['name']);
-    }
-
-
-    public function show(Genre $genre)
-    {
-        $genre = Genre::where('id', $genre->id)->with('movies.price', 'movies.copies.format')->first();
-
-        return view('admin.genres.show', compact('genre'));
-    }
-
-
-    public function edit(Genre $genre)
-    {
-        $genre = Genre::where('id', $genre->id)->first();
-
-        return view('admin.genres.edit', compact('genre'));
-    }
-
-
-    public function update(GenreRequest $request, Genre $genre)
-    {
-        $data = $request->validate([
-            'name' => ['required', 'string', Rule::unique('genres')->ignore($genre)],
-        ]);
-        
-        $genre->update($data);
-
-        return redirect()->route('genres.index')->with('success', 'Uspješno izmijenjen žanr ' . $data['name']);
-    }
-
-
-    public function destroy(Genre $genre)
-    {
-        $name = $genre->name;
+        $name = $role->name;
         try {
-            $genre->delete();
+            $role->delete();
         } catch (\PDOException $e) { 
-            return redirect()->back()->with('danger', 'Ne možete obrisati žanr prije nego obrišete vezane filmove');
+            return redirect()->back()->with('danger', "You cannot delete role before related users");
         }
 
-        return redirect()->route('genres.index')->with('success', 'Uspješno obrisan žanr ' . $name);
+        return redirect()->route('roles.index')->with('success', 'Succesfully deleted role ' . $name);
     }
 }

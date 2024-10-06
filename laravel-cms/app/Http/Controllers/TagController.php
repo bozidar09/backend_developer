@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTagRequest;
 use App\Http\Requests\UpdateTagRequest;
 use App\Models\Tag;
+use Illuminate\Validation\Rule;
 
 class TagController extends Controller
 {
@@ -13,7 +14,9 @@ class TagController extends Controller
      */
     public function index()
     {
-        //
+        $tags = Tag::paginate(10);
+
+        return view('tags.index', compact('tags'));
     }
 
     /**
@@ -21,7 +24,7 @@ class TagController extends Controller
      */
     public function create()
     {
-        //
+        return view('tags.create');
     }
 
     /**
@@ -29,7 +32,13 @@ class TagController extends Controller
      */
     public function store(StoreTagRequest $request)
     {
-        //
+        $data = $request->validate([
+            'name' => ['required', 'string', 'unique:tags'],
+        ]);
+
+        Tag::create($data);
+
+        return redirect()->route('tags.index')->with('success', 'Succesfully stored tag' . $data['name']);
     }
 
     /**
@@ -37,7 +46,9 @@ class TagController extends Controller
      */
     public function show(Tag $tag)
     {
-        //
+        $tag = Tag::where('id', $tag->id)->with('articles.author')->first();
+
+        return view('tags.show', compact('tag'));
     }
 
     /**
@@ -45,7 +56,9 @@ class TagController extends Controller
      */
     public function edit(Tag $tag)
     {
-        //
+        $tag = Tag::where('id', $tag->id)->first();
+
+        return view('tags.edit', compact('tag'));
     }
 
     /**
@@ -53,7 +66,13 @@ class TagController extends Controller
      */
     public function update(UpdateTagRequest $request, Tag $tag)
     {
-        //
+        $data = $request->validate([
+            'name' => ['required', 'string', Rule::unique('tags')->ignore($tag)],
+        ]);
+
+        $tag->update($data);
+
+        return redirect()->route('tags.index')->with('success', 'Succesfully updated tag' . $data['name']);
     }
 
     /**
@@ -61,84 +80,13 @@ class TagController extends Controller
      */
     public function destroy(Tag $tag)
     {
-        //
-    }
-}
-
-
-<?php
-
-namespace App\Http\Controllers;
-
-use App\Http\Requests\GenreRequest;
-use App\Models\Genre;
-use Illuminate\Validation\Rule;
-
-class GenreController extends Controller
-{
-    public function index()
-    {
-        $genres = Genre::paginate(20);
-
-        return view('admin.genres.index', compact('genres'));
-    }
-
-
-    public function create()
-    {
-        return view('admin.genres.create');
-    }
-
-
-    public function store(GenreRequest $request)
-    {
-        $data = $request->validate([
-            'name' => ['required', 'string', 'unique:genres'],
-        ]);
-
-        Genre::create($data);
-
-        return redirect()->route('genres.index')->with('success', 'Uspješno spremljen žanr ' . $data['name']);
-    }
-
-
-    public function show(Genre $genre)
-    {
-        $genre = Genre::where('id', $genre->id)->with('movies.price', 'movies.copies.format')->first();
-
-        return view('admin.genres.show', compact('genre'));
-    }
-
-
-    public function edit(Genre $genre)
-    {
-        $genre = Genre::where('id', $genre->id)->first();
-
-        return view('admin.genres.edit', compact('genre'));
-    }
-
-
-    public function update(GenreRequest $request, Genre $genre)
-    {
-        $data = $request->validate([
-            'name' => ['required', 'string', Rule::unique('genres')->ignore($genre)],
-        ]);
-        
-        $genre->update($data);
-
-        return redirect()->route('genres.index')->with('success', 'Uspješno izmijenjen žanr ' . $data['name']);
-    }
-
-
-    public function destroy(Genre $genre)
-    {
-        $name = $genre->name;
+        $name = $tag->name;
         try {
-            $genre->delete();
-        } catch (\PDOException $e) { 
-            return redirect()->back()->with('danger', 'Ne možete obrisati žanr prije nego obrišete vezane filmove');
+            $tag->delete();
+        } catch (\PDOException $e) {
+            return redirect()->back()->with('danger', "You cannot delete tag before related articles");
         }
 
-        return redirect()->route('genres.index')->with('success', 'Uspješno obrisan žanr ' . $name);
+        return redirect()->router('tags.index')->with('success', 'Succesfully deleted tag ' . $name);
     }
 }

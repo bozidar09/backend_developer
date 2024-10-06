@@ -27,7 +27,7 @@ class ArticleFactory extends Factory
             'title' => $title,
             'slug' => Str::slug($title),
             'image' => fake()->imageUrl(width: 800, height: 600),
-            'body' => fake()->text(mt_rand(500, 1000)),
+            'body' => fake()->paragraphs(mt_rand(5, 10), true),
             'views' => mt_rand(0, 1000),
             'category_id' => Category::inRandomOrder()->first() ?? Category::factory()->create(),
             'user_id' => User::where('role_id', $role->id)->inRandomOrder()->first() ?? User::factory()->create(['role_id' => $role]),

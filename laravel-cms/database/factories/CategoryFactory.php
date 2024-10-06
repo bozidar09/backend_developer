@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use Database\Seeders\CategorySeeder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -10,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class CategoryFactory extends Factory
 {
+    public const CATEGORIES = ['News', 'Life', 'Entertainment', 'Finance', 'Sports'];
     /**
      * Define the model's default state.
      *
@@ -17,10 +17,10 @@ class CategoryFactory extends Factory
      */
     public function definition(): array
     {
-        $key = array_rand(CategorySeeder::CATEGORIES);
+        $key = array_rand(self::CATEGORIES);
 
         return [
-            'name' => CategorySeeder::CATEGORIES[$key],
+            'name' => fake()->randomElement(self::CATEGORIES[$key]),
             'order' => ++$key,
         ];
     }

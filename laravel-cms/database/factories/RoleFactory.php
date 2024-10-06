@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class RoleFactory extends Factory
 {
+    public const ROLES = ['Admin', 'Writer', 'Member'];
     /**
      * Define the model's default state.
      *
@@ -17,7 +18,7 @@ class RoleFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->unique()->word(),
+            'name' => fake()->randomElement(self::ROLES),
         ];
     }
 }

@@ -3,18 +3,17 @@
 namespace Database\Seeders;
 
 use App\Models\Role;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Factories\RoleFactory;
 use Illuminate\Database\Seeder;
 
 class RoleSeeder extends Seeder
 {
-    private const ROLES = ['Admin', 'Writer', 'Member'];
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        foreach (self::ROLES as $role) {
+        foreach (RoleFactory::ROLES as $role) {
             Role::create([
                 'name' => $role,
             ]);

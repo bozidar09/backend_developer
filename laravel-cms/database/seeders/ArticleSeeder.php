@@ -7,7 +7,6 @@ use App\Models\Category;
 use App\Models\Role;
 use App\Models\Tag;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ArticleSeeder extends Seeder
@@ -27,10 +26,8 @@ class ArticleSeeder extends Seeder
                             'category_id' => $category,
                             'user_id' => $user,
                         ])->each(function($article){
-                            $tags = Tag::inRandomOrder()->limit(mt_rand(1, 3))->get();
-                            foreach ($tags as $tag) { 
-                                $article->tags()->attach($tag);
-                            }
+                            $tags = Tag::inRandomOrder()->limit(mt_rand(1, 3))->pluck('id');
+                            $article->tags()->attach($tags);
 
                             if ($article->id % 10 === 0) {
                                 $article->update(['featured' => 1]);
