@@ -11,7 +11,15 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::controller(HomeController::class)->group(function(){
+    Route::get('/', 'index')->name('home.index');
+    Route::get('/{category}', 'showCategory')->name('home.category');
+    Route::get('/{tag}', 'showTag')->name('home.tag');
+    Route::get('/{article}', 'showArticle')->name('home.article');
+    Route::post('/{article}', 'storeComment')->name('home.store');
+    Route::get('/{article}/{comment}/edit', 'editComment')->name('home.edit');
+    Route::put('/{article}/{comment}', 'updateComment')->name('home.update');
+});
 
 Route::middleware('guest')->group(function(){
     Route::controller(AuthenticatedSessionController::class)->group(function(){
@@ -36,8 +44,10 @@ Route::resource('articles', ArticleController::class);
 
 Route::resource('categories', CategoryController::class);
 
-Route::resource('roles', RoleController::class);
-
 Route::resource('tags', TagController::class);
+
+Route::resource('users', UserController::class);
+
+Route::resource('roles', RoleController::class);
 
 require __DIR__.'/auth.php';

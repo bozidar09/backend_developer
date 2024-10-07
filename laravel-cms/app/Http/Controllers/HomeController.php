@@ -53,6 +53,22 @@ class HomeController extends Controller
     /**
      * Display the specified resource.
      */
+    public function showTag(Tag $tag)
+    {
+        $categories = Category::all();
+
+        $tags = Tag::join('article_tag', 'article_tag.tag_id', '=', 'tags.id')
+        ->select('tags.name', DB::raw('count(tags.id) as occurence'))
+        ->groupBy('tags.id')->orderBy('occurence', 'desc')->limit(4)->get();
+
+        $articles = Tag::with('articles.author.role', 'articles.category')->where('id', $tag->id)->orderBy('views', 'desc')->latest()->paginate(12);
+
+        return view('showCategory', compact('categories', 'tags', 'latest', 'articles'));
+    }
+
+    /**
+     * Display the specified resource.
+     */
     public function showArticle(Article $article)
     {
         $categories = Category::all();
@@ -79,20 +95,20 @@ class HomeController extends Controller
 
         Comment::create($data);
         
-        return redirect()->route('showArticle')->with('success', 'Succesfully stored comment');
+        return redirect()->route('showArticle', $article->id)->with('success', 'Succesfully stored comment');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Article $article, Comment $comment)
+    public function editComment(Article $article, Comment $comment)
     {
         $article = Article::where('id', $article->id)->with('category', 'author', 'comments', 'tags')->first();
 
         $tagIds = $article->tags->pluck('id');
         $tags = Tag::whereNotIn('id', $tagIds)->get();
 
-        return view('editArticle', compact('article', 'tags'));
+        return view('editArticleComment', compact('article', 'tags'));
     }
 
     /**
@@ -108,6 +124,6 @@ class HomeController extends Controller
 
         $comment->update($data);
 
-        return redirect()->route('showArticle')->with('success', 'Succesfully updated comment');
+        return redirect()->route('showArticle', $article->id)->with('success', 'Succesfully updated comment');
     }
 }
