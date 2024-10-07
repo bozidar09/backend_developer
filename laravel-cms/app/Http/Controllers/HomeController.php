@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Models\Category;
-use App\Models\Comment;
 use App\Models\Tag;
+use App\Models\User;
 use App\Services\ViewCounterService;
-use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -42,6 +41,17 @@ class HomeController extends Controller
         $articles = Article::with('author.role', 'category')->where('category_id', $category->id)->orderBy('views', 'desc')->latest()->paginate(9);
 
         return view('home.show-category', compact('category', 'latest', 'articles'));
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function showUser(User $user)
+    {
+        $user = User::where('id', $user->id)->with('role')->first();
+        $articles = Article::with('author.role', 'category')->where('user_id', $user->id)->orderBy('views', 'desc')->latest()->paginate(9);
+
+        return view('home.show-user', compact('user', 'articles'));
     }
 
     /**

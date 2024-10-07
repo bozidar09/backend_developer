@@ -15,6 +15,7 @@ Route::controller(HomeController::class)->group(function(){
     Route::get('/', 'index')->name('home.index');
     Route::get('/{tag}/tag', 'showTag')->name('home.tag');
     Route::get('/{category}/category', 'showCategory')->name('home.category');
+    Route::get('/{user}/user', 'showUser')->name('home.user');
     Route::get('/{article}/article', 'showArticle')->name('home.article');
 });
 

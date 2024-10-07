@@ -9,12 +9,12 @@
     <div class="bg-white py-24 sm:py-16">
         <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="mx-auto max-w-2xl text-center">
-            <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">{{ $article->title }}</h2>
+            <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"><a href="{{ route('home.article', $article->id) }}">{{ $article->title }}</a></h2>
         </div>
         </div>
     </div>
 
-    <!-- Testimonial section -->
+    <!-- Body section -->
     <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div class="relative overflow-hidden bg-gray-900 px-6 py-20 shadow-xl sm:rounded-3xl sm:px-10 sm:py-24 md:px-12 lg:px-20">
             <img class="absolute inset-0 h-full w-full object-cover brightness-150 saturate-0" src="{{ $article->image }}" alt="">
@@ -31,7 +31,7 @@
                         <p>{{ $article->body }}</p>
                     </blockquote>
                     <figcaption class="mt-6 text-base text-white">
-                        <div class="font-semibold">{{ $article->author->fullName() }}</div>
+                        <div class="font-semibold"><a href="{{ route('home.user', $article->user_id) }}">{{ $article->author->fullName() }}</a></div>
                         <div class="mt-1">{{ $article->author->job }}</div>
                     </figcaption>
                 </figure>
