@@ -8,10 +8,6 @@ use Illuminate\View\View;
 
 class MasterLayout extends Component
 {
-    public function __construct(
-        public Collection $categories,
-        public Collection $tags,
-    ) {}
     /**
      * Get the view / contents that represents the component.
      */

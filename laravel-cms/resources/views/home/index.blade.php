@@ -1,6 +1,6 @@
 <hr class="mx-auto max-w-7xl pb-10">
 
-<x-master-layout :$categories :$tags>
+<x-master-layout>
   <x-slot:title>
     {{ 'Algebra Blog' }}
   </x-slot>

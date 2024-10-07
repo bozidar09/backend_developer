@@ -7,7 +7,6 @@ use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Tag;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -16,19 +15,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
         $featured = Article::with('author.role')->where('featured', true)->first();
+
         $latest = Article::with('author.role')->latest()->where('featured', true)->where('id', '<>', $featured->id)->limit(2)->get();
 
         $usedIds = $latest->pluck('id');
         $usedIds[] = $featured->id;
         $articles = Article::with('author.role', 'category')->latest()->whereNotIn('id', $usedIds)->paginate(9);
 
-        $tags = Tag::join('article_tag', 'article_tag.tag_id', '=', 'tags.id')
-            ->select('tags.name', DB::raw('count(tags.id) as occurence'))
-            ->groupBy('tags.id')->orderBy('occurence', 'desc')->limit(4)->get();
-
-        return view('home.index', compact('categories', 'featured', 'latest', 'articles', 'tags'));
+        return view('home.index', compact('featured', 'latest', 'articles'));
     }
 
     /**
@@ -36,18 +31,12 @@ class HomeController extends Controller
      */
     public function showCategory(Category $category)
     {
-        $categories = Category::all();
-
-        $tags = Tag::join('article_tag', 'article_tag.tag_id', '=', 'tags.id')
-        ->select('tags.name', DB::raw('count(tags.id) as occurence'))
-        ->groupBy('tags.id')->orderBy('occurence', 'desc')->limit(4)->get();
-
-        $latest = Article::with('author.role')->where('category_id', $category->id)->orderBy('featured', true)->latest()->limit(2)->get();
+        $latest = Article::with('author.role')->where('category_id', $category->id)->orderBy('featured', 'desc')->latest()->limit(2)->get();
 
         $usedIds = $latest->pluck('id');
-        $articles = Article::with('author.role', 'category')->where('category_id', $category->id)->orderBy('views', 'desc')->latest()->paginate(12);
+        $articles = Article::with('author.role', 'category')->where('category_id', $category->id)->orderBy('views', 'desc')->latest()->paginate(9);
 
-        return view('showCategory', compact('categories', 'tags', 'latest', 'articles'));
+        return view('home.show-category', compact('category', 'latest', 'articles'));
     }
 
     /**
@@ -55,15 +44,9 @@ class HomeController extends Controller
      */
     public function showTag(Tag $tag)
     {
-        $categories = Category::all();
+        $articles = Tag::with('articles.author.role', 'articles.category')->where('id', $tag->id)->latest()->paginate(9);
 
-        $tags = Tag::join('article_tag', 'article_tag.tag_id', '=', 'tags.id')
-        ->select('tags.name', DB::raw('count(tags.id) as occurence'))
-        ->groupBy('tags.id')->orderBy('occurence', 'desc')->limit(4)->get();
-
-        $articles = Tag::with('articles.author.role', 'articles.category')->where('id', $tag->id)->orderBy('views', 'desc')->latest()->paginate(12);
-
-        return view('showCategory', compact('categories', 'tags', 'latest', 'articles'));
+        return view('home.show-tag', compact('tag', 'articles'));
     }
 
     /**
@@ -71,15 +54,9 @@ class HomeController extends Controller
      */
     public function showArticle(Article $article)
     {
-        $categories = Category::all();
-
-        $tags = Tag::join('article_tag', 'article_tag.tag_id', '=', 'tags.id')
-        ->select('tags.name', DB::raw('count(tags.id) as occurence'))
-        ->groupBy('tags.id')->orderBy('occurence', 'desc')->limit(4)->get(); 
-
         $article = Article::where('id', $article->id)->with('author', 'category', 'comments', 'tags')->first();
 
-        return view('showArticle', compact('categories', 'tags', 'article'));
+        return view('home.show-article', compact('article'));
     }
 
     /**

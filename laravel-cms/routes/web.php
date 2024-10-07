@@ -13,9 +13,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(HomeController::class)->group(function(){
     Route::get('/', 'index')->name('home.index');
-    Route::get('/{category}', 'showCategory')->name('home.category');
-    Route::get('/{tag}', 'showTag')->name('home.tag');
-    Route::get('/{article}', 'showArticle')->name('home.article');
+    Route::get('/{tag}/tag', 'showTag')->name('home.tag');
+    Route::get('/{category}/category', 'showCategory')->name('home.category');
+    Route::get('/{article}/article', 'showArticle')->name('home.article');
     Route::post('/{article}', 'storeComment')->name('home.store');
     Route::get('/{article}/{comment}/edit', 'editComment')->name('home.edit');
     Route::put('/{article}/{comment}', 'updateComment')->name('home.update');

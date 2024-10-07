@@ -1,6 +1,6 @@
 <nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
     <div class="flex lg:flex-1">
-        <a href="#" class="-m-1.5 p-1.5">
+        <a href="{{ route('home.index') }}" class="-m-1.5 p-1.5">
             <span class="sr-only">Algebra Blog</span>
             <img class="h-8 w-auto" src="https://tailwindcss.com/_next/static/media/tailwindcss-mark.3c5441fc7a190fb1800d4a5c7f07ba4b1345a9c8.svg" alt="">
         </a>
@@ -15,7 +15,7 @@
     </div>
     <div class="hidden lg:flex lg:gap-x-12">
         @foreach($categories as $category)
-            <x-category-tag class="font-semibold text-gray-900">{{ $category->name }}</x-category-tag>
+            <x-category-tag href="{{ route('home.category', $category->id) }}" class="font-semibold text-gray-900">{{ $category->name }}</x-category-tag>
         @endforeach
     </div>
     <div class="hidden lg:flex lg:flex-1 lg:justify-end gap-3">
@@ -44,7 +44,7 @@
         <div class="-my-6 divide-y divide-gray-500/10">
             <div class="space-y-2 py-6">
             @foreach($categories as $category)
-                <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">{{ $category->name }}</a>
+                <a href="{{ route('home.category', $category->id) }}" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">{{ $category->name }}</a>
             @endforeach
             </div>
             <div class="py-6">
