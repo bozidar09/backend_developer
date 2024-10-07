@@ -219,10 +219,6 @@ sudo php artisan make:component MasterLayout
 
   class MasterLayout extends Component
   {
-      public function __construct(
-          public Collection $categories,
-          public Collection $tags,
-      ) {}
       /**
       * Get the view / contents that represents the component.
       */
@@ -233,6 +229,6 @@ sudo php artisan make:component MasterLayout
   }
 ```
 
-- objašnjenje koda - u konstruktoru navodimo podatke koje ćemo prenositi iz body dijela (home.blade.php) u layouts/master.blade.php, a u render() metodi navodimo gdje se nalazi taj master.blade.php file, odnosno gdje ga render metoda može pronaći (layouts folder)
+- ovdje u render() metodi navodimo gdje se nalazi master.blade.php file, odnosno gdje ga poziv na metodu može pronaći (layouts folder)
 
 - zatim u resources/views/layouts folderu kreirajte novi file master.blade.php i u njemu izdvojite okvir vašeg home pagea (kojeg će pozivati home.blade.php, i koji će uključivati - include(), header, footer i slične dijelove html stranice)
