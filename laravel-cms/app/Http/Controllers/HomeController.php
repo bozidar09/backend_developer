@@ -6,6 +6,7 @@ use App\Models\Article;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Tag;
+use App\Services\ViewCounterService;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -15,15 +16,19 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $featured = Article::with('author.role')->where('featured', true)->first();
+        $categories = Category::all();
 
-        $latest = Article::with('author.role')->latest()->where('featured', true)->where('id', '<>', $featured->id)->limit(2)->get();
+        foreach ($categories as $category) {
+            $featured = Article::with('author.role')->where('category_id', $category->id)->where('featured', true)->first();
+            $latest = Article::with('author.role', 'category')->where('category_id', $category->id)->where('id', '<>', $featured->id)->latest()->limit(3)->get();
 
-        $usedIds = $latest->pluck('id');
-        $usedIds[] = $featured->id;
-        $articles = Article::with('author.role', 'category')->latest()->whereNotIn('id', $usedIds)->paginate(9);
+            $articles[$category->name] = [
+                    'featured' => $featured, 
+                    'latest' => $latest
+                    ];
+        }
 
-        return view('home.index', compact('featured', 'latest', 'articles'));
+        return view('home.index', compact('articles', 'categories'));
     }
 
     /**
@@ -52,55 +57,11 @@ class HomeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function showArticle(Article $article)
+    public function showArticle(Article $article, ViewCounterService $viewCounter)
     {
         $article = Article::where('id', $article->id)->with('author', 'category', 'comments', 'tags')->first();
+        $viewCounter->count($article);
 
         return view('home.show-article', compact('article'));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function storeComment(Article $article, Request $request)
-    {
-        $data = $request->validate([
-            'text' => ['required', 'string'],
-            'article_id' => ['required', 'integer', 'gt:0', 'exists:articles,id'],
-            'user_id' => ['required', 'integer', 'gt:0', 'exists:users,id'],
-        ]);
-
-        Comment::create($data);
-        
-        return redirect()->route('showArticle', $article->id)->with('success', 'Succesfully stored comment');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function editComment(Article $article, Comment $comment)
-    {
-        $article = Article::where('id', $article->id)->with('category', 'author', 'comments', 'tags')->first();
-
-        $tagIds = $article->tags->pluck('id');
-        $tags = Tag::whereNotIn('id', $tagIds)->get();
-
-        return view('editArticleComment', compact('article', 'tags'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function updateComment(Article $article, Comment $comment, Request $request)
-    {
-        $data = $request->validate([
-            'text' => ['required', 'string'],
-            'article_id' => ['required', 'integer', 'gt:0', 'exists:articles,id'],
-            'user_id' => ['required', 'integer', 'gt:0', 'exists:users,id'],
-        ]);
-
-        $comment->update($data);
-
-        return redirect()->route('showArticle', $article->id)->with('success', 'Succesfully updated comment');
     }
 }

@@ -1,5 +1,9 @@
 <x-master-layout :$categories :$tags>
 
+    <x-slot:title>
+        {{ $tag->name }}
+    </x-slot>
+
     <!-- All -->
     <div class="bg-white pb-24 sm:py-32">
     <div class="mx-auto max-w-7xl px-6 lg:px-8">

@@ -21,18 +21,12 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
-
-        $tags = Tag::join('article_tag', 'article_tag.tag_id', '=', 'tags.id')
-        ->select('tags.name', DB::raw('count(tags.id) as occurence'))
-        ->groupBy('tags.id')->orderBy('occurence', 'desc')->limit(4)->get();
-
         $latest = Article::with('author.role')->latest()->where('featured', true)->limit(2)->get();
 
         $usedIds = $latest->pluck('id');
         $articles = Article::with('author.role', 'category')->latest()->paginate(12);
 
-        return view('articles', compact('categories', 'tags', 'latest', 'articles'));
+        return view('articles.index', compact('latest', 'articles'));
     }
 
     /**
@@ -72,11 +66,11 @@ class ArticleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Article $article)
+    public function show(Article $article, ViewCounterService $viewCounter)
     {
         $article = Article::where('id', $article->id)->with('category', 'author', 'comments', 'tags')->first();
 
-        (new ViewCounterService())->count($article);
+        $viewCounter->count($article);
 
         return view('article.show', compact('article'));
     }
