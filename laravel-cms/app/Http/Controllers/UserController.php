@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\UserRequest;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -33,21 +31,19 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreUserRequest $request)
+    public function store(UserRequest $request)
     {
-        $data = $request->validate([
-            'first_name' => ['required', 'string'],
-            'last_name' => ['required', 'string'],
-            'email' => ['required', 'email', 'unique:users,email'],
-            'password' => ['required', /* Rules\Password::defaults() */],
-            'avatar' => ['nullable', 'image'],
-            'job' => ['nullable', 'string'],
-            'role_id' => ['required', 'string', 'exists:roles,id'],
+        User::create([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'password' => $request->password,
+            'avatar' => $request->avatar,
+            'job' => $request->job,
+            'role_id' => $request->role_id,
         ]);
 
-        User::create($data);
-
-        return redirect()->route('users.index')->with('success', 'Succesfully stored user' . $data['first_name' . ' ' . $data['last_name']]);
+        return redirect()->route('users.index')->with('success', 'Succesfully stored user' . $request->first_name . ' ' . $request->last_name);
     }
 
     /**
@@ -74,21 +70,19 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(UserRequest $request, User $user)
     {
-        $data = $request->validate([
-            'first_name' => ['required', 'string'],
-            'last_name' => ['required', 'string'],
-            'email' => ['required', 'email', Rule::unique('email')->ignore($user)],
-            'password' => ['required', /* Rules\Password::defaults() */],
-            'avatar' => ['nullable', 'image'],
-            'job' => ['nullable', 'string'],
-            'role_id' => ['required', 'string', 'exists:roles,id'],
+        $user->update([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'password' => $request->password,
+            'avatar' => $request->avatar,
+            'job' => $request->job,
+            'role_id' => $request->role_id,
         ]);
 
-        $user->update($data);
-
-        return redirect()->route('users.index')->with('success', 'Succesfully updated user ' . $data['first_name'] . ' ' . $data['last_name']);
+        return redirect()->route('users.index')->with('success', 'Succesfully updated user ' . $request->first_name . ' ' . $request->last_name);
     }
 
     /**

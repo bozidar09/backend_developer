@@ -29,7 +29,7 @@ class TagPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return $user->role->name === 'Writer';
     }
 
     /**

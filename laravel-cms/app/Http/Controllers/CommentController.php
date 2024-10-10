@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreCommentRequest;
-use App\Http\Requests\UpdateCommentRequest;
+use App\Http\Requests\CommentRequest;
 use App\Models\Article;
 use App\Models\Comment;
 use App\Models\User;
@@ -34,15 +33,13 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCommentRequest $request)
+    public function store(CommentRequest $request)
     {
-        $data = $request->validate([
-            'text' => ['required', 'string'],
-            'article_id' => ['required', 'integer', 'gt:0', 'exists:articles,id'],
-            'user_id' => ['required', 'integer', 'gt:0', 'exists:users,id'],
+        Comment::create([
+            'text' => $request->text,
+            'article_id' => $request->article_id,
+            'user_id' => $request->user_id,
         ]);
-
-        Comment::create($data);
 
         return redirect()->route('comments.index')->with('success', 'Succesfully stored comment');
     }
@@ -72,15 +69,13 @@ class CommentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCommentRequest $request, Comment $comment)
+    public function update(CommentRequest $request, Comment $comment)
     {
-        $data = $request->validate([
-            'text' => ['required', 'string'],
-            'article_id' => ['required', 'integer', 'gt:0', 'exists:articles,id'],
-            'user_id' => ['required', 'integer', 'gt:0', 'exists:users,id'],
+        $comment->update([
+            'text' => $request->text,
+            'article_id' => $request->article_id,
+            'user_id' => $request->user_id,
         ]);
-
-        $comment->update($data);
 
         return redirect()->route('comments.index')->with('success', 'Succesfully updated comment');
     }

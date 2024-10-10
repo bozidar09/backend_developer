@@ -33,7 +33,7 @@
                 <p>{{ $articles[$category->name]['featured']->body }}</p>
               </blockquote>
               <figcaption class="mt-6 text-base text-white">
-                <a href="{{ route('home.user', $article->user_id) }}">
+                <a href="{{ route('home.user', $articles[$category->name]['featured']->user_id) }}">
                   <div class="font-semibold">{{ $articles[$category->name]['featured']->author->fullName() }}</div>
                 </a>
                 <div class="mt-1">{{ $articles[$category->name]['featured']->author->job }}</div>

@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreTagRequest extends FormRequest
+class CommentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class StoreTagRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'text' => ['required', 'string'],
+            'article_id' => ['required', 'integer', 'gt:0', 'exists:articles,id'],
+            'user_id' => ['required', 'integer', 'gt:0', 'exists:users,id'],
         ];
     }
 }

@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreRoleRequest;
-use App\Http\Requests\UpdateRoleRequest;
+use App\Http\Requests\RoleRequest;
 use App\Models\Role;
 use Illuminate\Validation\Rule;
 
@@ -30,15 +29,13 @@ class RoleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreRoleRequest $request)
+    public function store(RoleRequest $request)
     {
-        $data = $request->validate([
-            'name' => ['required', 'string', 'unique:roles'],
+        Role::create([
+            'name' => $request->name,
         ]);
 
-        Role::create($data);
-
-        return redirect()->route('roles.index')->with('success', 'Succesfully stored role ' . $data['name']);
+        return redirect()->route('roles.index')->with('success', 'Succesfully stored role ' . $request->name);
     }
 
     /**
@@ -64,15 +61,13 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRoleRequest $request, Role $role)
+    public function update(RoleRequest $request, Role $role)
     {
-        $data = $request->validate([
-            'name' => ['required', 'string', Rule::unique('roles')->ignore($role)],
+        $role->update([
+            'name' => $request->name,
         ]);
-        
-        $role->update($data);
 
-        return redirect()->route('roles.index')->with('success', 'Succesfully updated role ' . $data['name']);
+        return redirect()->route('roles.index')->with('success', 'Succesfully updated role ' . $request->name);
     }
 
     /**

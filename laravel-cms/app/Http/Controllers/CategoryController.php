@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreCategoryRequest;
-use App\Http\Requests\UpdateCategoryRequest;
+use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
-use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
@@ -30,16 +28,14 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCategoryRequest $request)
+    public function store(CategoryRequest $request)
     {
-        $data = $request->validate([
-            'name' => ['required', 'string', 'unique:categories'],
-            'order' => ['required', 'integer', 'gt:0'],
+        Category::create([
+            'name' => $request->name,
+            'order' => $request->order,
         ]);
 
-        Category::create($data);
-
-        return redirect()->route('categpries.index')->with('success', 'Succesfully stored category ' . $data['name']);
+        return redirect()->route('categpries.index')->with('success', 'Succesfully stored category ' . $request->name);
     }
 
     /**
@@ -65,16 +61,14 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCategoryRequest $request, Category $category)
+    public function update(CategoryRequest $request, Category $category)
     {
-        $data = $request->validate([
-            'name' => ['required', 'string', Rule::unique('categories')->ignore($category)],
-            'order' => ['required', 'integer', 'gt:0'],
+        $category->update([
+            'name' => $request->name,
+            'order' => $request->order,
         ]);
 
-        $category->update($data);
-
-        return redirect()->route('categories.index')->with('success', 'Succesfully updated category' . $data['name']);
+        return redirect()->route('categories.index')->with('success', 'Succesfully updated category' . $request->name);
     }
 
     /**

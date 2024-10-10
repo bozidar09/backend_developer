@@ -35,7 +35,7 @@ class HomeController extends Controller
      */
     public function showCategory(Category $category)
     {
-        $latest = Article::with('author.role')->where('category_id', $category->id)->orderBy('featured', 'desc')->latest()->limit(2)->get();
+        $latest = $category->articles()->with('author.role')->orderBy('featured', 'desc')->latest()->limit(2)->get();
 
         $usedIds = $latest->pluck('id');
         $articles = Article::with('author.role', 'category')->where('category_id', $category->id)->orderBy('views', 'desc')->latest()->paginate(9);
@@ -49,7 +49,7 @@ class HomeController extends Controller
     public function showUser(User $user)
     {
         $user = User::where('id', $user->id)->with('role')->first();
-        $articles = Article::with('author.role', 'category')->where('user_id', $user->id)->orderBy('views', 'desc')->latest()->paginate(9);
+        $articles = $user->articles()->with('author.role', 'category')->orderBy('views', 'desc')->latest()->paginate(9);
 
         return view('home.show-user', compact('user', 'articles'));
     }
@@ -59,7 +59,7 @@ class HomeController extends Controller
      */
     public function showTag(Tag $tag)
     {
-        $articles = Tag::with('articles.author.role', 'articles.category')->where('id', $tag->id)->latest()->paginate(9);
+        $articles = $tag->articles()->with('author.role', 'category')->latest()->paginate(9);
 
         return view('home.show-tag', compact('tag', 'articles'));
     }

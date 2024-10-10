@@ -14,7 +14,7 @@
   <div class="pl-10">
     <h3 class="text-sm font-semibold leading-6 text-gray-900">Tags</h3>
     <ul role="list" class="mt-6 space-y-4">
-      @foreach($tags as $tag)
+      @foreach($layoutTags as $tag)
         <li>
           <x-category-tag href="{{ route('home.tag', $tag->id) }}" class="text-gray-600 hover:text-gray-900">{{ $tag->name }}</x-category-tag>
         </li>
@@ -24,7 +24,7 @@
   <div  class="pl-10">
     <h3 class="text-sm font-semibold leading-6 text-gray-900">Archives</h3>
     <ul role="list" class="mt-6 space-y-4">
-      @foreach($categories as $category)
+      @foreach($layoutCategories as $category)
         <li>
           <x-category-tag href="{{ route('home.category', $category->id) }}" class="text-gray-600 hover:text-gray-900">{{ $category->name }}</x-category-tag>
         </li>

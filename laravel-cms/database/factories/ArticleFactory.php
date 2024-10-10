@@ -5,8 +5,8 @@ namespace Database\Factories;
 use App\Models\Category;
 use App\Models\Role;
 use App\Models\User;
+use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Article>
@@ -25,7 +25,6 @@ class ArticleFactory extends Factory
 
         return [
             'title' => $title,
-            'slug' => Str::slug($title),
             'image' => fake()->imageUrl(width: 800, height: 600),
             'body' => fake()->paragraphs(mt_rand(5, 10), true),
             'views' => mt_rand(0, 1000),

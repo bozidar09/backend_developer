@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreTagRequest;
-use App\Http\Requests\UpdateTagRequest;
+use App\Http\Requests\TagRequest;
 use App\Models\Tag;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Validator;
 
 class TagController extends Controller
 {
@@ -30,15 +29,26 @@ class TagController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTagRequest $request)
+    public function store(TagRequest $request)
     {
-        $data = $request->validate([
-            'name' => ['required', 'string', 'unique:tags'],
+        Tag::create([
+            'name' => $request->name,
         ]);
 
-        Tag::create($data);
+        $tags = $request->additionalTag;
 
-        return redirect()->route('tags.index')->with('success', 'Succesfully stored tag' . $data['name']);
+        if (str_contains($tags , ',')) {
+            $tags = explode(',', $tags );
+        } else {
+            $tags[] = $tags;
+        }
+
+        foreach ($tags as $tag) {
+            Validator::make(['name' => $tag], ['name' => 'required|min:3|max:255|unique:tags,name'])->validateWithBag('additionalTagCreation');
+            Tag::create(['name' => $tag]);
+        }
+
+        return redirect()->route('tags.index')->with('success', 'Succesfully stored tag' . $request->name);
     }
 
     /**
@@ -64,15 +74,13 @@ class TagController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTagRequest $request, Tag $tag)
+    public function update(TagRequest $request, Tag $tag)
     {
-        $data = $request->validate([
-            'name' => ['required', 'string', Rule::unique('tags')->ignore($tag)],
+        $tag->update([
+            'name' => $request->name,
         ]);
 
-        $tag->update($data);
-
-        return redirect()->route('tags.index')->with('success', 'Succesfully updated tag' . $data['name']);
+        return redirect()->route('tags.index')->with('success', 'Succesfully updated tag' . $request->name);
     }
 
     /**

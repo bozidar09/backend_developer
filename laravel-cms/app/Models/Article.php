@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Article extends Model
 {
-    use HasFactory;
+    use HasFactory, Sluggable; 
 
     protected $fillable = [
         'title',
@@ -19,6 +20,15 @@ class Article extends Model
         'category_id',
         'user_id',
     ];
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'title'
+            ]
+        ];
+    }
 
     public function category() {
         return $this->belongsTo(Category::class);

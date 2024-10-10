@@ -29,7 +29,7 @@ class CommentPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return $user->role->name === 'Writer' || 'Member';
     }
 
     /**
@@ -37,7 +37,7 @@ class CommentPolicy
      */
     public function update(User $user, Comment $comment): bool
     {
-        //
+        return $user->id === $comment->user_id;
     }
 
     /**
@@ -45,7 +45,7 @@ class CommentPolicy
      */
     public function delete(User $user, Comment $comment): bool
     {
-        //
+        return $user->id === $comment->user_id;
     }
 
     /**
