@@ -7,15 +7,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class Guest
+class Writer
 {
     /**
      * @param \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response) $next
      */
 
-     public function handle(Request $request, Closure $next, string $role): Response
+     public function handle(Request $request, Closure $next): Response
      {
-         if (!$request->user()->hasRole($role)) {
+         if (!$request->user()->role->name === 'Writer') {
              return redirect()->route('home.index')->with('danger', "Can't access page");
          }
   

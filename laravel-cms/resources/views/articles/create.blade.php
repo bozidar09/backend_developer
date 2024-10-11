@@ -37,6 +37,17 @@
                             <p class="text-xs leading-5 text-gray-600">PNG, JPG up to 10MB</p>
                             <x-input-error :messages="$errors->get('image')" class="mt-2" />
                         </div>
+
+                        @role('admin')
+                            <div>
+                                <label for="featured" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Featured</label>
+                                <select id="featured" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option value="0" {{ old('featured') == 0 ? 'selected' : '' }}>0</option>
+                                <option value="1" {{ old('featured') == 1 ? 'selected' : '' }}>1</option>
+                                </select>      
+                                <x-input-error :messages="$errors->get('featured')" class="mt-2" />
+                            </div>
+                        @endrole
                       
                         <div class="border-b border-gray-900/10 pb-12">                      
                             <div class="mt-10 space-y-10">
@@ -46,7 +57,7 @@
                                     @foreach ($categories as $category)
                                         <div class="relative flex gap-3">
                                             <div class="flex h-6 items-center">
-                                                <input id="category-{{ $category->id }}" name="category" type="radio" value="{{ $category->id }}"
+                                                <input id="category-{{ $category->id }}" name="category_id" type="radio" value="{{ $category->id }}"
                                                 {{ old('category') == $category->id ? 'checked' : '' }} class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
                                             </div>
                                             <div class="text-sm leading-6">
@@ -55,7 +66,7 @@
                                       </div>
                                     @endforeach
                                 </div>
-                                <x-input-error :messages="$errors->get('category')" class="mt-2" />
+                                <x-input-error :messages="$errors->get('category_id')" class="mt-2" />
                               </fieldset>
                               
                               <fieldset>
@@ -64,11 +75,9 @@
                                 <div class="mt-6 flex flex-wrap items-center gap-6">
 
                                     @foreach ($tags as $tag)
-                                        @php($checked = old('tags') && in_array($tag->id, old('tags')))
-                                        
                                         <div class="relative flex gap-3">
                                             <div class="flex h-6 items-center">
-                                                <input {{ $checked ? 'checked' : '' }} type="checkbox" id="tags-{{ $tag->id }}" name="tags[]" value="{{ $tag->id }}" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" />
+                                                <input {{ old('tags') && in_array($tag->id, old('tags')) ? 'checked' : '' }} type="checkbox" id="tags-{{ $tag->id }}" name="tags[]" value="{{ $tag->id }}" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" />
                                             </div>
                                             <div class="text-sm leading-6">
                                                 <label for="tags-{{ $tag->id }}" class="font-medium text-gray-900">{{ $tag->name }}</label>

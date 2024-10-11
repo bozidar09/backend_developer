@@ -46,11 +46,11 @@ class ArticleController extends Controller
     public function store(ArticleRequest $request)
     {
         Gate::authorize('create', Article::class);
-
+        
         $article = Article::create([
             'title' => $request->title,
-            'image' => $request->image,
             'body' => $request->body,
+            'featured' => $request->featured ?? false,
             'user_id' => Auth::id(),
             'category_id' => $request->category_id,
         ]);
@@ -62,7 +62,7 @@ class ArticleController extends Controller
              $article->update(['image' => $path]);
         }
 
-        return redirect()->route('articles.index')->with('success', 'Succesfully stored article ' . $request->title);
+        return redirect()->route('articles.index')->withFlashMessage('Succesfully stored article ' . $request->title);
     }
 
     /**
@@ -101,7 +101,8 @@ class ArticleController extends Controller
         $article->update([
             'title' => $request->title,
             'body' => $request->body,
-            'category_id' => $request->category,
+            'featured' => $request->featured ?? false,
+            'category_id' => $request->category_id,
         ]);
 
         if ($image = $request->file('image')) {
@@ -117,7 +118,7 @@ class ArticleController extends Controller
             $article->tags()->detach();
         }
 
-        return redirect()->route('articles.index')->with('success', 'Succesfully updated article ' . $request->title);
+        return redirect()->route('articles.index')->withFlashMessage('Succesfully updated article ' . $request->title);
     }
 
     /**

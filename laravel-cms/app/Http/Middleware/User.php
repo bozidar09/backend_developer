@@ -13,9 +13,9 @@ class User
      * @param \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response) $next
      */
 
-    public function handle(Request $request, Closure $next, string $role): Response
+    public function handle(Request $request, Closure $next): Response
     {
-        if (!$request->user()->hasRole($role)) {
+        if (!$request->user()->role->name === 'User') {
             return redirect()->route('home.index')->with('danger', "Can't access page");
         }
  

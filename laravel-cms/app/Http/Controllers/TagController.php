@@ -31,20 +31,16 @@ class TagController extends Controller
      */
     public function store(TagRequest $request)
     {
-        Tag::create([
-            'name' => $request->name,
-        ]);
+        $data = $request->additionalTag;
 
-        $tags = $request->additionalTag;
-
-        if (str_contains($tags , ',')) {
-            $tags = explode(',', $tags );
+        if (str_contains($data , ',')) {
+            $tags = explode(',', $data );
         } else {
-            $tags[] = $tags;
+            $tags[] = $data;
         }
 
         foreach ($tags as $tag) {
-            Validator::make(['name' => $tag], ['name' => 'required|min:3|max:255|unique:tags,name'])->validateWithBag('additionalTagCreation');
+            Validator::make(['additionalTag' => $tag], ['additionalTag' => 'required|unique:tags,name'])->validateWithBag('additionalTagCreation');
             Tag::create(['name' => $tag]);
         }
 

@@ -23,11 +23,11 @@ class ArticleRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string'],
-            'image' => ['nullable', 'image'],
             'body' => ['required', 'string'],
-            'featured' => ['nullable', 'integer', 'gte:0', 'lte:1'],
+            'image' => ['nullable', 'image'],
+            'featured' => ['nullable', 'boolean'],
             'category_id' => ['required', 'integer', 'gt:0', 'exists:categories,id'],
-            'tags' => ['nullable', 'integer', 'gt:0', 'exists:tags,id'],
+            'tags' => ['nullable', 'exists:tags,id'],
         ];
     }
 }

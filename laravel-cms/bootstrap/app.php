@@ -2,10 +2,10 @@
 
 use App\Http\Middleware\Admin;
 use App\Http\Middleware\User;
+use App\Http\Middleware\Writer;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use NunoMaduro\Collision\Writer;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(

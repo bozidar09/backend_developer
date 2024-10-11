@@ -4,4 +4,5 @@
 
 <title>{{ $title ?? config('app.name', 'Algebra Blog') }}</title>
 
-<script src="https://cdn.tailwindcss.com"></script>
+<!-- Scripts -->
+@vite(['resources/css/app.css', 'resources/js/app.js'])

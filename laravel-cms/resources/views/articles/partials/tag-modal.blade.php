@@ -1,4 +1,4 @@
-<x-modal name="create-tag" :show="$errors->additionalTagCreation->isNotEmpty()" focusable>
+<x-modal name="create-tag" :show="!empty($errors->get('additionalTag')) || $errors->additionalTagCreation->isNotEmpty()" focusable>
     <form method="post" action="{{ route('tags.store') }}" class="p-6">
         @csrf
 
@@ -14,7 +14,7 @@
                 class="mt-1 block w-3/4 p-2"
                 placeholder="Bussines,Travel"
             />
-
+            <x-input-error :messages="$errors->get('additionalTag')" class="mt-2" />
             <x-input-error :messages="$errors->additionalTagCreation->get('additionalTag')" class="mt-2" />
         </div>
 

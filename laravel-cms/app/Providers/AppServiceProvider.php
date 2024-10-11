@@ -3,9 +3,12 @@
 namespace App\Providers;
 
 use App\Models\Category;
+use App\Models\Role;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Support\Facades;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -23,6 +26,9 @@ class AppServiceProvider extends ServiceProvider
             $faker = fake();
             $faker->addProvider(new \Ottaviano\Faker\Gravatar($faker));
             $faker->addProvider(new \Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
+
+            $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
+            $this->app->register(TelescopeServiceProvider::class);
         }
     }
 
@@ -48,6 +54,11 @@ class AppServiceProvider extends ServiceProvider
         // Admin allow all policy
         Gate::before(function (User $user, string $ability){
             return $user->role->name === "Admin" ? true : null;
+        });
+
+        // Blade check admin role
+        Blade::if('role', function(string $role){
+            return Auth::user()->role_id === Role::where('name', $role)->first()->id;
         });
     }
 }
