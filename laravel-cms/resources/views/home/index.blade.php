@@ -10,7 +10,7 @@
       <div class="bg-white py-24 sm:py-16">
         <div class="mx-auto max-w-7xl px-6 lg:px-8">
           <div class="mx-auto max-w-2xl text-center">
-            <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"><a href="{{ route('home.category', $category->id) }}">{{ $category->name }}</a></h2>
+            <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"><a href="{{ route('home.category', $category) }}">{{ $category->name }}</a></h2>
           </div>
         </div>
       </div>
@@ -27,7 +27,7 @@
             <div class="aspect-[1097/845] w-[68.5625rem] bg-gradient-to-r from-[#ff4694] to-[#776fff] opacity-25" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
           </div>
           <div class="relative mx-auto max-w-2xl lg:mx-0">
-            <p class="text-3xl font-semibold text-white"><a href="{{ route('home.article', $articles[$category->name]['featured']->id) }}">{{ $articles[$category->name]['featured']->title }}</a></p>
+            <p class="text-3xl font-semibold text-white"><a href="{{ route('home.article', $articles[$category->name]['featured']) }}">{{ $articles[$category->name]['featured']->title }}</a></p>
             <figure>
               <blockquote class="mt-6 text-lg line-clamp-5 font-semibold text-white sm:text-xl sm:leading-8">
                 <p>{{ $articles[$category->name]['featured']->body }}</p>
@@ -56,11 +56,11 @@
                 <div class="max-w-xl">
                   <div class="mt-8 flex items-center gap-x-4 text-xs">
                     <time datetime="2020-03-16" class="text-gray-500">{{ $article->created_at->toFormattedDateString() }}</time>
-                    <a href="{{ route('home.category', $article->category->id) }}" class="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">{{ $article->category->name }}</a>
+                    <a href="{{ route('home.category', $article->category) }}" class="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">{{ $article->category->name }}</a>
                   </div>
                   <div class="group relative">
                     <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
-                      <a href="{{ route('home.article', $article->id) }}">
+                      <a href="{{ route('home.article', $article) }}">
                         <span class="absolute inset-0"></span>
                         {{ $article->title }}
                       </a>

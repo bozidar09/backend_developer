@@ -15,7 +15,7 @@
     </div>
     <div class="hidden lg:flex lg:gap-x-12">
         @foreach($layoutCategories as $category)
-            <x-category-tag href="{{ route('home.category', $category->id) }}" class="font-semibold text-gray-900">{{ $category->name }}</x-category-tag>
+            <x-category-tag href="{{ route('home.category', $category) }}" class="font-semibold text-gray-900">{{ $category->name }}</x-category-tag>
         @endforeach
     </div>
     <div class="hidden lg:flex lg:flex-1 lg:justify-end gap-3">
@@ -44,7 +44,7 @@
         <div class="-my-6 divide-y divide-gray-500/10">
             <div class="space-y-2 py-6">
             @foreach($layoutCategories as $category)
-                <a href="{{ route('home.category', $category->id) }}" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">{{ $category->name }}</a>
+                <a href="{{ route('home.category', $category) }}" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">{{ $category->name }}</a>
             @endforeach
             </div>
             <div class="py-6">

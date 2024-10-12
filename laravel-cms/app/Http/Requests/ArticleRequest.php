@@ -30,4 +30,12 @@ class ArticleRequest extends FormRequest
             'tags' => ['nullable', 'exists:tags,id'],
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'featured.boolean' => 'The featured field must be 1 or 0.',
+            'tags.exists' => 'This tag does not exist.',
+        ];
+    }
 }

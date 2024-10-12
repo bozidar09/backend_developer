@@ -40,7 +40,7 @@ class AppServiceProvider extends ServiceProvider
         $categories = Category::all();
 
         $tags = Tag::join('article_tag', 'article_tag.tag_id', '=', 'tags.id')
-        ->select('tags.id', 'tags.name', DB::raw('count(tags.id) as occurence'))
+        ->select('tags.*', DB::raw('count(tags.id) as occurence'))
         ->groupBy('tags.id')->orderBy('occurence', 'desc')->limit(4)->get();
 
         // Using closure based composers...

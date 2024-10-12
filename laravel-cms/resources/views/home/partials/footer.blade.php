@@ -16,7 +16,7 @@
     <ul role="list" class="mt-6 space-y-4">
       @foreach($layoutTags as $tag)
         <li>
-          <x-category-tag href="{{ route('home.tag', $tag->id) }}" class="text-gray-600 hover:text-gray-900">{{ $tag->name }}</x-category-tag>
+          <x-category-tag href="{{ route('home.tag', $tag) }}" class="text-gray-600 hover:text-gray-900">{{ $tag->name }}</x-category-tag>
         </li>
       @endforeach
     </ul>
@@ -26,7 +26,7 @@
     <ul role="list" class="mt-6 space-y-4">
       @foreach($layoutCategories as $category)
         <li>
-          <x-category-tag href="{{ route('home.category', $category->id) }}" class="text-gray-600 hover:text-gray-900">{{ $category->name }}</x-category-tag>
+          <x-category-tag href="{{ route('home.category', $category) }}" class="text-gray-600 hover:text-gray-900">{{ $category->name }}</x-category-tag>
         </li>
       @endforeach
     </ul>
