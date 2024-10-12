@@ -56,9 +56,10 @@ class AppServiceProvider extends ServiceProvider
             return $user->role->name === "Admin" ? true : null;
         });
 
-        // Blade check admin role
-        Blade::if('role', function(string $role){
-            return Auth::user()->role_id === Role::where('name', $role)->first()->id;
+        // Blade check role
+        Blade::if('role', function(string|array $role){
+            $userRole = mb_strtolower(Role::where('id', Auth::user()->role_id)->first()->name);
+            return is_array($role) ? in_array($userRole, $role) : $userRole === $role;
         });
     }
 }

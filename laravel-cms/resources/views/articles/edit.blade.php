@@ -33,6 +33,11 @@
                         <div>
                             <label for="body" class="block font-medium text-sm text-gray-700 mb-2">Article Photo</label>
                             <img class="h-auto max-w-lg rounded-lg" src="{{ Storage::url($article->image) }}" alt="">
+                            @unless(Storage::url($article->image))
+                                <div class="relative flex gap-3">
+                                    <x-algebra.button type="button" boja="red" x-data="" x-on:click.prevent="$dispatch('open-modal', 'delete-data')">Delete</x-algebra.button>
+                                </div>
+                            @endunless
                         </div>
 
                         <div class="col-span-full">
@@ -106,5 +111,6 @@
         </div>
     </div>
 
+    @include('components.delete-modal', ['route' => 'articles.destroyImage', 'data' => $article])
     @include('articles.partials.tag-modal')
 </x-app-layout>

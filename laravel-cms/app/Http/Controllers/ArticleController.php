@@ -138,6 +138,21 @@ class ArticleController extends Controller
     }
 
     /**
+     * Remove the specified resource from storage.
+     */
+    public function destroyImage(Article $article)
+    {
+        Storage::disk('public')->delete($article->image);
+        $article->update(['image' => null]);
+
+        $article = Article::where('id', $article->id)->with('category', 'author', 'comments', 'tags')->first();
+        $categories = Category::all();
+        $tags = Tag::all();
+
+        return view('articles.edit', compact('article', 'categories', 'tags'));
+    }
+
+    /**
      * Display the specified resource.
      */
     public function byAuthor(User $user)

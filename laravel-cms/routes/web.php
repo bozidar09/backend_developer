@@ -42,6 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/articles/{article}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
     Route::put('/articles/{article}', [ArticleController::class, 'update'])->name('articles.update');
     Route::delete('/articles/{article}', [ArticleController::class, 'destroy'])->name('articles.destroy');
+    Route::delete('/articles/{article}/image', [ArticleController::class, 'destroyImage'])->name('articles.destroyImage');
     Route::get('/articles/{tag}/tag', [ArticleController::class, 'byTag'])->name('tag.articles');
     Route::get('/articles/{category}/category', [ArticleController::class, 'byCategory'])->name('category.articles');
     Route::get('/articles/{user}/user', [ArticleController::class, 'byAuthor'])->name('user.articles');
