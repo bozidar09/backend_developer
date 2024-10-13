@@ -13,7 +13,7 @@
         <div class="mx-auto mt-16 grid max-w-2xl auto-rows-fr grid-cols-1 gap-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
           @foreach($latest as $article)
             <article class="relative isolate flex flex-col justify-end overflow-hidden rounded-2xl bg-gray-900 px-8 pb-8 pt-80 sm:pt-48 lg:pt-80">
-              <img src="{{ $article->image }}" alt="" class="absolute inset-0 -z-10 h-full w-full object-cover">
+              <img src="{{ Storage::url($article->image) }}" alt="" class="absolute inset-0 -z-10 h-full w-full object-cover">
               <div class="absolute inset-0 -z-10 bg-gradient-to-t from-gray-900 via-gray-900/40"></div>
               <div class="absolute inset-0 -z-10 rounded-2xl ring-1 ring-inset ring-gray-900/10"></div>
       
@@ -24,7 +24,7 @@
                     <circle cx="1" cy="1" r="1" />
                   </svg>
                   <div class="flex gap-x-2.5">
-                    <img src="{{ $article->author->avatar }}" alt="" class="h-6 w-6 flex-none rounded-full bg-white/10">
+                    <img src="{{ Storage::url($article->author->avatar) }}" alt="" class="h-6 w-6 flex-none rounded-full bg-white/10">
                     <a href="{{ route('home.user', $article->user_id) }}">
                       {{ $article->author->fullName() }}
                     </a>
@@ -50,7 +50,7 @@
           @foreach($articles as $article)
             <article class="flex flex-col items-start justify-between">
               <div class="relative w-full">
-                <img src="{{ $article->image }}" alt="" class="aspect-[16/9] w-full rounded-2xl bg-gray-100 object-cover sm:aspect-[2/1] lg:aspect-[3/2]">
+                <img src="{{ Storage::url($article->image) }}" alt="" class="aspect-[16/9] w-full rounded-2xl bg-gray-100 object-cover sm:aspect-[2/1] lg:aspect-[3/2]">
                 <div class="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-900/10"></div>
               </div>
               <div class="max-w-xl">
@@ -68,7 +68,7 @@
                   <p class="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">{{ $article->body }}</p>
                 </div>
                 <div class="relative mt-8 flex items-center gap-x-4">
-                  <img src="{{ $article->author->avatar }}" alt="" class="h-10 w-10 rounded-full bg-gray-100">
+                  <img src="{{ Storage::url($article->author->avatar) }}" alt="" class="h-10 w-10 rounded-full bg-gray-100">
                   <div class="text-sm leading-6">
                     <p class="font-semibold text-gray-900">
                       <a href="{{ route('home.user', $article->user_id) }}">

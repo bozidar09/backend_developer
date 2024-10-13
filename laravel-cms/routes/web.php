@@ -38,6 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
+    Route::get('/articles/filter', [ArticleController::class, 'filterArticles'])->name('filter.articles');
     Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create')->can('create', Article::class);
     Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store')->can('create', Article::class);
     Route::get('/articles/{article:slug}', [ArticleController::class, 'show'])->name('articles.show');
@@ -47,7 +48,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/articles/{article:slug}/image', [ArticleController::class, 'destroyImage'])->name('articles.destroyImage')->can('delete', 'article');
     Route::get('/articles/{tag:slug}/tag', [ArticleController::class, 'byTag'])->name('tag.articles');
     Route::get('/articles/{category:slug}/category', [ArticleController::class, 'byCategory'])->name('category.articles');
-    Route::get('/articles/{user:slug}/user', [ArticleController::class, 'byAuthor'])->name('user.articles');
+    Route::get('/articles/{user}/user', [ArticleController::class, 'byAuthor'])->name('user.articles');
 
     Route::get('/comments', [CommentController::class, 'index'])->name('comments.index');
     Route::get('/comments/create', [CommentController::class, 'create'])->name('comments.create');

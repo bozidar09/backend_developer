@@ -6,6 +6,7 @@
     <x-slot:header>
         <div class="flex justify-between items-center">
             <h3 class="text-xl">{{ $header ?? 'Articles' }}</h3>
+            <x-algebra.button type="button" boja="orange" x-data="" class="px-3.5 py-2.5" x-on:click.prevent="$dispatch('open-modal', 'filter-articles')">Filter articles</x-algebra.button>
             @can('create', App\Models\Article::class)
                 <a href="{{ route('articles.create') }}" class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Create new Article</a>
             @endcan
@@ -25,4 +26,5 @@
     <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
         {{ $articles->links() }}
     </div>
+    @include('articles.partials.filter-modal', ['data' => $data])
 </x-app-layout>

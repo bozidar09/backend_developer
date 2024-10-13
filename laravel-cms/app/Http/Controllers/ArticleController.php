@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
 use App\Models\Category;
+use App\Models\Role;
 use App\Models\Tag;
 use App\Models\User;
 use App\Services\ViewCounterService;
@@ -15,16 +16,30 @@ use Illuminate\Support\Facades\Storage;
 class ArticleController extends Controller
 {
     /**
+     * Get data from database.
+     */
+    public function getData(): array
+    {
+        $data['users'] = User::where('role_id', Role::where('name', 'Writer')->first()->id)->get();
+        $data['categories'] = Category::all();
+        $data['tags'] = Tag::all();
+
+        return $data;
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $data = $this->getData();
+
         $latest = Article::with('author.role')->latest()->where('featured', true)->limit(2)->get();
 
         $usedIds = $latest->pluck('id');
         $articles = Article::with('author.role', 'category')->latest()->paginate(12);
 
-        return view('articles.index', compact('latest', 'articles'));
+        return view('articles.index', compact('latest', 'articles', 'data'));
     }
 
     /**
@@ -58,7 +73,7 @@ class ArticleController extends Controller
         $article->tags()->attach($request->tags);
 
         if ($image = $request->file('image')) {
-             $path = $image->store("images/articles/$article->slug", "public");
+             $path = $image->store("images/articles", "public");
              $article->update(['image' => $path]);
         }
 
@@ -108,7 +123,7 @@ class ArticleController extends Controller
         if ($image = $request->file('image')) {
             Storage::disk('public')->delete($article->image);
 
-            $path = $image->store("images/articles/$article->id", "public");
+            $path = $image->store("images/articles", "public");
             $article->update(['image' => $path]);
         }
 
@@ -157,10 +172,12 @@ class ArticleController extends Controller
      */
     public function byAuthor(User $user)
     {
+        $data = $this->getData();
+        
         $articles = $user->articles()->with('author', 'tags')->latest()->paginate(9);
         $header = $user->fullName();
 
-        return view('articles.index', compact('articles', 'header'));
+        return view('articles.index', compact('articles', 'header', 'data'));
     }
 
     /**
@@ -168,10 +185,12 @@ class ArticleController extends Controller
      */
     public function byTag(Tag $tag)
     {
+        $data = $this->getData();
+
         $articles = $tag->articles()->with('author', 'tags')->latest()->paginate(9);
         $header = $tag->name;
 
-        return view('articles.index', compact('articles', 'header'));
+        return view('articles.index', compact('articles', 'header', 'data'));
     }
 
     /**
@@ -179,12 +198,38 @@ class ArticleController extends Controller
      */
     public function byCategory(Category $category)
     {
+        $data = $this->getData();
+
         // $articles = Article::where('category_id', $id)->with('author', 'tags')->latest()->paginate(10);
         // $articles = Article::whereCategoryId($id)->with('author', 'tags')->latest()->paginate(10);
         $articles = $category->articles()->with('author', 'tags')->latest()->paginate(9);
         $header = $category->name;
 
-        return view('articles.index', compact('articles', 'header'));
+        return view('articles.index', compact('articles', 'header', 'data'));
     }
 
+    /**
+     * Display the filtered resource.
+     */
+    public function filterArticles(ArticleRequest $request)
+    {
+        $data = $this->getData();
+
+        $articles = Article::with('tags')->get();
+        if ($request->users) {
+            $articles = $articles->whereIn('user_id', $request->users);
+        }
+        if ($request->categories) {
+            $articles = $articles->whereIn('category_id', $request->categories);
+        }
+        if ($request->tags) {
+            $articleIds = Tag::join('article_tag', 'article_tag.tag_id', '=', 'tags.id')
+                ->select('article_tag.article_id')->whereIn('tag_id', $request->tags)->get()->pluck('article_id');
+            $articles = $articles->whereIn('id', $articleIds);
+        }
+        $articles = $articles->pluck('id');
+        $articles = Article::whereIn('id', $articles)->with('author.role', 'category')->latest()->paginate(12);
+
+        return view('articles.index', compact('articles', 'data'));
+    }
 }

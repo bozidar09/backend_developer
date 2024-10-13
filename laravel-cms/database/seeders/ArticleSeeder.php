@@ -16,24 +16,30 @@ class ArticleSeeder extends Seeder
      */
     public function run(): void
     {
-            $categories = Category::all() ?? Category::factory()->create();
-            $role = Role::where('name', 'Writer')->first();
-            $users = User::where('role_id', $role->id)->get() ?? User::factory()->create(['role_id' => $role]);
+        $categories = Category::all() ?? Category::factory()->create();
+        $role = Role::where('name', 'Writer')->first();
+        $users = User::where('role_id', $role->id)->get() ?? User::factory()->create(['role_id' => $role]);
 
-            foreach ($categories as $category) {
-                foreach ($users as $user) {
-                    Article::factory(mt_rand(1, 3))->create([
-                            'category_id' => $category,
-                            'user_id' => $user,
-                        ])->each(function($article){
-                            $tags = Tag::inRandomOrder()->limit(mt_rand(1, 3))->pluck('id');
-                            $article->tags()->attach($tags);
+        foreach ($categories as $category) {
+            foreach ($users as $user) {
+                Article::factory(mt_rand(1, 3))->create([
+                        'category_id' => $category,
+                        'user_id' => $user,
+                    ])->each(function($article){
+                        $tags = Tag::inRandomOrder()->limit(mt_rand(1, 3))->pluck('id');
+                        $article->tags()->attach($tags);
 
-                            if ($article->id % 10 === 0) {
-                                $article->update(['featured' => 1]);
-                            }
-                        });
-                }
+                        if ($article->id % 10 === 0) {
+                            $article->update(['featured' => 1]);
+                        }
+                    });
             }
+        }
+
+        // Article image path fix
+        $articles = Article::all();
+        foreach ($articles as $article) {
+            $article->update(['image' => str_replace('/var/www/backend_developer/laravel-cms/public/storage', '', $article->image)]);
+        }
     }
 }

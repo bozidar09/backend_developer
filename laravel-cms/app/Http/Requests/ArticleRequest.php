@@ -21,14 +21,24 @@ class ArticleRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'title' => ['required', 'string'],
-            'body' => ['required', 'string'],
-            'image' => ['nullable', 'image'],
-            'featured' => ['nullable', 'boolean'],
-            'category_id' => ['required', 'integer', 'gt:0', 'exists:categories,id'],
-            'tags' => ['nullable', 'exists:tags,id'],
-        ];
+        if ($this->isMethod('post') || $this->isMethod('put')) {
+            return [
+                'title' => ['required', 'string'],
+                'body' => ['required', 'string'],
+                'image' => ['nullable', 'image'],
+                'featured' => ['nullable', 'boolean'],
+                'category_id' => ['required', 'integer', 'gt:0', 'exists:categories,id'],
+                'tags' => ['nullable', 'exists:tags,id'],
+            ];
+        }
+
+        if ($this->isMethod('get')) {
+            return [
+                'users' => ['nullable', 'exists:users,id'],
+                'categories' => ['nullable', 'exists:categories,id'],
+                'tags' => ['nullable', 'exists:tags,id'],
+            ];
+        }
     }
 
     public function messages()

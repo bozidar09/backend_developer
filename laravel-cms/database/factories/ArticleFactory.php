@@ -5,7 +5,6 @@ namespace Database\Factories;
 use App\Models\Category;
 use App\Models\Role;
 use App\Models\User;
-use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -25,8 +24,8 @@ class ArticleFactory extends Factory
 
         return [
             'title' => $title,
-            'image' => fake()->imageUrl(width: 800, height: 600),
             'body' => fake()->paragraphs(mt_rand(5, 10), true),
+            'image' => fake()->image(public_path('storage/images/articles'), 800, 600),
             'views' => mt_rand(0, 1000),
             'category_id' => Category::inRandomOrder()->first() ?? Category::factory()->create(),
             'user_id' => User::where('role_id', $role->id)->inRandomOrder()->first() ?? User::factory()->create(['role_id' => $role]),

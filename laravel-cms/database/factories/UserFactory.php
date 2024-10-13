@@ -31,10 +31,10 @@ class UserFactory extends Factory
         return [
             'first_name' => $firstName,
             'last_name' => $lastName,
+            'avatar' => fake()->gravatar(public_path('storage/images/users'), 'identicon'),
             'email' => $firstName . '.' . $lastName . fake()->unique()->randomNumber(3) . '@' . fake()->randomElement($mailProviders) . '.com',
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
-            'avatar' => fake()->gravatarUrl(mode: 'retro'),
             'role_id' => Role::inRandomOrder()->first() ?? Role::factory()->create(),
             'job' => fake()->optional()->jobTitle(),
             'remember_token' => Str::random(10),

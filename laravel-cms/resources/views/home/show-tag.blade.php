@@ -14,7 +14,7 @@
         @foreach($tag->articles as $article)
             <article class="flex flex-col items-start justify-between">
             <div class="relative w-full">
-                <img src="{{ $article->image }}" alt="" class="aspect-[16/9] w-full rounded-2xl bg-gray-100 object-cover sm:aspect-[2/1] lg:aspect-[3/2]">
+                <img src="{{ Storage::url($article->image) }}" alt="" class="aspect-[16/9] w-full rounded-2xl bg-gray-100 object-cover sm:aspect-[2/1] lg:aspect-[3/2]">
                 <div class="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-900/10"></div>
             </div>
             <div class="max-w-xl">
@@ -32,7 +32,7 @@
                 <p class="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">{{ $article->body }}</p>
                 </div>
                 <div class="relative mt-8 flex items-center gap-x-4">
-                <img src="{{ $article->author->avatar }}" alt="" class="h-10 w-10 rounded-full bg-gray-100">
+                <img src="{{ Storage::url($article->author->avatar) }}" alt="" class="h-10 w-10 rounded-full bg-gray-100">
                 <div class="text-sm leading-6">
                     <p class="font-semibold text-gray-900">
                     <a href="{{ route('home.user', $article->user_id) }}">

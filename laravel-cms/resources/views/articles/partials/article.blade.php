@@ -1,4 +1,4 @@
-<div class="p-4 mb-6 inline-flex w-full sm:p-8 bg-white shadow sm:rounded-lg hover:shadow-lg" {{--style="background-image: url('{{ $article->image }}')" --}}>
+<div class="p-4 mb-6 inline-flex w-full sm:p-8 bg-white shadow sm:rounded-lg hover:shadow-lg" {{--style="background-image: url('{{ Storage::url($article->image) }}')" --}}>
     <section class="space-y-6 w-full">
         <header>
             <div class="flex items-center justify-between">
