@@ -23,9 +23,9 @@
                 {{ __('Cancel') }}
             </x-secondary-button>
 
-            <x-algebra.button type="submit">
+            <x-link-button type="submit">
                 {{ __('Save') }}
-            </x-algebra.button>
+            </x-link-button>
         </div>
     </form>
 </x-modal>

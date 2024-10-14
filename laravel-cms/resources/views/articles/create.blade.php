@@ -6,8 +6,7 @@
     <x-slot:header>
         <div class="flex justify-between">
             <h3 class="text-xl">Articles Create</h3>
-            <x-algebra.button type="submit" class="mr-6" boja="red">Pritisni me</x-algebra.button>
-            <x-algebra.button href="http://google.hr" :link="true">Link</x-algebra.button>
+            <x-link-button href="http://google.hr" :link="true">Link</x-link-button>
         </div>
     </x-slot>
 
@@ -55,15 +54,7 @@
                                 <legend class="text-sm font-semibold leading-6 text-gray-900">Choose Category</legend>
                                 <div class="mt-6 flex flex-wrap items-center gap-6">
                                     @foreach ($categories as $category)
-                                        <div class="relative flex gap-3">
-                                            <div class="flex h-6 items-center">
-                                                <input id="category-{{ $category->id }}" name="category_id" type="radio" value="{{ $category->id }}"
-                                                {{ old('category') == $category->id ? 'checked' : '' }} class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
-                                            </div>
-                                            <div class="text-sm leading-6">
-                                                <label for="category-{{ $category->id }}" class="font-medium text-gray-900">{{ $category->name }}</label>
-                                            </div>
-                                      </div>
+                                        <x-radio-checkbox id="category-{{ $category->id }}" name="category_id" type="radio" value="{{ $category->id }}" :checked="old('category') == $category->id" :label="$category->name" for="category-{{ $category->id }}"/>
                                     @endforeach
                                 </div>
                                 <x-input-error :messages="$errors->get('category_id')" class="mt-2" />
@@ -75,16 +66,9 @@
                                 <div class="mt-6 flex flex-wrap items-center gap-6">
 
                                     @foreach ($tags as $tag)
-                                        <div class="relative flex gap-3">
-                                            <div class="flex h-6 items-center">
-                                                <input {{ old('tags') && in_array($tag->id, old('tags')) ? 'checked' : '' }} type="checkbox" id="tags-{{ $tag->id }}" name="tags[]" value="{{ $tag->id }}" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" />
-                                            </div>
-                                            <div class="text-sm leading-6">
-                                                <label for="tags-{{ $tag->id }}" class="font-medium text-gray-900">{{ $tag->name }}</label>
-                                            </div>
-                                        </div>
+                                        <x-radio-checkbox id="tag-{{ $tag->id }}" name="tags[]" type="checkbox" value="{{ $tag->id }}" :checked="old('tags') && in_array($tag->id, old('tags'))" :label="$tag->name" for="tag-{{ $tag->id }}"/>
                                     @endforeach
-                                    <x-algebra.button type="button" x-data="" x-on:click.prevent="$dispatch('open-modal', 'create-tag')">+</x-algebra.button>
+                                    <x-link-button type="button" x-data="" x-on:click.prevent="$dispatch('open-modal', 'create-tag')">+</x-link-button>
                                 </div>
 
                                 <x-input-error :messages="$errors->get('tags')" class="mt-2" />

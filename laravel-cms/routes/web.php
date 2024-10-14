@@ -61,7 +61,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/tags', [TagController::class, 'store'])->name('tags.store')->can('create', Tag::class);
 });
 
-Route::middleware('admin')->group(function () {
+Route::middleware(['auth', 'admin'])->group(function () {
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
     Route::get('/tags', [TagController::class, 'index'])->name('tags.index');

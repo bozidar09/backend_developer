@@ -36,7 +36,7 @@ class UserSeeder extends Seeder
             'role_id' => Role::where('name', 'admin')->first()->id,
         ]);
 
-        // User avatar path fix
+        // User avatar factory path fix
         $users = User::all();
         foreach ($users as $user) {
             $user->update(['avatar' => str_replace('/var/www/backend_developer/laravel-cms/public/storage', '', $user->avatar)]);

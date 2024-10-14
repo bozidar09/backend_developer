@@ -20,7 +20,7 @@ class ArticleController extends Controller
      */
     public function getData(): array
     {
-        $data['users'] = User::where('role_id', Role::where('name', 'Writer')->first()->id)->get();
+        $data['users'] = User::whereIn('role_id', Role::whereIn('name',  ['Writer', 'Admin'])->get()->pluck('id'))->get();
         $data['categories'] = Category::all();
         $data['tags'] = Tag::all();
 
@@ -214,6 +214,7 @@ class ArticleController extends Controller
     public function filterArticles(ArticleRequest $request)
     {
         $data = $this->getData();
+        $header = 'Filtered articles';
 
         $articles = Article::with('tags')->get();
         if ($request->users) {
@@ -230,6 +231,6 @@ class ArticleController extends Controller
         $articles = $articles->pluck('id');
         $articles = Article::whereIn('id', $articles)->with('author.role', 'category')->latest()->paginate(12);
 
-        return view('articles.index', compact('articles', 'data'));
+        return view('articles.index', compact('header', 'articles', 'data'));
     }
 }

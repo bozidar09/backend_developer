@@ -29,14 +29,14 @@ class ArticleSeeder extends Seeder
                         $tags = Tag::inRandomOrder()->limit(mt_rand(1, 3))->pluck('id');
                         $article->tags()->attach($tags);
 
-                        if ($article->id % 10 === 0) {
+                        if ($article->id % 5 === 0) {
                             $article->update(['featured' => 1]);
                         }
                     });
             }
         }
 
-        // Article image path fix
+        // Article image factory path fix
         $articles = Article::all();
         foreach ($articles as $article) {
             $article->update(['image' => str_replace('/var/www/backend_developer/laravel-cms/public/storage', '', $article->image)]);

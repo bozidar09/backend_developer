@@ -14,7 +14,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                 <section>
-                    <form method="post" action="{{ route('articles.update', $article->id) }}" class="mt-6 space-y-6" enctype="multipart/form-data">
+                    <form method="post" action="{{ route('articles.update', $article) }}" class="mt-6 space-y-6" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
@@ -35,7 +35,7 @@
                             <img class="h-auto max-w-lg rounded-lg" src="{{ Storage::url($article->image) }}" alt="">
                             @unless(Storage::url($article->image))
                                 <div class="relative flex gap-3">
-                                    <x-algebra.button type="button" boja="red" x-data="" x-on:click.prevent="$dispatch('open-modal', 'delete-data')">Delete</x-algebra.button>
+                                    <x-link-button type="button" boja="red" x-data="" x-on:click.prevent="$dispatch('open-modal', 'delete-data')">Delete</x-link-button>
                                 </div>
                             @endunless
                         </div>
@@ -64,15 +64,7 @@
                                 <legend class="text-sm font-semibold leading-6 text-gray-900">Choose Category</legend>
                                 <div class="mt-6 flex flex-wrap items-center gap-6">
                                     @foreach ($categories as $category)
-                                        <div class="relative flex gap-3">
-                                            <div class="flex h-6 items-center">
-                                                <input id="category-{{ $category->id }}" name="category_id" type="radio" value="{{ $category->id }}"
-                                                {{ $article->category_id === $category->id ? 'checked' : '' }} class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
-                                            </div>
-                                            <div class="text-sm leading-6">
-                                                <label for="category-{{ $category->id }}" class="font-medium text-gray-900">{{ $category->name }}</label>
-                                            </div>
-                                      </div>
+                                        <x-radio-checkbox id="category-{{ $category->id }}" name="category_id" type="radio" value="{{ $category->id }}" :checked="$article->category_id === $category->id" :label="$category->name" for="category-{{ $category->id }}"/>
                                     @endforeach
                                 </div>
                                 <x-input-error :messages="$errors->get('category_id')" class="mt-2" />
@@ -82,18 +74,10 @@
                                 <legend class="text-sm font-semibold leading-6 text-gray-900">Choose Tags</legend>
                                 <div class="mt-6 flex flex-wrap items-center gap-6">
                                     @foreach ($tags as $tag)
-                                        <div class="relative flex gap-3">
-                                            <div class="flex h-6 items-center">
-                                                <input id="tag-{{ $tag->id }}" name="tags[]" type="checkbox" value="{{ $tag->id }}"
-                                                {{ $tag->articles->contains($article) ? 'checked' : '' }} class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
-                                            </div>
-                                            <div class="text-sm leading-6">
-                                                <label for="tag-{{ $tag->id }}" class="font-medium text-gray-900">{{ $tag->name }}</label>
-                                            </div>
-                                      </div>
+                                        <x-radio-checkbox id="tag-{{ $tag->id }}" name="tags[]" type="checkbox" value="{{ $tag->id }}" :checked="$tag->articles->contains($article)" :label="$tag->name" for="tag-{{ $tag->id }}"/>
                                     @endforeach
                                     <div class="relative flex gap-3">
-                                        <x-algebra.button type="button" x-data="" x-on:click.prevent="$dispatch('open-modal', 'create-tag')">+</x-algebra.button>
+                                        <x-link-button type="button" x-data="" x-on:click.prevent="$dispatch('open-modal', 'create-tag')">+</x-link-button>
                                     </div>
                                 </div>
                                 <x-input-error :messages="$errors->get('tags')" class="mt-2" />
