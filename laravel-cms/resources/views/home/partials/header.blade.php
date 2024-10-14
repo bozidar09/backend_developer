@@ -2,7 +2,7 @@
     <div class="flex lg:flex-1">
         <a href="{{ route('home.index') }}" class="-m-1.5 p-1.5">
             <span class="sr-only">Algebra Blog</span>
-            <img class="h-12 w-auto" src="{{ Storage::url('images/header/algebra.png') }}" alt="">
+            <img class="h-12 w-auto" src="{{ asset('banner/algebra.png') }}" alt="">
         </a>
     </div>
     <div class="flex lg:hidden">
@@ -31,7 +31,7 @@
         <div class="flex items-center justify-between">
         <a href="#" class="-m-1.5 p-1.5">
             <span class="sr-only">Algebra Blog</span>
-            <img class="h-12 w-auto" src="{{ Storage::url('images/header/algebra.png') }}" alt="">
+            <img class="h-12 w-auto" src="{{ asset('banner/algebra.png') }}" alt="">
         </a>
         <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700">
             <span class="sr-only">Close menu</span>

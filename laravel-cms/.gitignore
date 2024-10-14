@@ -2,8 +2,7 @@
 /node_modules
 /public/build
 /public/hot
-/public/storage/images/articles/
-/public/storage/images/users/
+/public/storage
 /storage/*.key
 /storage/debugbar
 /vendor

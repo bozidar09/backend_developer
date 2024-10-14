@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
@@ -14,6 +15,9 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        $path = public_path('storage/images/users');
+        !File::isDirectory($path) ? File::makeDirectory($path, 0755, true, true) : '';    
+
         $roles = Role::all() ?? Role::factory()->create();
 
         foreach ($roles as $role) {

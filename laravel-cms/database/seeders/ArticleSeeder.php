@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\File;
 
 class ArticleSeeder extends Seeder
 {
@@ -19,6 +20,9 @@ class ArticleSeeder extends Seeder
         $categories = Category::all() ?? Category::factory()->create();
         $role = Role::where('name', 'Writer')->first();
         $users = User::where('role_id', $role->id)->get() ?? User::factory()->create(['role_id' => $role]);
+
+        $path = public_path('storage/images/articles');
+        !File::isDirectory($path) ? File::makeDirectory($path, 0755, true, true) : '';    
 
         foreach ($categories as $category) {
             foreach ($users as $user) {
