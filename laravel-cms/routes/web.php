@@ -30,7 +30,7 @@ Route::middleware('guest')->group(function(){
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->name('dashboard')->middleware(['auth', 'verified', 'redirectUser']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ArticleRequest;
+use App\Mail\ArticleCreated;
+use App\Mail\ArticleDeleted;
+use App\Mail\ArticleUpdated;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\Role;
@@ -11,6 +14,7 @@ use App\Models\User;
 use App\Services\ViewCounterService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends Controller
@@ -60,13 +64,15 @@ class ArticleController extends Controller
      */
     public function store(ArticleRequest $request)
     {
-        Gate::authorize('create', Article::class);
+        // Gate::authorize('create', Article::class);
         
+        $user = Auth::user();
+
         $article = Article::create([
             'title' => $request->title,
             'body' => $request->body,
             'featured' => $request->featured ?? false,
-            'user_id' => Auth::id(),
+            'user_id' => $user->id,
             'category_id' => $request->category_id,
         ]);
 
@@ -76,6 +82,8 @@ class ArticleController extends Controller
              $path = $image->store("images/articles", "public");
              $article->update(['image' => $path]);
         }
+
+        Mail::to($user->email)->send(new ArticleCreated($article, $user));
 
         return redirect()->route('articles.index')->withFlashMessage('Succesfully stored article ' . $request->title);
     }
@@ -111,7 +119,7 @@ class ArticleController extends Controller
      */
     public function update(ArticleRequest $request, Article $article)
     {
-        Gate::authorize('update', $article);     
+        // Gate::authorize('update', $article);     
 
         $article->update([
             'title' => $request->title,
@@ -133,6 +141,9 @@ class ArticleController extends Controller
             $article->tags()->detach();
         }
 
+        $user = $request->user();
+        Mail::to('algebra@mail.com')->send(new ArticleUpdated($article, $user));
+
         return redirect()->route('articles.index')->withFlashMessage('Succesfully updated article ' . $request->title);
     }
 
@@ -142,11 +153,17 @@ class ArticleController extends Controller
     public function destroy(Article $article)
     {
         $title = $article->title;
+        $author = User::where('id', $article->user_id)->first();
+
         try {
             $article->delete();
 
         } catch (\PDOException $e) { 
             return redirect()->back()->with('danger', 'Error, article not deleted');
+        }
+
+        if (Auth::user() !== $author) {
+            Mail::to($author)->send(new ArticleDeleted($article, $author));
         }
 
         return redirect()->route('articles.index')->with('success', 'Succesfully deleted article ' . $title);
