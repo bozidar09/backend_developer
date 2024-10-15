@@ -140,7 +140,7 @@ class ArticleController extends Controller
         } else {
             $article->tags()->detach();
         }
-
+        
         $user = $request->user();
         Mail::to('algebra@mail.com')->send(new ArticleUpdated($article, $user));
 
@@ -153,7 +153,7 @@ class ArticleController extends Controller
     public function destroy(Article $article)
     {
         $title = $article->title;
-        $author = User::where('id', $article->user_id)->first();
+        $author = $article->author;
 
         try {
             $article->delete();
@@ -162,7 +162,8 @@ class ArticleController extends Controller
             return redirect()->back()->with('danger', 'Error, article not deleted');
         }
 
-        if (Auth::user() !== $author) {
+        // druga opcija - !Auth::user()->is($author)
+        if (Auth::user()->id !== $author->id) {
             Mail::to($author)->send(new ArticleDeleted($article, $author));
         }
 
