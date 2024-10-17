@@ -49,6 +49,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/articles/{tag:slug}/tag', [ArticleController::class, 'byTag'])->name('tag.articles');
     Route::get('/articles/{category:slug}/category', [ArticleController::class, 'byCategory'])->name('category.articles');
     Route::get('/articles/{user}/user', [ArticleController::class, 'byAuthor'])->name('user.articles');
+    Route::get('/articles/{article:slug}/test', [ArticleController::class, 'testMail'])->name('test.mail');
 
     Route::get('/comments', [CommentController::class, 'index'])->name('comments.index');
     Route::get('/comments/create', [CommentController::class, 'create'])->name('comments.create');

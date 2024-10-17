@@ -251,4 +251,14 @@ class ArticleController extends Controller
 
         return view('articles.index', compact('header', 'articles', 'data'));
     }
+
+    /**
+     * Display the specified resource.
+     */
+    public function testMail(Article $article)
+    {
+        // return new ArticleCreated($article, Auth::user());
+        // return new ArticleUpdated($article, Auth::user());
+        return new ArticleDeleted($article, Auth::user());
+    }
 }
