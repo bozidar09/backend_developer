@@ -1,0 +1,6 @@
+1. Kreirati mapu BackendDeveloper.
+2. U mapi BackendDeveloper kreirajte novu mapu Documentation.
+3. U mapi Documentation kreirajte datoteku readme.txt
+4. Datoteku readme.txt otvorite u NANO uređivači te upišite svoje ime i prezime i spremite izmjene.
+5. Izađite iz uređivača
+6. Datoteci readme.txt dodjelite sva prava za korisnika “owner”, a za korisnike “group” i “other” dodjelite “read” i “execute” prava.

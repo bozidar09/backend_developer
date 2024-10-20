@@ -1,0 +1,2 @@
+1. Instalirati MySQL server na instancu Linuxa kreiranog u prvoj vježbi.
+2. Podesiti “root” korisnika da se može prijaviti pomoću lozinke.

@@ -1,0 +1,8 @@
+1. U mapi BackendDeveloper koju ste kreirali u prethodnoj domaćoj zadaći inicijalizirajte GIT.
+2. Kreirajte udaljeni repozitorij na odabranom servisu(GitLab, GitHub, itd).
+3. Povežite lokalni i udaljeni repozitorij.
+4. Napravite inicijalni “commit” i promjene pospremite na udaljeni repozitorij.
+5. Kreirajte novu granu development te se prebacite na istu.
+6. Datoteku readme.txt otvorite u NANO uređivači te poslije imena i prezimena dodajte tekst po želji i spremite izmjene.
+7. Napravite “commit” i izmjene spojite s “master” granom.
+8. Promjene pošaljite na udaljeni repozitorij.
