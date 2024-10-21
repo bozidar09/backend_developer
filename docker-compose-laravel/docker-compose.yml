@@ -1,11 +1,10 @@
-version: '3'
-
 networks:
   laravel:
 
-
 services:
   app:
+    env_file:
+      - src/.env
     build:
       context: ./dockerfiles
       dockerfile: nginx.dockerfile
@@ -31,10 +30,10 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_DATABASE: 01_blog
-      MYSQL_USER: bozidar
-      MYSQL_PASSWORD: bozidar
-      MYSQL_ROOT_PASSWORD: bozidar
+      MYSQL_DATABASE: DB_DATABASE
+      MYSQL_USER: DB_USERNAME
+      MYSQL_PASSWORD: DB_PASSWORD
+      MYSQL_ROOT_PASSWORD: root
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     networks:
