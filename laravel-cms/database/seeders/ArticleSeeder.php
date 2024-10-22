@@ -43,7 +43,7 @@ class ArticleSeeder extends Seeder
         // Article image factory path fix
         $articles = Article::all();
         foreach ($articles as $article) {
-            $article->update(['image' => preg_replace('/.*(?:\/laravel-cms\/public\/storage)/', '', $article->image)]);
+            $article->update(['image' => preg_replace('/.*(?:\/public\/storage)/', '', $article->image)]);
         }
     }
 }

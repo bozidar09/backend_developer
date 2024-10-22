@@ -43,7 +43,7 @@ class UserSeeder extends Seeder
         // User avatar factory path fix
         $users = User::all();
         foreach ($users as $user) {
-            $user->update(['avatar' => preg_replace('/.*(?:\/laravel-cms\/public\/storage)/', '', $user->avatar)]);
+            $user->update(['avatar' => preg_replace('/.*(?:\/public\/storage)/', '', $user->avatar)]);
         }
     }
 }

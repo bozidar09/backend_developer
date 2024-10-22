@@ -37,14 +37,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $categories = Category::all();
-
-        $tags = Tag::join('article_tag', 'article_tag.tag_id', '=', 'tags.id')
-        ->select('tags.*', DB::raw('count(tags.id) as occurence'))
-        ->groupBy('tags.id')->orderBy('occurence', 'desc')->limit(4)->get();
-
         // Using closure based composers...
-        Facades\View::composer('home.*', function(View $view) use($categories, $tags){
+        Facades\View::composer('home.*', function(View $view) {
+            $categories = Category::all();
+
+            $tags = Tag::join('article_tag', 'article_tag.tag_id', '=', 'tags.id')
+            ->select('tags.id', 'tags.name', 'tags.slug', DB::raw('count(tags.id) as occurence'))
+            ->groupBy('tags.id', 'tags.name', 'tags.slug')->orderBy('occurence', 'desc')->limit(4)->get();
+
             $view->with([
                 'layoutCategories' => $categories,
                 'layoutTags' => $tags,
