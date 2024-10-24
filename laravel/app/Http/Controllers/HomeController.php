@@ -17,7 +17,7 @@ class HomeController extends Controller
             ->select('movies.title as movie_title', 'movies.year as movie_year', 
                     'genres.name as genre', 'prices.type', DB::raw('count(movies.id) as rentals_number'))
             ->where('rentals.rental_date', '>', '2024-01-01')
-            ->groupBy('copies.movie_id')
+            ->groupBy('copies.movie_id', 'movies.title', 'movies.year', 'genres.name', 'prices.type')
             ->orderBy('rentals_number', 'desc')
             ->limit(3)
             ->get();
