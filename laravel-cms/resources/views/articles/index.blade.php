@@ -6,6 +6,7 @@
     <x-slot:header>
         <div class="flex justify-between items-center">
             <h3 class="text-xl">{{ $header ?? 'Articles' }}</h3>
+            @include('articles.partials.search')
             <x-link-button type="button" boja="orange" x-data="" class="px-3.5 py-2.5" x-on:click.prevent="$dispatch('open-modal', 'filter-articles')">Filter articles</x-link-button>
             @can('create', App\Models\Article::class)
                 <a href="{{ route('articles.create') }}" class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Create new Article</a>

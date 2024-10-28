@@ -12,10 +12,12 @@ use App\Models\Role;
 use App\Models\Tag;
 use App\Models\User;
 use App\Services\ViewCounterService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class ArticleController extends Controller
 {
@@ -248,6 +250,23 @@ class ArticleController extends Controller
         }
         $articles = $articles->pluck('id');
         $articles = Article::whereIn('id', $articles)->with('author.role', 'category')->latest()->paginate(12);
+
+        return view('articles.index', compact('header', 'articles', 'data'));
+    }
+
+    /**
+     * Display search results.
+     */
+    public function searchArticles(Request $request)
+    {
+        $data = $this->getData();
+        $header = 'Filtered articles';
+
+        $keyword = $request->search;
+        Validator::make(['search' => $keyword], ['search' => 'required|regex:/^[\pL0-9\s_-]+$/i'], ['regex' => 'The :attribute field has to be alphanumeric.'])
+            ->validateWithBag('search');
+
+        $articles = Article::with('tags')->whereAny(['title', 'body'], 'like', "%$keyword%")->paginate(12);
 
         return view('articles.index', compact('header', 'articles', 'data'));
     }

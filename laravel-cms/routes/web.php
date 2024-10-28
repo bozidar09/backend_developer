@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
     Route::get('/articles/filter', [ArticleController::class, 'filterArticles'])->name('filter.articles');
+    Route::get('/articles/search', [ArticleController::class, 'searchArticles'])->name('search.articles');
     Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create')->can('create', Article::class);
     Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store')->can('create', Article::class);
     Route::get('/articles/{article:slug}', [ArticleController::class, 'show'])->name('articles.show');
