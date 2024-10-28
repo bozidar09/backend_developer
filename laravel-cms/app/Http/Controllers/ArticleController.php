@@ -260,7 +260,7 @@ class ArticleController extends Controller
     public function searchArticles(Request $request)
     {
         $data = $this->getData();
-        $header = 'Filtered articles';
+        $header = 'Search results';
 
         $keyword = $request->search;
         Validator::make(['search' => $keyword], ['search' => 'required|regex:/^[\pL0-9\s_-]+$/i'], ['regex' => 'The :attribute field has to be alphanumeric.'])
