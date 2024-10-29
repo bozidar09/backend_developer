@@ -68,13 +68,16 @@ function setNavClass(string $link): string
     return isCurrent($link) ? 'secondary' : 'white';
 }
 
-function envLoad(): array
+function envLoad(): void
 {
     $data = parse_ini_file(basePath('.env'));
     
     foreach ($data as $key => $value) {
         str_starts_with($key, '#') ? : putenv("$key=$value");
     }
+}
 
-    return getenv();
+function env(string $key, string $default = null): ?string
+{
+    return getenv($key) ?? $default;
 }

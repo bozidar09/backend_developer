@@ -13,26 +13,35 @@ class Database
     
     public function __construct() 
     {
-        $config = envLoad();
+        $config = [ 
+            'db_host' => env('DB_HOST', "database"),
+            'db_port' => env('DB_PORT', 3306),
+            'db_database' => env('DB_DATABASE', "videoteka"),
+            'db_charset' => env('DB_CHARSET', "utf8mb4"),
+            'db_username' => env('DB_USERNAME', "algebra"),
+            'db_password' => env('DB_PASSWORD', "algebra"),
+            'db_options' => env('DB_OPTIONS'),
+        ];
+        dd($config);
 
-        if ($config['DB_OPTIONS']) {
-            if (str_contains($config['DB_OPTIONS'] , ',')) {
-                $elements = explode(',', $config['DB_OPTIONS']);
+        if ($config['db_options']) {
+            if (str_contains($config['db_options'] , ',')) {
+                $elements = explode(',', $config['db_options']);
             } else {
-                $elements[] = $config['DB_OPTIONS'];
+                $elements[] = $config['db_options'];
             }
             
-            $config['DB_OPTIONS'] = [];
+            $config['db_options'] = [];
             foreach ($elements as $element) {
                 $element = explode('=>', $element);
-                $config['DB_OPTIONS'][$element[0]] = $element[1];
+                $config['db_options'][$element[0]] = $element[1];
             }
         }
 
-        $dsn = "mysql:host={$config['DB_HOST']};port={$config['DB_PORT']};dbname={$config['DB_DATABASE']};charset={$config['DB_CHARSET']}";
+        $dsn = "mysql:host={$config['db_host']};port={$config['db_port']};dbname={$config['db_database']};charset={$config['db_charset']}";
         
         try {
-            $this->pdo = new PDO($dsn, $config['DB_USERNAME'], $config['DB_PASSWORD'], $config['DB_OPTIONS']);
+            $this->pdo = new PDO($dsn, $config['db_username'], $config['db_password'], $config['db_options']);
 
         } catch (\PDOException $e) {
             die('Connection failed: ' . $e->getMessage());
