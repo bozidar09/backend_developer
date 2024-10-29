@@ -73,7 +73,7 @@ function envLoad(): array
     $data = parse_ini_file(basePath('.env'));
     
     foreach ($data as $key => $value) {
-        putenv("$key=$value");
+        str_starts_with($key, '#') ? : putenv("$key=$value");
     }
 
     return getenv();
