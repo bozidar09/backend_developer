@@ -67,3 +67,14 @@ function setNavClass(string $link): string
 {
     return isCurrent($link) ? 'secondary' : 'white';
 }
+
+function envLoad(): array
+{
+    $data = parse_ini_file(basePath('.env'));
+    
+    foreach ($data as $key => $value) {
+        putenv("$key=$value");
+    }
+
+    return getenv();
+}

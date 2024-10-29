@@ -13,11 +13,26 @@ class Database
     
     public function __construct() 
     {
-        $config = require_once basePath('config/db_config.php'); 
-        $dsn = "mysql:host={$config['host']};dbname={$config['dbname']};charset={$config['charset']}";
+        $config = envLoad();
+
+        if ($config['DB_OPTIONS']) {
+            if (str_contains($config['DB_OPTIONS'] , ',')) {
+                $elements = explode(',', $config['DB_OPTIONS']);
+            } else {
+                $elements[] = $config['DB_OPTIONS'];
+            }
+            
+            $config['DB_OPTIONS'] = [];
+            foreach ($elements as $element) {
+                $element = explode('=>', $element);
+                $config['DB_OPTIONS'][$element[0]] = $element[1];
+            }
+        }
+
+        $dsn = "mysql:host={$config['DB_HOST']};port={$config['DB_PORT']};dbname={$config['DB_DATABASE']};charset={$config['DB_CHARSET']}";
         
         try {
-            $this->pdo = new PDO($dsn, $config['user'], $config['password'], $config['options']);
+            $this->pdo = new PDO($dsn, $config['DB_USERNAME'], $config['DB_PASSWORD'], $config['DB_OPTIONS']);
 
         } catch (\PDOException $e) {
             die('Connection failed: ' . $e->getMessage());
