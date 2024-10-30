@@ -70,10 +70,25 @@ function setNavClass(string $link): string
 
 function envLoad(): void
 {
-    $data = parse_ini_file(basePath('.env'));
-    
-    foreach ($data as $key => $value) {
-        str_starts_with($key, '#') ? : putenv("$key=$value");
+    // $data = parse_ini_file(basePath('.env'));
+    // foreach ($data as $key => $value) {
+    //     str_starts_with($key, '#') ? : putenv("$key=$value");
+    // }
+    if ($file = fopen(basePath('.env'), "r")) {
+        while(!feof($file)) {
+            $line = fgets($file);
+
+            if ($pos = strpos($line, "#")) {
+                $line = substr_replace($line, '', $pos);
+            }
+
+            if($pos = strpos($line, "=")) {
+                $key = trim(substr($line, 0, $pos));
+                $value = trim(str_replace("\n", '', substr($line, ++$pos)));
+                putenv("$key=$value");
+            }
+        }
+        fclose($file);
     }
 }
 

@@ -22,7 +22,6 @@ class Database
             'db_password' => env('DB_PASSWORD', "algebra"),
             'db_options' => env('DB_OPTIONS'),
         ];
-        dd($config);
 
         if ($config['db_options']) {
             if (str_contains($config['db_options'] , ',')) {
