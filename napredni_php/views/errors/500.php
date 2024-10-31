@@ -10,8 +10,8 @@
 <body>
     <div class="d-flex align-items-center justify-content-center vh-100">
         <div class="text-center">
-            <h1 class="display-1 fw-bold">404</h1>
-            <p class="fs-3"> <span class="text-danger">Opps!</span> Internal server error.</p>
+            <h1 class="display-1 fw-bold">500</h1>
+            <p class="fs-3"> <span class="text-danger">Oops!</span> Internal server error.</p>
             <p class="lead">
                 Server nije u mogućnosti obraditi zahtjev, pokušajte ponovno kasnije.
             </p>
