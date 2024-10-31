@@ -85,7 +85,9 @@ function envLoad(): void
             if($pos = strpos($line, "=")) {
                 $key = trim(substr($line, 0, $pos));
                 $value = trim(str_replace("\n", '', substr($line, ++$pos)));
-                putenv("$key=$value");
+                if ($key && $value) {
+                    putenv("$key=$value");
+                }
             }
         }
         fclose($file);

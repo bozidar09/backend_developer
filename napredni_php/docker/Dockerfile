@@ -22,10 +22,10 @@ RUN curl -sL https://deb.nodesource.com/setup_20.x | bash -\
     && apt-get install -y nodejs \
     && npm install -g yarn
 
-RUN groupadd -g ${USER_ID} algebra-docker && useradd -u ${USER_ID} -g algebra-docker -s /bin/bash -m algebra-docker
-RUN echo "alias ll='ls -al'" >> /home/algebra-docker/.bashrc
+RUN groupadd -g ${USER_ID} bozidar-docker && useradd -u ${USER_ID} -g bozidar-docker -s /bin/bash -m bozidar-docker
+RUN echo "alias ll='ls -al'" >> /home/bozidar-docker/.bashrc
 
-USER algebra-docker
+USER bozidar-docker
 
 EXPOSE 9000
 

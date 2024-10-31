@@ -22,3 +22,4 @@ yarn-error.log
 /.zed
 mysql_data
 redis_data
+db-data
