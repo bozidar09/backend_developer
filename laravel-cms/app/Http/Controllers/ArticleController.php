@@ -11,6 +11,7 @@ use App\Models\Category;
 use App\Models\Role;
 use App\Models\Tag;
 use App\Models\User;
+use App\Rules\AlphanumericSpaces;
 use App\Services\ViewCounterService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -263,8 +264,7 @@ class ArticleController extends Controller
         $header = 'Search results';
 
         $keyword = $request->search;
-        Validator::make(['search' => $keyword], ['search' => 'required|regex:/^[\pL0-9\s_-]+$/i'], ['regex' => 'The :attribute field has to be alphanumeric.'])
-            ->validateWithBag('search');
+        Validator::make(['search' => $keyword], ['search' => ['required', new AlphanumericSpaces]])->validateWithBag('search');
 
         $articles = Article::with('tags')->whereAny(['title', 'body'], 'like', "%$keyword%")->paginate(12);
 
