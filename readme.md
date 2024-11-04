@@ -232,3 +232,140 @@ sudo php artisan make:component MasterLayout
 - ovdje u render() metodi navodimo gdje se nalazi master.blade.php file, odnosno gdje ga poziv na metodu može pronaći (layouts folder)
 
 - zatim u resources/views/layouts folderu kreirajte novi file master.blade.php i u njemu izdvojite okvir vašeg home pagea (kojeg će pozivati home.blade.php, i koji će uključivati - include(), header, footer i slične dijelove html stranice)
+
+
+
+## Simulacija udaljenog Linux servera pomoću Virtualboxa:
+
+- download najnovijih verzija Virtualbox i Ubuntu server LTS
+
+- nakon instalacije, u Virtualboxu treba odabrati opciju 'New' za dodavanje nove virtualke, te kliknuti na "Skip unattended installation" kako bi mogli ručno namjestiti pojedine opcije, pritom je ključno odabrati dovoljnu veličinu virtualnog hard diska (barem 30GB) ako na virtualki želite instalirati i docker
+
+- u settings (može i prije, i poslije instalacije) treba za Network namjestiti opciju 'bridged connection'
+
+- tokom instalacije bitno je namjestiti vlastiti ipV4 network connection, te naposljetku odabrati opciju da se instalira OpenSSH (u videu možete vidjeti primjer toga)
+
+```
+https://www.youtube.com/watch?v=zx3bICfe5PY
+```
+
+- nakon instalacije virtualke treba omogućiti OpenSSH, te dodati vlastiti SSH ključ prilikom spajanja sa desktop (u našem slučaju wsl) Linuxa na simulirani udaljeni Virtualbox Linux server (primjer za to, uključujući i kako stvoriti SSH ključ, te onemogućiti običan password login, možete vidjeti na linkovima dolje)
+
+```
+https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu
+
+https://www.youtube.com/watch?v=3FKsdbjzBcc
+```
+
+- nakon što ste se spojili sa vlastitog linuxa na "udaljeni server", trebate još iskopirati i pokrenuti .setup.sh datoteku sa gita (pritom treba naglastiti da je iz nje na "server" jedino bitno instalirati PHP i Composer), nakon čega ćete imati potpuno spreman "udaljeni" Linux server za pokretanje vaših aplikacija
+
+```
+sudo apt install -y php libapache2-mod-php php-mysql php-pdo php-intl php-gd php-xml php-json php-mbstring php-tokenizer php-fileinfo php-opcache
+
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+php -r "if (hash_file('sha384', 'composer-setup.php') === 'dac665fdc30fdd8ec78b38b9800061b4150413ff2e3b6f88543c636f7cd84f6db9189d43a81e5503cda447da73c7e5b6') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+php -r "unlink('composer-setup.php');"
+```
+
+
+
+## Prebacivanje aplikacije na udaljeni server naredbom rsync -a
+
+- prije prebacivanja trebate naredbom chown dobiti ovlast nad odredišnim direktorijem na serveru u kojeg želite spremiti aplikaciju (primjer slučaja ako aplikaciju želite prebaciti u odredišni direktorij /var/www/)
+
+```
+sudo chown -R algebra:algebra /var/www/
+```
+
+- nakon toga koristimo naredbu 'rsync -a' kako bi aplikaciju prebacili na udaljeni server (uz napomenu da nam trebaju sudo ovlasti ako na server želimo prebaciti i datoteke kojima vlasnik nije korisnik 'algebra')
+
+```
+sudo rsync -a /var/www/backend_developer/laravel-videoteka algebra@192.168.1.225:/var/www/
+```
+
+
+
+## Prebacivanje aplikacije na udaljeni server pomoću git clone
+
+- prvo trebate kopirati link projekta sa githuba koji želite klonirati, te na serveru napraviti git clone
+
+- nakon toga, treba prekopirati .env.example file u .env te dodati APP_KEY
+
+```
+echo $UID
+cp .env.example .env
+php artisan key:generate
+```
+
+- zatim sa composer install treba dodati vendor folder koji nedostaje (eventualno instalirati i zip, te unzip ako fale)
+
+```
+sudo apt-get install zip && sudo apt-get install unzip
+composer install
+```
+
+
+
+## Pokretanje aplikacije na udaljenom serveru
+
+- kako bi spriječili greške sa file permissionima, trebate odraditi ove naredbe:
+
+```
+sudo chown -R algebra:www-data storage/ bootstrap/cache/
+sudo chmod -R 775 storage/ bootstrap/cache/
+```
+
+- ako u projektu koristite custom javaScrip (Tailwind i slično) onda trebate odraditi npm naredbe
+
+```
+npm install
+npm run build
+```
+
+- zatim napraviti provjeru i po potrebi izmjene .env filea (user_id, ime baze, username, password i slično) 
+
+```
+echo $UID
+sudo nano .env
+```
+
+- naposlijetku trebate napraviti symlink, te napuniti bazu sa podacima
+
+```
+php artisan storage:link
+php artisan migrate --seed
+```
+
+
+
+## Pokretanje aplikacije pomoću dockera na udaljenom serveru
+
+- najprije trebate instalirati docker na Linux udaljenog servera (upute na linku, opcionalno možete i dodati docker u sudo grupu)
+
+```
+https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-22-04
+```
+
+- zatim trebate provjeriti portove u .env fileu (app_port, forward_db port i slično) i eventualno ih zamijeniti (najjednostavnije +1) ako želite upogoniti više docker aplikacija (jer svaka treba raditi na vlastitom portu)
+
+- sljedeće trebate pokrenuti docker, te instalirati potrebne containerse (sa docker ps naredbom možete provjeriti koji containeri trenutno rade na serveru)
+
+```
+docker compose up -d
+docker ps
+```
+
+- naposlijetku trebate ući u app docker container te napraviti symlink i pokrenuti migraciju
+
+```
+docker compose exec -it app bash
+php artisan storage:link
+php artisan migrate --seed
+```
+
+- nakon ovoga bi primjerice aplikaciji sa ip adresom 'udaljenog servera' 192.168.1.225 na portu 8000 trebali moći pristupiti u web browseru sa:
+
+```
+192.168.1.225:8000
+```
