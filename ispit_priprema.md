@@ -1,19 +1,104 @@
 #### Spajanje xampp i vscode
 
-TODO
+- downloadajte najnoviji XAMPP i instalirajte ga (ako već ne postoji na sustavu)
+
+- na localdisk C: pronađite xampp, i u njemu php direktorij te iskopirajte adresu iz putanje (desni klik na php i copy address)
+
+- adresu (koja bi trebala ovako izgledati - C:\xampp\php) spremite u system environment path varijablu vaših Windowsa (upute kako doći do nje na linku)
+
+ ```
+ https://www.eukhost.com/kb/how-to-add-to-the-path-on-windows-10-and-windows-11/
+ ```
+
+ - nakon toga otvorite vaš VSCode, kliknite na Open Folder i dođite putanjom C:\xampp\htdocs do htdocs foldera u kojem kreirate direktorij za vaš projekt (nakon toga možete stvoriti .php stranicu i krenuti sa kodiranjem)
+
 
 
 #### Instalacija wsl i ubuntu na virtualnim Windowsima
 
-TODO
+- upute za instalaciju wsl i ubuntu iz command prompta (windows+R, pa upišite cmd, te potom ctrl+shift+enter da bi ga otvorili sa administratorskim ovlastima)
 
-#### Continuous integration
+ ```
+https://learn.microsoft.com/en-us/windows/wsl/install
+ ```
 
-TODO
+- nakon toga trebate spojiti wsl sa VS Code prema sljedećim uputama (koristite "from VS Code" dio)
+
+ ```
+https://code.visualstudio.com/docs/remote/wsl
+ ```
+
+- sljedeće pristupite Ubuntu putem terminala na VS Code, kopirajte .setup.sh sa gita (imate link dolje) i pohranite u setup.sh na Ubuntu (sa sudo nano)
+- zatim mu dajte 777 ovlasti (sudo chmod 777), te ga pokrenite kako bi instalirali LAMP stack (php, mysql, apache, composer)
+
+ ```
+https://github.com/adobrini-algebra/radno_okruzenje/blob/master/setup.sh
+
+sudo nano setup.sh
+sudo chmod 777 setup.sh
+setup.sh
+
+ ```
+
+
+#### Instaliranje Laravel projekta pomoću Composera
+
+- s obzirom da već imamo instalirane php i composer, Laravel možemo instalirati ovom naredbom:
+
+ ```
+composer global require laravel/installer
+ ```
+
+- nakon toga kreiramo novu Laravel aplikaciju sa naredbom:
+
+ ```
+laravel new ime_aplikacije
+ ```
+
+- gdje ćete moći odabrati niz opcija, a po instalaciji trebate izmijeniti .env file, itd., detaljnije upute na linku (Laravel dokumentacija):
+
+ ```
+ https://laravel.com/docs/11.x/installation#installing-php
+ ```
+
 
 #### Laravel middleware
 
 TODO
+
+
+#### Kreiranje kontrolera i middlewarea pomoću Bearer tokena
+
+TODO
+
+
+#### API JSON response sa status kodom
+
+TODO
+
+
+#### Spajanje na bazu pomoću Mysqli funkcije
+
+TODO
+
+
+#### Spajanje na bazu pomoću PDO klase
+
+TODO
+
+
+#### Continuous integration
+
+- CI uvodi stalnu automatizaciju i kontinuirani nadzor tokom čitavog životnog ciklusa aplikacije, od faza integracije i testiranja do isporuke i primjene
+- obavezni koraci koje bi trebalo dodati u CI (Continuous Integration) pipeline:
+    - izvrtiti testove i vidjeti da li prolaze
+    - statički analizirati kod te validirati da nema nikakvih pogrešaka
+    - napraviti cache konfiguracijskih datoteka projekta te provjeriti da nema pogrešaka
+
+
+#### Programske petlje (foreach, for, while)
+
+- programske petlje su strukture koje omogućavaju da se dijelovi programa/koda izvrše, odnosno iteriraju više puta (zadani broj ili sve dok je određeni uvjet ispunjen), te na taj način ubrzavaju/automatiziraju procesuiranje podataka, poput primjerice pretraživanja lista i polja
 
 
 #### Git grananje
@@ -89,6 +174,19 @@ git merge origin ime_nove_grane
 git branch -d ime_nove_grane
 <!-- brisanje nove grane -->
 
+ ```
+
+
+#### SQL pretvaranje entiteta u relacije
+
+- zaposlenik može tokom vremena odraditi više poslova, a na svakom poslu može raditi više zaposlenika
+
+ ```
+    ZAPOSLENIK(id, ime, prezime, adresa)
+    ODRAĐENI_POSLOVI (id_zaposlenik, id_posao, datum)
+    POSAO (id, naziv)
+
+    ZAPOSLENIK 1 - n ODRAĐENI_POSLOVI n - 1 POSAO
  ```
 
 
@@ -176,9 +274,7 @@ https://laraveldaily.com/lesson/testing-laravel/db-configuration-refreshdatabase
 
 
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
-         bootstrap="vendor/autoload.php"
+<phpunit bootstrap="vendor/autoload.php"
          colors="true">
     <!-- testovi -->
     <testsuites>
@@ -202,19 +298,6 @@ https://laraveldaily.com/lesson/testing-laravel/db-configuration-refreshdatabase
             <file suffix=".php">app/Providers/AppServiceProvider.php</file>
         </exclude>
     </source>
-    <php>
-        <env name="APP_ENV" value="testing"/>
-        <env name="APP_MAINTENANCE_DRIVER" value="file"/>
-        <env name="BCRYPT_ROUNDS" value="4"/>
-        <env name="CACHE_STORE" value="array"/> 
-        <!-- <env name="DB_CONNECTION" value="sqlite"/> -->
-        <!-- <env name="DB_DATABASE" value=":memory:"/> -->
-        <env name="MAIL_MAILER" value="array"/>
-        <env name="PULSE_ENABLED" value="false"/>
-        <env name="QUEUE_CONNECTION" value="sync"/>
-        <env name="SESSION_DRIVER" value="array"/>
-        <env name="TELESCOPE_ENABLED" value="false"/>
-    </php>
 </phpunit>
  ```
 
