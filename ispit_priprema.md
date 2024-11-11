@@ -37,7 +37,6 @@ https://github.com/adobrini-algebra/radno_okruzenje/blob/master/setup.sh
 sudo nano setup.sh
 sudo chmod 777 setup.sh
 setup.sh
-
  ```
 
 
@@ -107,73 +106,133 @@ TODO
 <!-- inicijalizacija -->
 git init
 
-git add .
-git commit -m "prvi commit"
-git remote add origin adresa_repozitorija
-git push -u origin master
+<!-- postavljanje username i email u git konfiguracijsku datoteku -->
+git config --global user.name <username>
+git config --global user.email <mailaddress>
+
+<!-- prikaz podataka iz git konfiguracijske datoteke -->
+git config --global --list
+
 <!-- postupak spajanja sa udaljenim repozitorijem -->
+<!-- postavljanje promjena . označava da postavljamo sve, a možemo dodavati i zasebno fileove ili foldere -->
+git add .
+<!-- svaki commit mora biti označen sa porukom -->
+git commit -m "prvi commit"
+<!-- označavamo udaljeni repozitorij kao origin -->
+git remote add origin adresa_repozitorija
+<!-- šaljemo sa master grane lokalnog repozitorija na udaljeni origin repozitorij, -u (set upstream) konfigurira lokalnu granu da prati udaljeni repozitorij -->
+git push -u origin master
 
 <!-- kopiranje projekta sa nekog repozitorija -->
 git clone git_repo_path
 
-<!-- dodavanje na remote repozitorij -->
-git add .
-<!-- postavljanje promjena . označava da postavljamo sve, a možemo dodavati i zasebno fileove ili foldere -->
-git commit -m "poruka"
-<!-- svaki commit mora biti označen sa porukom -->
-git push origin master
-<!-- origin master znači da sa trenutne grane šaljemo na master granu udaljenog repozitorija -->
-
-git pull origin master
-<!-- dohvaćamo promjene sa udaljenog repozitorija na granu master -->
-
-git status
-<!-- trenutno stanje gita, grana, promjene, itd. -->
-
-git checkout .
-<!-- undo svih promjena ako nismo napravili add-commit, . sve promjene, a mogu se i zasebno navesti pojedini folderi i fileovi -->
-
-git reset
-<!-- undo add -->
-
-git reset --soft HEAD^
-<!-- undo samo commita -->
-
-git reset HEAD^
-<!-- undo commit i add -->
-
-git reset --hard HEAD^
-<!-- undo commit, add i svih promjena -->
-
-git branch
-<!-- ispis grane na kojoj smo trenutno -->
-
-git branch ime_nove_grane
-<!-- kreiranje nove grane, ali ne i automatski prijelaz na nju -->
-
-git checkout ime_nove_grane
-<!-- prijelaz na novu granu -->
-
-git push origin ime_nove_grane
-<!-- stavljanje nove grane na udaljeni repozitorij -->
-
+<!-- dohvat te spajanje podataka sa udaljenog repozitorija -->
 git fetch
-<!-- dohvaćanje osvježenog popisa novih grana sa udaljenog repozitorija -->
+git merge
 
+<!-- skraćeni način, automatski napravi i dohvat, i spajanje -->
 git pull
-git merge origin master
+
+<!-- skraćeni način slanja podataka sa lokalne grane na udaljeni repozitorij, nakon što smo prilikom prvog pusha sve konfigurirali, origin i set upstream -->
+git push
+
+<!-- trenutno stanje gita, grana, promjene, itd. -->
+git status
+
+<!-- undo svih promjena ako nismo napravili add-commit, . sve promjene, a mogu se i zasebno navesti pojedini folderi i fileovi -->
+git checkout .
+
+<!-- undo add -->
+git reset
+
+<!-- undo samo commita -->
+git reset --soft HEAD^
+
+<!-- undo commit i add -->
+git reset HEAD^
+
+<!-- undo commit, add i svih promjena -->
+git reset --hard HEAD^
+
+<!-- ispis grane na kojoj smo trenutno -->
+git branch
+
+<!-- kreiranje nove grane lokalno, ali ne i automatski prijelaz na nju -->
+git branch nova
+
+<!-- prijelaz na novu granu -->
+git checkout nova
+
+<!-- stavljanje novostvorene grane na udaljeni repozitorij -->
+git push -u origin nova
+
+<!-- dohvaćanje osvježenog popisa novih grana sa udaljenog repozitorija -->
+git fetch
+
 <!-- dohvaćanje najnovije verzije nove grane sa udaljenog repozitorija, te potom dohvaćanje izmjena sa master grane u novu granu -->
+git fetch
+git merge origin nova
 
-git checkout master
+<!-- uzastopno odrađene fetch i merge naredbe -->
+git pull origin nova
+
 <!-- prebacivanje na master granu -->
+git checkout master
 
-git pull origin master
-git merge origin ime_nove_grane
-<!-- dohvaćanje najnovije verzije master grane sa udaljenog repozitorija, te potom dohvaćanje izmena sa nove grane u master -->
+<!-- dohvat filea iz nove grane u master -->
+git checkout nova ime_filea
 
-git branch -d ime_nove_grane
-<!-- brisanje nove grane -->
+<!-- spajanje podataka iz nove grane u master -->
+git merge nova
 
+<!-- brisanje nove grane na udaljenom repozitoriju -->
+git push -d origin nova
+
+<!-- brisanje nove grane lokalno, prije toga se sa checkout morate premjestiti na neku drugu granu -->
+git branch -d nova
+ ```
+
+
+#### Prikaz sadržaja Linux datoteke
+
+- ispis u Linux terminalu
+
+ ```
+cat ime_datoteke
+ ```
+
+- prikaz datoteke sa posebnim programima
+
+ ```
+nano ime_datoteke
+vim ime_datoteke
+ ```
+
+
+#### Zapisivanje u file kroz Linux terminal
+
+- sa operatorom >> i naredbom echo dodajemo tekst kao novu liniju na kraj datoteke
+
+ ```
+echo "Hello World" >> file.txt
+ ```
+
+- sa operatorom > dodajemo tekst i brišemo stari sadržaj datoteke
+
+ ```
+echo "Hello World" > file.txt
+ ```
+
+- dodatne opcije
+ ```
+https://www.baeldung.com/linux/file-append-text-no-redirection
+ ```
+
+
+#### Provjera PHP verzije u Linux terminalu
+
+ ```
+php -v
  ```
 
 
@@ -274,7 +333,9 @@ https://laraveldaily.com/lesson/testing-laravel/db-configuration-refreshdatabase
 
 
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="vendor/autoload.php"
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
          colors="true">
     <!-- testovi -->
     <testsuites>
@@ -298,6 +359,19 @@ https://laraveldaily.com/lesson/testing-laravel/db-configuration-refreshdatabase
             <file suffix=".php">app/Providers/AppServiceProvider.php</file>
         </exclude>
     </source>
+        <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="APP_MAINTENANCE_DRIVER" value="file"/>
+        <env name="BCRYPT_ROUNDS" value="4"/>
+        <env name="CACHE_STORE" value="array"/> 
+        <env name="DB_CONNECTION" value="mysql"/>
+        <env name="DB_DATABASE" value="algebra"/>
+        <env name="MAIL_MAILER" value="array"/>
+        <env name="PULSE_ENABLED" value="false"/>
+        <env name="QUEUE_CONNECTION" value="sync"/>
+        <env name="SESSION_DRIVER" value="array"/>
+        <env name="TELESCOPE_ENABLED" value="false"/>
+    </php>
 </phpunit>
  ```
 
@@ -418,25 +492,6 @@ php artisan migrate:fresh
 
 <!-- brisanje stare, kreiranje nove baze te punjenje podacima prema shemi u database/seeders i database/factories folderima -->
 php artisan migrate:fresh --seed
- ```
-
-
-#### Provjera PHP verzije u Linux terminalu
-
- ```
-php -v
- ```
-
-
-#### Prikaz sadržaja Linux datoteke
-
- ```
- <!-- ispis u Linux terminalu -->
-cat ime_datoteke
-
-<!-- prikaz datoteke sa posebnim programima -->
-nano ime_datoteke
-vim ime_datoteke
  ```
 
 
