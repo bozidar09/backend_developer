@@ -1,4 +1,4 @@
-#### Laravel auth middleware, kreiranje pomoću Bearer tokena, AP JSON response sa status kodom
+#### Laravel kontroler i auth middleware za autorizaciju pomoću Bearer tokena, API JSON response sa status kodom
 
 TODO (ovo će potrajat dan, dva da posložim kako treba)
 
@@ -187,9 +187,9 @@ $result = $statement->fetchAll();
 - u klasi definiramo dvije privatne varijable, numberA i numberB, dvije public metode za dohvaćanje njihovih vrijednosti (settere), te public funkciju za zbrajanje
  
  ```
-function sum(int a, int b): int
+function sum(int $a, int $b): int
 {
-    return a + b;
+    return $a + $b;
 }
 
 class Sum 
@@ -207,7 +207,7 @@ class Sum
         $this->numberB = $b;
     }
 
-    public function sum(int a = null, int b = null ); int
+    public function sum(?int $a = null, ?int $b = null ): int
     {
          
         return (a ?? $this->numberA ?? 0) + (b ?? $this->numberB ?? 0);
@@ -219,7 +219,7 @@ $zbroj = new Sum();
 $zbroj->setA(7);
 $zbroj->setB(10);
 
-$zbroj->sum(4, 5)
+$zbroj->sum(4, 5);
 <!-- vratit će 9 -->
 
 $zbroj->sum(); 
@@ -494,21 +494,21 @@ CTRL+Z
  https://www.dolthub.com/blog/2024-01-17-writing-mysql-procedures/
  <!-- mini tutorial za mysql procedure -->
 
-DROP DATABASE IF EXISTS `algebra`;
+DROP DATABASE IF EXISTS `pekara`;
 
-CREATE DATABASE IF NOT EXISTS `algebra` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `algebra`;
+CREATE DATABASE IF NOT EXISTS `pekara` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `pekara`;
 
 CREATE TABLE IF NOT EXISTS `proizvodi` (
     `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
     `naziv` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-    `kolicina` int UNSIGNED NOT NULL,
+    `kolicina` int UNSIGNED NOT NULL
 );
 
 INSERT INTO `proizvodi` (`naziv`, `kolicina`) VALUES
     ('kruh', '1000'),
     ('pecivo', '500'),
-    ('burek', '500'),
+    ('burek', '200'),
     ('buhtla', '200'),
     ('sendvic', '100');
 
@@ -584,11 +584,17 @@ php artisan migrate:fresh --seed
 
 #### Continuous integration
 
-- CI uvodi stalnu automatizaciju i kontinuirani nadzor tokom čitavog životnog ciklusa aplikacije, od faza integracije i testiranja do isporuke i primjene
+- CI/CD pipeline (continuous integration/continuous deployment/delivery) uvodi stalnu automatizaciju i kontinuirani nadzor tokom čitavog životnog ciklusa aplikacije, od faza integracije i testiranja do isporuke i primjene
+
+- CI je praksa prilikom razvoja aplikacije gdje programeri redovito (u nekim slučajevima jednom dnevno) dodaju vlastite promjene koda na centralni repozitorij, nakon čega se kod pokreće te izvode testovi
 - obavezni koraci koje bi trebalo dodati u CI (Continuous Integration) pipeline:
     - izvrtiti testove i vidjeti da li prolaze
     - statički analizirati kod te validirati da nema nikakvih pogrešaka
     - napraviti cache konfiguracijskih datoteka projekta te provjeriti da nema pogrešaka
+
+ ```
+https://group.miletic.net/hr/nastava/materijali/web-kontinuirana-integracija/#tijek-rada-kontinuirane-integracije-12
+ ```
 
 
 #### PHP Unit config xml
@@ -605,11 +611,15 @@ https://laraveldaily.com/lesson/testing-laravel/db-configuration-refreshdatabase
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="vendor/autoload.php"
-         colors="true">
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertWarningsToExceptions="true"
+         convertNoticesToExceptions="true"
+         stopOnFailure="false">
     <!-- testovi -->
     <testsuites>
-        <testsuite name="Tests">
-            <directory>./tests</directory>
+        <testsuite name="Unit">
+            <directory>tests/Unit</directory>
         </testsuite>
         <!-- može se dodati više od jedne testne konfiguracije -->
         <testsuite name="Feature">
@@ -621,14 +631,14 @@ https://laraveldaily.com/lesson/testing-laravel/db-configuration-refreshdatabase
         <include>
             <directory>app</directory>
         </include>
+        <!-- primjer excludeanja direktorija/filea -->
         <exclude>
-        <!-- primjer excludeanja direktorija -->
             <directory suffix=".php">app/Providers</directory> 
-        <!-- primjer excludeanja filea -->
             <file suffix=".php">app/Providers/AppServiceProvider.php</file>
         </exclude>
     </source>
-        <php>
+    <!-- za env varijable umjesto ovog možemo koristiti .env.testing file -->
+    <php>
         <env name="APP_ENV" value="testing"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
