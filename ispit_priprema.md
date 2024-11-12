@@ -1,3 +1,37 @@
+#### Laravel auth middleware, kreiranje pomoću Bearer tokena, AP JSON response sa status kodom
+
+TODO (ovo će potrajat dan, dva da posložim kako treba)
+
+ ```
+Kreiranje kontrolera i middlewarea za autorizaciju pomoću bearer tokena, vraćanje odgovora u obliku JSON-a sa status kodom
+
+    https://stackoverflow.com/questions/58730579/laravel-bearer-token-authentication
+
+    https://phi-rakib.medium.com/how-to-get-the-authentication-token-from-the-request-in-laravel-c577445da296
+
+    https://stackoverflow.com/questions/31131159/laravel-return-json-along-with-http-status-code
+ ```
+
+
+#### Hyper-V virtualka (radno okruženje)
+
+- login na fizičko računalo ispred vas
+ ```
+user: STUDENT
+pass: STUDENT
+ ```
+
+- upute za sve u pdf obliku u Downloads (prebacit će profesor sa mreže)
+
+- na računalu će biti 2 Hyper-V virtualke (Ubuntu Server i Windows virtualka Ispit) sa loginom:
+ ```
+user: algebra
+pass: Pa$$w0rd
+ ```
+
+TODO (sami instalirat Ubuntu na Hyper-V i shvatit kako se snaći u tom virtualnom okruženju)
+
+
 #### Spajanje xampp i vscode
 
 - downloadajte najnoviji XAMPP i instalirajte ga (ako već ne postoji na sustavu)
@@ -16,7 +50,7 @@
 
 #### Instalacija wsl i ubuntu na virtualnim Windowsima
 
-- upute za instalaciju wsl i ubuntu iz command prompta (windows+R, pa upišite cmd, te potom ctrl+shift+enter da bi ga otvorili sa administratorskim ovlastima)
+- upute za instalaciju wsl i Ubuntu iz command prompta (Windows+R, pa upišite cmd, te potom ctrl+shift+enter da bi ga otvorili sa administratorskim ovlastima)
 
  ```
 https://learn.microsoft.com/en-us/windows/wsl/install
@@ -28,8 +62,13 @@ https://learn.microsoft.com/en-us/windows/wsl/install
 https://code.visualstudio.com/docs/remote/wsl
  ```
 
-- sljedeće pristupite Ubuntu putem terminala na VS Code, kopirajte .setup.sh sa gita (imate link dolje) i pohranite u setup.sh na Ubuntu (sa sudo nano)
-- zatim mu dajte 777 ovlasti (sudo chmod 777), te ga pokrenite kako bi instalirali LAMP stack (php, mysql, apache, composer)
+- sljedeće pristupite Ubuntu putem terminala na VS Code te napravite naredbu za update i upgrade
+
+ ```
+sudo apt-get update && sudo apt-get upgrade -y
+ ```
+
+- zatim kopirajte .setup.sh sa gita (imate link dolje) i pohranite u setup.sh na Ubuntu (sa sudo nano), dajte mu 777 ovlasti (sudo chmod 777), te ga pokrenite kako bi instalirali LAMP stack (php, mysql, apache, composer)
 
  ```
 https://github.com/adobrini-algebra/radno_okruzenje/blob/master/setup.sh
@@ -40,64 +79,176 @@ setup.sh
  ```
 
 
-#### Instaliranje Laravel projekta pomoću Composera
-
-- s obzirom da već imamo instalirane php i composer, Laravel možemo instalirati ovom naredbom:
+#### Spajanje na bazu (i dohvat podataka) pomoću Mysqli funkcije
 
  ```
-composer global require laravel/installer
+$hostname = localhost;
+$username = algebra;
+$password = algebra;
+$database = videoteka;
+<!-- opcionalno -->
+$port = 3306;
+
+ <!-- stvaranje konekcije na bazu -->
+$connection = mysqli_connect($hostname, $username, $password, $database, $port);
+
+<!-- provjera je li sve prošlo bez grešaka -->
+if (mysqli_connect_errno()) {
+    die("Pogreška kod spajanja na poslužitelj: " . mysqli_connect_error());
+}
+echo "Spojeni ste na bazu";
+
+<!-- zatvaranje konekcije -->
+mysqli_close($connection);
+
+
+<!-- query i podaci -->
+$query = 'SELECT * FROM users WHERE city = ? ORDER BY name';
+$param = 'Zagreb';
+
+<!-- funkcija za pripremu SQL naredbe, sigurno vezanje parametara, te izvođenje naredbe, sve u jednom -->
+$result = mysqli_execute_query($connection, $query, $param);
  ```
 
-- nakon toga kreiramo novu Laravel aplikaciju sa naredbom:
+
+#### Spajanje na bazu (i dohvat podataka) pomoću PDO klase
 
  ```
-laravel new ime_aplikacije
+ <!-- potrebni podaci -->
+$host = 'localhost';
+$database = 'videoteka';
+$username = 'algebra';
+$password = 'algebra';
+<!-- opcionalno -->
+$port = 3306;
+$charset = 'utf8mb4';
+
+<!-- dodatne opcije, kako će se dohvaćati podaci (fetch - associjativno polje) i kako će se prikazivati greške (error mode - exception) -->
+$options = [PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
+
+<!-- osnovni podaci o bazi, tip, naziv, host i (opcionalno) port, charset -->
+$dsn = "mysql:host={$host};port={$port};dbname={$database};charset={$charset}" 
+
+<!-- konekcija sa dns (data source name), username, password i dodatnim opcijama (dohvat podataka, greške i slično) -->
+$pdo = new PDO($dsn, $username, $password, $options);
+
+<!-- zatvaranje konekcije (u biti nuliranje varijable koja sadrži konekciju na bazu) -->
+$pdo = NULL;
+
+
+<!-- query i podaci -->
+$query = 'SELECT * FROM users WHERE city = ? ORDER BY name';
+$param = 'Zagreb';
+
+<!-- metode za pripremu i izvođenje naredbe -->
+$statement = $pdo->prepare($sql);
+$statement->execute($param);
+
+<!-- metode za dohvat podataka (fetch dohvati samo jedan redak, fetchAll dohvati sve) -->
+$result = $statement->fetch();
+$result = $statement->fetchAll();
  ```
 
-- gdje ćete moći odabrati niz opcija, a po instalaciji trebate izmijeniti .env file, itd., detaljnije upute na linku (Laravel dokumentacija):
+
+#### HTML forma
+
+- napraviti formu koja će slati username i password sa POST metodom (potreban je i submit button)
+ 
+ ```
+<?php 
+
+    <form action="/login" method="POST">
+        <div>
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div>
+            <label for="password">Password</label>
+            <input type="password"id="password" name="password" required>
+        </div>
+        <hr>
+        <div>
+            <button type="submit" value="Suubmit">Submit</button>
+        </div>
+    </form>
+
+<!-- za file u form treba dodati enctype="multipart/form-data" te type="file" -->
 
  ```
- https://laravel.com/docs/11.x/installation#installing-php
- ```
-
-
-#### Laravel middleware
-
-TODO
-
-
-#### Kreiranje kontrolera i middlewarea pomoću Bearer tokena
-
-TODO
-
-
-#### API JSON response sa status kodom
-
-TODO
-
-
-#### Spajanje na bazu pomoću Mysqli funkcije
-
-TODO
-
-
-#### Spajanje na bazu pomoću PDO klase
-
-TODO
-
-
-#### Continuous integration
-
-- CI uvodi stalnu automatizaciju i kontinuirani nadzor tokom čitavog životnog ciklusa aplikacije, od faza integracije i testiranja do isporuke i primjene
-- obavezni koraci koje bi trebalo dodati u CI (Continuous Integration) pipeline:
-    - izvrtiti testove i vidjeti da li prolaze
-    - statički analizirati kod te validirati da nema nikakvih pogrešaka
-    - napraviti cache konfiguracijskih datoteka projekta te provjeriti da nema pogrešaka
 
 
 #### Programske petlje (foreach, for, while)
 
-- programske petlje su strukture koje omogućavaju da se dijelovi programa/koda izvrše, odnosno iteriraju više puta (zadani broj ili sve dok je određeni uvjet ispunjen), te na taj način ubrzavaju/automatiziraju procesuiranje podataka, poput primjerice pretraživanja lista i polja
+- programske petlje su strukture koje omogućavaju da se dijelovi programa/koda izvrše, odnosno iteriraju više puta (zadani broj ili sve dok je određeni uvjet ispunjen), te na taj način ubrzavaju/automatiziraju procesuiranje podataka, pretraživanja lista i polja i slično.
+
+
+#### Pretvaranje funkcije u klasu
+
+- u klasi definiramo dvije privatne varijable, numberA i numberB, dvije public metode za dohvaćanje njihovih vrijednosti (settere), te public funkciju za zbrajanje
+ 
+ ```
+function sum(int a, int b): int
+{
+    return a + b;
+}
+
+class Sum 
+{
+    private int $numberA;
+    private int $numberB;
+
+    public function setA(int $a) 
+    {
+        $this->numberA = $a;
+    }
+
+    public function setB(int $b) 
+    {
+        $this->numberB = $b;
+    }
+
+    public function sum(int a = null, int b = null ); int
+    {
+         
+        return (a ?? $this->numberA ?? 0) + (b ?? $this->numberB ?? 0);
+    }
+}
+
+$zbroj = new Sum();
+
+$zbroj->setA(7);
+$zbroj->setB(10);
+
+$zbroj->sum(4, 5)
+<!-- vratit će 9 -->
+
+$zbroj->sum(); 
+<!-- vratit će 17 -->
+
+ ```
+
+#### array_map()
+
+- funkcija array_map() kao prvi argument može primiti ili ime druge funkcije, ili anonimnu "callback" funkciju, a kao ostale argumente prima jedno ili više polja vrijednosti (koje onda redom koristi u funkciji danoj sa prvim argumentom)
+ 
+ ```
+function squares($n)
+{
+    return ($n * $n);
+}
+$squares = array_map('squares', [2, 3, 4, 5, 6]);
+print_r($squares);
+
+array(
+    [0] => 4
+    [1] => 9
+    [2] => 16
+    [3] => 25
+    [4] => 36
+)
+
+https://www.php.net/manual/en/function.array-map.php
+ ```
 
 
 #### Git grananje
@@ -124,7 +275,7 @@ git remote add origin adresa_repozitorija
 git push -u origin master
 
 <!-- kopiranje projekta sa nekog repozitorija -->
-git clone git_repo_path
+git clone repo_path
 
 <!-- dohvat te spajanje podataka sa udaljenog repozitorija -->
 git fetch
@@ -166,10 +317,7 @@ git checkout nova
 <!-- stavljanje novostvorene grane na udaljeni repozitorij -->
 git push -u origin nova
 
-<!-- dohvaćanje osvježenog popisa novih grana sa udaljenog repozitorija -->
-git fetch
-
-<!-- dohvaćanje najnovije verzije nove grane sa udaljenog repozitorija, te potom dohvaćanje izmjena sa master grane u novu granu -->
+<!-- dohvaćanje najnovije verzije nove grane sa udaljenog repozitorija -->
 git fetch
 git merge origin nova
 
@@ -182,7 +330,7 @@ git checkout master
 <!-- dohvat filea iz nove grane u master -->
 git checkout nova ime_filea
 
-<!-- spajanje podataka iz nove grane u master -->
+<!-- spajanje svih podataka iz nove grane u master -->
 git merge nova
 
 <!-- brisanje nove grane na udaljenom repozitoriju -->
@@ -193,17 +341,31 @@ git branch -d nova
  ```
 
 
-#### Prikaz sadržaja Linux datoteke
-
-- ispis u Linux terminalu
+#### Prikaz, kreiranje, brisanje direktorija i datoteka u Linux terminalu
 
  ```
+<!-- prikaz svih datoteka i poddirektorija unutar navedenog direktorija, -al određuje prikaz svih elemenata (i onih skrivenih - a kao all), i to poredanih u listu sa prikazom ovlasti (l kao list)  -->
+ls -al ime_direktorija
+
+<!-- alias za ls -al spremljen u .bashrc -->
+ll ime_direktorija
+
+<!-- kreiranje direktorija -->
+mkdir ime_direktorija
+
+<!-- brisanje praznog! direktorija -->
+rmdir ime_direktorija
+
+<!-- kreiranje nove datoteke -->
+touch ime_datoteke
+
+<!-- brisanje direktorija i datoteka, ponekad potrebne sudo ovlasti, možemo ih navesti više jedno iza drugog -->
+rm -rf ime_direktorija ime_datoteke
+
+<!-- ispis u Linux terminalu -->
 cat ime_datoteke
- ```
 
-- prikaz datoteke sa posebnim programima
-
- ```
+<!-- otvaranje/prikaz datoteke sa posebnim programom, datoteka se ako ne postoji automatski stvori, potrebna sudo ovlast -->
 nano ime_datoteke
 vim ime_datoteke
  ```
@@ -234,6 +396,81 @@ https://www.baeldung.com/linux/file-append-text-no-redirection
  ```
 php -v
  ```
+
+
+#### Ostale Linux terminal naredbe
+
+ ```
+ <!-- prikaz patha direktorija u kojem se trenutno nalazimo -->
+ pwd 
+
+ <!-- promjena direktorija -->
+ cd path
+ <!-- prijelaz u direktorij koji se nalazi unutar trenutnog direktorija -->
+ cd ime_direktorija 
+ <!-- prijelaz na nivo iznad trenutnog direktorija -->
+ cd .. 
+ <!-- povratak nivo iznad te ulazak u neki drugi poddirektorij -->
+ cd ../ime_direktorija 
+ <!-- povratak u home direktorij usera -->
+ cd ~
+
+<!-- prikaz opisa naredbe -->
+ man ime_naredbe
+ ime_naredbe --help
+
+ <!-- kopiranje datoteke -->
+ cp odredišna_datoteka neki_direktorij/nova_datoteka
+
+<!-- preimenovanje datoteke ako je ishodište i odredište u istome direktoriju -->
+ mv staro_ime novo_ime
+
+ <!-- premještanje datoteke ako je odredište u nekom drugom direktoriju, moguće joj je dati i novo ime -->
+ mv stara_datoteka drugi_direktorij/nova_datoteka
+
+<!-- super user do - oznaka da naredbu izvodimo sa root privilegijama -->
+ sudo
+
+ <!-- prikaz veličine datoteke/direktorija, -m prikazuje veličinu u megabajtima -->
+ du -m ime_datoteke
+
+ <!-- kompresija/dekompresija datoteka/direktorija -->
+ zip
+ unzip
+
+<!-- dohvat updatea i upgrade nekog paketa ili svih programa Linux sustava (ako ne navedemo određeni paket) -->
+ sudo apt-get update ime_paketa
+ sudo apt-get upgrade ime_paketa
+
+<!-- promjena privilegija (read 2^2, write 2^1, execute 2^1) određene datoteke/direktorija, -R oznakom mijenjamo vlasništvo i nad fileovima, te poddirektorijima koji se nalaze unutar navedenog direktorija -->
+ chmod -R 777 ime_datoteke
+<!-- primjer sa User/Group/Other i Read/Write/eXecute -->
+ chmod u:rwx, g:rx, o:r ime_datoteke
+
+ <!-- promjena vlasništva nad datotekom/direktorijem, -R oznakom mijenjamo vlasništvo i nad fileovima, te poddirektorijima koji se nalaze unutar navedenog direktorija -->
+ chown -R algebra:algebra ime_direktorija
+
+ <!-- prikaz ip adrese -->
+ hostname -I 
+ 
+ <!-- provjera konekcije sa navedenom ip adredom -->
+ ping neki_ip
+
+ <!-- prikaz id trenutnog korisnika -->
+ echo $UID
+ 
+ <!-- brisanje zaslona terminala -->
+ clear
+
+<!-- zaustavljanje izvođenja naredbe u terminalu -->
+CTRL+C
+<!-- prisilno zaustavljanje izvođenja naredbe u terminalu -->
+CTRL+Z
+
+ <!-- izlazak iz terminala -->
+ exit
+ ```
+
 
 
 #### SQL pretvaranje entiteta u relacije
@@ -322,6 +559,38 @@ DELIMITER ;
  ```
 
 
+#### SQL migracije
+
+- prijenos sheme (database schema migration) i podataka (sql data migration) iz jedne u drugu (odredišne u ciljnu) bazu
+
+
+#### Laravel migracije
+
+- služe za definiranje sheme baze podataka određene aplikacije (kreiranje i modificiranje tablica/entiteta i njenih atributa) sa ciljem olakšavanja prijenosa i rada u timu (primjerice laka dostupnost najnovije verzije i u slučaju promjena od strane drugog člana tima koji radi na istoj aplikaciji)
+ 
+ ```
+https://laravel.com/docs/11.x/migrations#introduction
+
+ <!-- kreiranje nove baze prema shemi u database/migrations folderu -->
+php artisan migrate
+
+<!-- brisanje stare i kreiranje nove baze -->
+php artisan migrate:fresh
+
+<!-- brisanje stare, kreiranje nove baze te punjenje podacima prema shemi u database/seeders i database/factories folderima -->
+php artisan migrate:fresh --seed
+ ```
+
+
+#### Continuous integration
+
+- CI uvodi stalnu automatizaciju i kontinuirani nadzor tokom čitavog životnog ciklusa aplikacije, od faza integracije i testiranja do isporuke i primjene
+- obavezni koraci koje bi trebalo dodati u CI (Continuous Integration) pipeline:
+    - izvrtiti testove i vidjeti da li prolaze
+    - statički analizirati kod te validirati da nema nikakvih pogrešaka
+    - napraviti cache konfiguracijskih datoteka projekta te provjeriti da nema pogrešaka
+
+
 #### PHP Unit config xml
 
 - napraviti PHPUnit config xml koji će napraviti exclude određene datoteke (u našem slučaju config)
@@ -376,122 +645,24 @@ https://laraveldaily.com/lesson/testing-laravel/db-configuration-refreshdatabase
  ```
 
 
-#### HTML forma
+#### Instaliranje Laravel projekta pomoću Composera
 
-- napraviti formu koja će slati username i password sa POST metodom (potreban je i submit button)
- 
- ```
-<?php 
-
-    <form action="/login" method="POST">
-        <div>
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" required>
-        </div>
-        <div>
-            <label for="password">Password</label>
-            <input type="password"id="password" name="password" required>
-        </div>
-        <hr>
-        <div>
-            <button type="submit" value="Suubmit">Submit</button>
-        </div>
-    </form>
-
-<!-- za file u form treba dodati enctype="multipart/form-data" te type="file" -->
+- s obzirom da već imamo instalirane php i composer, Laravel možemo instalirati ovom naredbom:
 
  ```
-
-
-#### Pretvaranje funkcije u klasu
-
-- u klasi definiramo dvije privatne varijable, numberA i numberB, dvije public metode za dohvaćanje njihovih vrijednosti (settere), te public funkciju za zbrajanje
- 
- ```
-function sum(int a, int b): int
-{
-    return a + b;
-}
-
-class Sum 
-{
-    private int $numberA;
-    private int $numberB;
-
-    public function setA(int $a) 
-    {
-        $this->numberA = $a;
-    }
-
-    public function setB(int $b) 
-    {
-        $this->numberB = $b;
-    }
-
-    public function sum(int a = null, int b = null ); int
-    {
-         
-        return (a ?? $this->numberA ?? 0) + (b ?? $this->numberB ?? 0);
-    }
-}
-
-$zbroj = new Sum();
-
-$zbroj->setA(7);
-$zbroj->setB(10);
-
-$zbroj->sum(4, 5)
-<!-- vratit će 9 -->
-
-$zbroj->sum(); 
-<!-- vratit će 17 -->
-
+composer global require laravel/installer
  ```
 
-#### array_map()
+- nakon toga kreiramo novu Laravel aplikaciju sa naredbom:
 
-- funkcija array_map() kao prvi argument može primiti ili ime druge funkcije, ili anonimnu "callback" funkciju, a kao ostale argumente prima jedno ili više polja vrijednosti (koje onda redom koristi u funkciji danoj sa prvim argumentom)
- 
  ```
-function squares($n)
-{
-    return ($n * $n);
-}
-$squares = array_map('squares', [2, 3, 4, 5, 6]);
-print_r($squares);
-
-array(
-    [0] => 4
-    [1] => 9
-    [2] => 16
-    [3] => 25
-    [4] => 36
-)
-
-https://www.php.net/manual/en/function.array-map.php
+laravel new ime_aplikacije
  ```
 
+- gdje ćete moći odabrati niz opcija, a po instalaciji trebate izmijeniti .env file, itd., detaljnije upute na linku (Laravel dokumentacija):
 
-#### SQL migracije
-
-- prijenos sheme (database schema migration) i podataka (sql data migration) iz jedne u drugu (odredišne u ciljnu) bazu
-
-
-#### Laravel migracije
-
-- služe za definiranje sheme baze podataka određene aplikacije (kreiranje i modificiranje tablica/entiteta i njenih atributa) sa ciljem olakšavanja prijenosa i rada u timu (primjerice laka dostupnost najnovije verzije i u slučaju promjena od strane drugog člana tima koji radi na istoj aplikaciji)
- 
  ```
-https://laravel.com/docs/11.x/migrations#introduction
-
- <!-- kreiranje nove baze prema shemi u database/migrations folderu -->
-php artisan migrate
-
-<!-- brisanje stare i kreiranje nove baze -->
-php artisan migrate:fresh
-
-<!-- brisanje stare, kreiranje nove baze te punjenje podacima prema shemi u database/seeders i database/factories folderima -->
-php artisan migrate:fresh --seed
+ https://laravel.com/docs/11.x/installation#installing-php
  ```
 
 
