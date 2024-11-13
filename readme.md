@@ -1,5 +1,3 @@
-[TOC]
-
 ## Vlastiti host
 
 - otvorite terminal (bilo u VSCode, bilo zasebno) i sa naredbom "cd /etc/apache2/sites-available" se pozicionirajte u apache direktorij dostupnih hostova
