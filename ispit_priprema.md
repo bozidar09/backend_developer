@@ -395,6 +395,14 @@ https://www.baeldung.com/linux/file-append-text-no-redirection
 
  ```
 php -v
+php --version
+
+<!-- ispis cijelog phpinfo() filea -->
+php -i
+php --info
+
+<!-- prikaz putanja svih php konfiguracijskih datoteka -->
+php --ini
  ```
 
 
@@ -584,9 +592,9 @@ php artisan migrate:fresh --seed
 
 #### Continuous integration
 
-- CI/CD pipeline (continuous integration/continuous deployment/delivery) uvodi stalnu automatizaciju i kontinuirani nadzor tokom čitavog životnog ciklusa aplikacije, od faza integracije i testiranja do isporuke i primjene
+- CI/CD pipeline (continuous integration/delivery/deployment) uvodi stalnu automatizaciju i kontinuirani nadzor tokom čitavog životnog ciklusa aplikacije, od faza integracije i testiranja do isporuke i primjene
 
-- CI je praksa prilikom razvoja aplikacije gdje programeri redovito (u nekim slučajevima jednom dnevno) dodaju vlastite promjene koda na centralni repozitorij, nakon čega se kod pokreće te izvode testovi
+- CI je praksa prilikom razvoja aplikacije gdje programeri redovito (ponekad svakodnevno) dodaju vlastite promjene koda na zajednički repozitorij, nakon čega se aplikacija gradi te izvode testovi
 - obavezni koraci koje bi trebalo dodati u CI (Continuous Integration) pipeline:
     - izvrtiti testove i vidjeti da li prolaze
     - statički analizirati kod te validirati da nema nikakvih pogrešaka
