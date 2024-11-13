@@ -1,7 +1,10 @@
-#### Laravel kontroler i auth middleware (bearer token, API JSON response sa status kodom)
+### Laravel kontroler i auth middleware (bearer token, API JSON response sa status kodom)
 
 - napravljeno prema ovim primjerima (ovo je u biti jednostavna simulacija Laravel Passport/Sanctum)
+- napravljeno prema ovim primjerima (ovo je u biti jednostavna simulacija Laravel Passport/Sanctum)
  ```
+ <!-- kontroler i rute -->
+ https://dev.to/thatcoolguy/token-based-authentication-in-laravel-9-using-laravel-sanctum-3b61
  <!-- kontroler i rute -->
  https://dev.to/thatcoolguy/token-based-authentication-in-laravel-9-using-laravel-sanctum-3b61
 
@@ -133,8 +136,9 @@ Route:controller(AuthController::class)->group(function () {
 });
  ```
 
+---
 
-#### Hyper-V virtualka (radno okruženje)
+### Hyper-V virtualka (radno okruženje)
 
 - login na fizičko računalo ispred vas
  ```
@@ -152,8 +156,9 @@ pass: Pa$$w0rd
 
 TODO (sami instalirat Ubuntu na Hyper-V i shvatit kako se snaći u tom virtualnom okruženju)
 
+---
 
-#### Spajanje xampp i vscode
+### Spajanje xampp i vscode
 
 - downloadajte najnoviji XAMPP i instalirajte ga (ako već ne postoji na sustavu)
 
@@ -167,9 +172,9 @@ TODO (sami instalirat Ubuntu na Hyper-V i shvatit kako se snaći u tom virtualno
 
  - nakon toga otvorite vaš VSCode, kliknite na Open Folder i dođite putanjom C:\xampp\htdocs do htdocs foldera u kojem kreirate direktorij za vaš projekt (nakon toga možete stvoriti .php stranicu i krenuti sa kodiranjem)
 
+---
 
-
-#### Instalacija wsl i ubuntu na virtualnim Windowsima
+### Instalacija wsl i ubuntu na virtualnim Windowsima
 
 - upute za instalaciju wsl i Ubuntu iz command prompta (Windows+R, pa upišite cmd, te potom ctrl+shift+enter da bi ga otvorili sa administratorskim ovlastima)
 
@@ -199,8 +204,9 @@ sudo chmod 777 setup.sh
 setup.sh
  ```
 
+---
 
-#### Spajanje na bazu (i dohvat podataka) pomoću Mysqli funkcije
+### Spajanje na bazu (i dohvat podataka) pomoću Mysqli funkcije
 
  ```
 $hostname = localhost;
@@ -231,8 +237,9 @@ $param = 'Zagreb';
 $result = mysqli_execute_query($connection, $query, $param);
  ```
 
+---
 
-#### Spajanje na bazu (i dohvat podataka) pomoću PDO klase
+### Spajanje na bazu (i dohvat podataka) pomoću PDO klase
 
  ```
  <!-- potrebni podaci -->
@@ -270,8 +277,9 @@ $result = $statement->fetch();
 $result = $statement->fetchAll();
  ```
 
+---
 
-#### HTML forma
+### HTML forma
 
 - napraviti formu koja će slati username i password sa POST metodom (potreban je i submit button)
  
@@ -297,13 +305,15 @@ $result = $statement->fetchAll();
 
  ```
 
+---
 
-#### Programske petlje (foreach, for, while)
+### Programske petlje (foreach, for, while)
 
 - programske petlje su strukture koje omogućavaju da se dijelovi programa/koda izvrše, odnosno iteriraju više puta (zadani broj ili sve dok je određeni uvjet ispunjen), te na taj način ubrzavaju/automatiziraju procesuiranje podataka, pretraživanja lista i polja i slično.
 
+---
 
-#### Pretvaranje funkcije u klasu
+### Pretvaranje funkcije u klasu
 
 - u klasi definiramo dvije privatne varijable, numberA i numberB, dvije public metode za dohvaćanje njihovih vrijednosti (settere), te public funkciju za zbrajanje
  
@@ -345,10 +355,11 @@ $zbroj->sum(4, 5);
 
 $zbroj->sum(); 
 <!-- vratit će 17 -->
-
  ```
 
-#### array_map()
+---
+
+### array_map()
 
 - funkcija array_map() kao prvi argument može primiti ili ime druge funkcije, ili anonimnu "callback" funkciju, a kao ostale argumente prima jedno ili više polja vrijednosti (koje onda redom koristi u funkciji danoj sa prvim argumentom)
  
@@ -371,8 +382,9 @@ array(
 https://www.php.net/manual/en/function.array-map.php
  ```
 
+---
 
-#### Git grananje
+### Git grananje
  
  ```
 <!-- inicijalizacija -->
@@ -461,8 +473,9 @@ git push -d origin nova
 git branch -d nova
  ```
 
+---
 
-#### Prikaz, kreiranje, brisanje direktorija i datoteka u Linux terminalu
+### Prikaz, kreiranje, brisanje direktorija i datoteka u Linux terminalu
 
  ```
 <!-- prikaz svih datoteka i poddirektorija unutar navedenog direktorija, -al određuje prikaz svih elemenata (i onih skrivenih - a kao all), i to poredanih u listu sa prikazom ovlasti (l kao list)  -->
@@ -491,8 +504,9 @@ nano ime_datoteke
 vim ime_datoteke
  ```
 
+---
 
-#### Zapisivanje u file kroz Linux terminal
+### Zapisivanje u file kroz Linux terminal
 
 - sa operatorom >> i naredbom echo dodajemo tekst kao novu liniju na kraj datoteke
 
@@ -511,8 +525,9 @@ echo "Hello World" > file.txt
 https://www.baeldung.com/linux/file-append-text-no-redirection
  ```
 
+---
 
-#### Provjera PHP verzije u Linux terminalu
+### Provjera PHP verzije u Linux terminalu
 
  ```
 php -v
@@ -526,8 +541,9 @@ php --info
 php --ini
  ```
 
+---
 
-#### Ostale Linux terminal naredbe
+### Ostale Linux terminal naredbe
 
  ```
  <!-- prikaz patha direktorija u kojem se trenutno nalazimo -->
@@ -600,9 +616,9 @@ CTRL+Z
  exit
  ```
 
+---
 
-
-#### SQL pretvaranje entiteta u relacije
+### SQL pretvaranje entiteta u relacije
 
 - zaposlenik može tokom vremena odraditi više poslova, a na svakom poslu može raditi više zaposlenika
 
@@ -614,8 +630,9 @@ CTRL+Z
     ZAPOSLENIK 1 - n ODRAĐENI_POSLOVI n - 1 POSAO
  ```
 
+---
 
-#### SQL procedura
+### SQL procedura
 
 - napraviti proceduru koja će u tablici proizvodi mijenjati količine ovisno o količini prodanih proizvoda
  
@@ -687,13 +704,15 @@ DELIMITER ;
 
  ```
 
+---
 
-#### SQL migracije
+### SQL migracije
 
 - prijenos sheme (database schema migration) i podataka (sql data migration) iz jedne u drugu (odredišne u ciljnu) bazu
 
+---
 
-#### Laravel migracije
+### Laravel migracije
 
 - služe za definiranje sheme baze podataka određene aplikacije (kreiranje i modificiranje tablica/entiteta i njenih atributa) sa ciljem olakšavanja prijenosa i rada u timu (primjerice laka dostupnost najnovije verzije i u slučaju promjena od strane drugog člana tima koji radi na istoj aplikaciji)
  
@@ -710,8 +729,9 @@ php artisan migrate:fresh
 php artisan migrate:fresh --seed
  ```
 
+---
 
-#### Continuous integration
+### Continuous integration
 
 - CI/CD pipeline (continuous integration/delivery/deployment) uvodi stalnu automatizaciju i kontinuirani nadzor tokom čitavog životnog ciklusa aplikacije, od faza integracije i testiranja do isporuke i primjene
 
@@ -725,8 +745,9 @@ php artisan migrate:fresh --seed
 https://group.miletic.net/hr/nastava/materijali/web-kontinuirana-integracija/#tijek-rada-kontinuirane-integracije-12
  ```
 
+---
 
-#### PHP Unit config xml
+### PHP Unit config xml
 
 - napraviti PHPUnit config xml koji će napraviti exclude određene datoteke (u našem slučaju config)
  
@@ -783,8 +804,9 @@ https://laraveldaily.com/lesson/testing-laravel/db-configuration-refreshdatabase
 </phpunit>
  ```
 
+---
 
-#### Instaliranje Laravel projekta pomoću Composera
+### Instaliranje Laravel projekta pomoću Composera
 
 - s obzirom da već imamo instalirane php i composer, Laravel možemo instalirati ovom naredbom:
 
@@ -804,8 +826,9 @@ laravel new ime_aplikacije
  https://laravel.com/docs/11.x/installation#installing-php
  ```
 
+---
 
-#### Postavljanje aplikacije na server
+### Postavljanje aplikacije na server
 
 - ulogirajte se na udaljeni server sa danim podacima (username i password)
 
@@ -931,3 +954,5 @@ php artisan migrate --seed
 ```
 192.168.1.225:8000
 ```
+
+---
