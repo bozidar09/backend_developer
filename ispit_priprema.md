@@ -1,7 +1,6 @@
 ### Laravel kontroler i auth middleware (bearer token, API JSON response sa status kodom)
 
 - napravljeno prema ovim primjerima (ovo je u biti jednostavna simulacija Laravel Passport/Sanctum)
-- napravljeno prema ovim primjerima (ovo je u biti jednostavna simulacija Laravel Passport/Sanctum)
  ```
  <!-- kontroler i rute -->
  https://dev.to/thatcoolguy/token-based-authentication-in-laravel-9-using-laravel-sanctum-3b61
@@ -13,7 +12,7 @@
  https://laravel.com/docs/11.x/middleware#defining-middleware
  ```
 
-- Auth kontroler (treba ga kreirati sa naredbom "php artisan make:controller AuthController")
+- Auth kontroler sa register/login/logout metodama (treba ga kreirati sa naredbom "php artisan make:controller AuthController")
 
  ```
 <?php
@@ -84,7 +83,7 @@ class AuthController extends Controller
 }
  ```
 
-- Middleware (treba ga kreirati sa naredbom "php artisan make:middleware AuthToken")
+- Middleware koji provjerava korisnikov token (treba ga kreirati sa naredbom "php artisan make:middleware AuthToken")
 
  ```
 <?php
@@ -112,7 +111,7 @@ class AuthToken
 }
  ```
 
-- te potom registrirati u bootstrap/app.php (ulančati/nadodati između configure i create metoda klase Application)
+- te potom registrirati u bootstrap/app.php, novu middleware klasu dodajemo u api grupu i dajemo joj alias (naredbu treba ulančati/nadodati između configure i create metoda klase Application)
 
  ```
 ->withMiddleware(function (Middleware $middleware) {
@@ -121,7 +120,7 @@ class AuthToken
 })
  ```
 
-- Rute (treba omogućiti vidljivost, odnosno napraviti "publish" api.php filea u routes folderu sa naredbom "php artisan install:api")
+- Rute za metode Auth kontrolera (treba omogućiti vidljivost, odnosno napraviti "publish" api.php filea u routes folderu sa naredbom "php artisan install:api")
 
  ```
 <?php
@@ -136,7 +135,7 @@ Route:controller(AuthController::class)->group(function () {
 });
  ```
 
----
+
 
 ### Hyper-V virtualka (radno okruženje)
 
@@ -156,7 +155,7 @@ pass: Pa$$w0rd
 
 TODO (sami instalirat Ubuntu na Hyper-V i shvatit kako se snaći u tom virtualnom okruženju)
 
----
+
 
 ### Spajanje xampp i vscode
 
@@ -170,9 +169,11 @@ TODO (sami instalirat Ubuntu na Hyper-V i shvatit kako se snaći u tom virtualno
  https://www.eukhost.com/kb/how-to-add-to-the-path-on-windows-10-and-windows-11/
  ```
 
- - nakon toga otvorite vaš VSCode, kliknite na Open Folder i dođite putanjom C:\xampp\htdocs do htdocs foldera u kojem kreirate direktorij za vaš projekt (nakon toga možete stvoriti .php stranicu i krenuti sa kodiranjem)
+- nakon toga otvorite vaš VSCode, kliknite na Open Folder i dođite putanjom C:\xampp\htdocs do htdocs foldera u kojem kreirate direktorij za vaš projekt (nakon toga možete stvoriti .php stranicu i krenuti sa kodiranjem)
 
----
+- rezultate možete provjeriti otvaranjem localhost stranice u web browseru (localhost/ime_stranice ako ih imate više)
+
+
 
 ### Instalacija wsl i ubuntu na virtualnim Windowsima
 
@@ -204,7 +205,7 @@ sudo chmod 777 setup.sh
 setup.sh
  ```
 
----
+
 
 ### Spajanje na bazu (i dohvat podataka) pomoću Mysqli funkcije
 
@@ -237,7 +238,7 @@ $param = 'Zagreb';
 $result = mysqli_execute_query($connection, $query, $param);
  ```
 
----
+
 
 ### Spajanje na bazu (i dohvat podataka) pomoću PDO klase
 
@@ -277,7 +278,7 @@ $result = $statement->fetch();
 $result = $statement->fetchAll();
  ```
 
----
+
 
 ### HTML forma
 
@@ -305,13 +306,13 @@ $result = $statement->fetchAll();
 
  ```
 
----
+
 
 ### Programske petlje (foreach, for, while)
 
-- programske petlje su strukture koje omogućavaju da se dijelovi programa/koda izvrše, odnosno iteriraju više puta (zadani broj ili sve dok je određeni uvjet ispunjen), te na taj način ubrzavaju/automatiziraju procesuiranje podataka, pretraživanja lista i polja i slično.
+- programske petlje su strukture koje omogućavaju da se dijelovi programa/koda izvrše, odnosno iteriraju više puta (zadani broj ili sve dok je određeni uvjet ispunjen), te na taj način ubrzavaju/automatiziraju obradu podataka, pretraživanja lista, polja i slično.
 
----
+
 
 ### Pretvaranje funkcije u klasu
 
@@ -347,17 +348,19 @@ class Sum
 
 $zbroj = new Sum();
 
+$zbroj->sum();
+<!-- vratit će 0 -->
+
 $zbroj->setA(7);
 $zbroj->setB(10);
+$zbroj->sum(); 
+<!-- vratit će 17 -->
 
 $zbroj->sum(4, 5);
 <!-- vratit će 9 -->
-
-$zbroj->sum(); 
-<!-- vratit će 17 -->
  ```
 
----
+
 
 ### array_map()
 
@@ -382,7 +385,7 @@ array(
 https://www.php.net/manual/en/function.array-map.php
  ```
 
----
+
 
 ### Git grananje
  
@@ -390,7 +393,7 @@ https://www.php.net/manual/en/function.array-map.php
 <!-- inicijalizacija -->
 git init
 
-<!-- postavljanje username i email u git konfiguracijsku datoteku -->
+<!-- postavljanje username i email u git konfiguracijsku datoteku (global označava da se postavka primjenjuje za sve git repozitorije na vašem računalu) -->
 git config --global user.name <username>
 git config --global user.email <mailaddress>
 
@@ -398,9 +401,9 @@ git config --global user.email <mailaddress>
 git config --global --list
 
 <!-- postupak spajanja sa udaljenim repozitorijem -->
-<!-- postavljanje promjena . označava da postavljamo sve, a možemo dodavati i zasebno fileove ili foldere -->
+<!-- postavljanje promjena koje želimo poslati na udaljeni repozitorij, . označava da postavljamo sve, a možemo dodavati i zasebno fileove ili foldere -->
 git add .
-<!-- svaki commit mora biti označen sa porukom -->
+<!-- svakom commitu (odnosno slanju podataka) se mora dodati poruka -->
 git commit -m "prvi commit"
 <!-- označavamo udaljeni repozitorij kao origin -->
 git remote add origin adresa_repozitorija
@@ -413,11 +416,10 @@ git clone repo_path
 <!-- dohvat te spajanje podataka sa udaljenog repozitorija -->
 git fetch
 git merge
-
 <!-- skraćeni način, automatski napravi i dohvat, i spajanje -->
 git pull
 
-<!-- skraćeni način slanja podataka sa lokalne grane na udaljeni repozitorij, nakon što smo prilikom prvog pusha sve konfigurirali, origin i set upstream -->
+<!-- skraćeni način slanja podataka sa lokalne grane na udaljeni repozitorij, nakon što smo prilikom prvog pusha sve konfigurirali (origin i set upstream) -->
 git push
 
 <!-- trenutno stanje gita, grana, promjene, itd. -->
@@ -425,25 +427,19 @@ git status
 
 <!-- undo svih promjena ako nismo napravili add-commit, . sve promjene, a mogu se i zasebno navesti pojedini folderi i fileovi -->
 git checkout .
-
 <!-- undo add -->
 git reset
-
 <!-- undo samo commita -->
 git reset --soft HEAD^
-
 <!-- undo commit i add -->
 git reset HEAD^
-
 <!-- undo commit, add i svih promjena -->
 git reset --hard HEAD^
 
 <!-- ispis grane na kojoj smo trenutno -->
 git branch
-
 <!-- kreiranje nove grane lokalno, ali ne i automatski prijelaz na nju -->
 git branch nova
-
 <!-- prijelaz na novu granu -->
 git checkout nova
 
@@ -453,7 +449,6 @@ git push -u origin nova
 <!-- dohvaćanje najnovije verzije nove grane sa udaljenog repozitorija -->
 git fetch
 git merge origin nova
-
 <!-- uzastopno odrađene fetch i merge naredbe -->
 git pull origin nova
 
@@ -462,25 +457,22 @@ git checkout master
 
 <!-- dohvat filea iz nove grane u master -->
 git checkout nova ime_filea
-
 <!-- spajanje svih podataka iz nove grane u master -->
 git merge nova
 
 <!-- brisanje nove grane na udaljenom repozitoriju -->
 git push -d origin nova
-
 <!-- brisanje nove grane lokalno, prije toga se sa checkout morate premjestiti na neku drugu granu -->
 git branch -d nova
  ```
 
----
+
 
 ### Prikaz, kreiranje, brisanje direktorija i datoteka u Linux terminalu
 
  ```
 <!-- prikaz svih datoteka i poddirektorija unutar navedenog direktorija, -al određuje prikaz svih elemenata (i onih skrivenih - a kao all), i to poredanih u listu sa prikazom ovlasti (l kao list)  -->
 ls -al ime_direktorija
-
 <!-- alias za ls -al spremljen u .bashrc -->
 ll ime_direktorija
 
@@ -493,8 +485,8 @@ rmdir ime_direktorija
 <!-- kreiranje nove datoteke -->
 touch ime_datoteke
 
-<!-- brisanje direktorija i datoteka, ponekad potrebne sudo ovlasti, možemo ih navesti više jedno iza drugog -->
-rm -rf ime_direktorija ime_datoteke
+<!-- brisanje direktorija i datoteka, možemo ih navesti više jedno iza drugog, ponekad potrebne sudo ovlasti (r oznaka da obriše sve poddirektorije i datoteke unutar navedenog direktorija) -->
+rm -r ime_direktorija ime_datoteke
 
 <!-- ispis u Linux terminalu -->
 cat ime_datoteke
@@ -504,19 +496,15 @@ nano ime_datoteke
 vim ime_datoteke
  ```
 
----
+
 
 ### Zapisivanje u file kroz Linux terminal
 
-- sa operatorom >> i naredbom echo dodajemo tekst kao novu liniju na kraj datoteke
-
  ```
+<!-- sa operatorom >> i naredbom echo dodajemo tekst kao novu liniju na kraj datoteke -->
 echo "Hello World" >> file.txt
- ```
 
-- sa operatorom > dodajemo tekst i brišemo stari sadržaj datoteke
-
- ```
+<!-- sa operatorom > dodajemo tekst i brišemo stari sadržaj datoteke -->
 echo "Hello World" > file.txt
  ```
 
@@ -525,7 +513,7 @@ echo "Hello World" > file.txt
 https://www.baeldung.com/linux/file-append-text-no-redirection
  ```
 
----
+
 
 ### Provjera PHP verzije u Linux terminalu
 
@@ -541,7 +529,7 @@ php --info
 php --ini
  ```
 
----
+
 
 ### Ostale Linux terminal naredbe
 
@@ -557,7 +545,7 @@ php --ini
  cd .. 
  <!-- povratak nivo iznad te ulazak u neki drugi poddirektorij -->
  cd ../ime_direktorija 
- <!-- povratak u home direktorij usera -->
+ <!-- povratak u home direktorij korisnika -->
  cd ~
 
 <!-- prikaz opisa naredbe -->
@@ -565,7 +553,7 @@ php --ini
  ime_naredbe --help
 
  <!-- kopiranje datoteke -->
- cp odredišna_datoteka neki_direktorij/nova_datoteka
+ cp stara_datoteka neki_direktorij/nova_datoteka
 
 <!-- preimenovanje datoteke ako je ishodište i odredište u istome direktoriju -->
  mv staro_ime novo_ime
@@ -580,8 +568,8 @@ php --ini
  du -m ime_datoteke
 
  <!-- kompresija/dekompresija datoteka/direktorija -->
- zip
- unzip
+ zip ime_direktorija
+ unzip ime_direktorija
 
 <!-- dohvat updatea i upgrade nekog paketa ili svih programa Linux sustava (ako ne navedemo određeni paket) -->
  sudo apt-get update ime_paketa
@@ -592,13 +580,13 @@ php --ini
 <!-- primjer sa User/Group/Other i Read/Write/eXecute -->
  chmod u:rwx, g:rx, o:r ime_datoteke
 
- <!-- promjena vlasništva nad datotekom/direktorijem, -R oznakom mijenjamo vlasništvo i nad fileovima, te poddirektorijima koji se nalaze unutar navedenog direktorija -->
+ <!-- promjena vlasništva (user:group) nad datotekom/direktorijem, -R oznakom mijenjamo vlasništvo i nad fileovima, te poddirektorijima koji se nalaze unutar navedenog direktorija -->
  chown -R algebra:algebra ime_direktorija
 
  <!-- prikaz ip adrese -->
  hostname -I 
  
- <!-- provjera konekcije sa navedenom ip adredom -->
+ <!-- provjera konekcije prema navedenoj ip adresom -->
  ping neki_ip
 
  <!-- prikaz id trenutnog korisnika -->
@@ -616,7 +604,7 @@ CTRL+Z
  exit
  ```
 
----
+
 
 ### SQL pretvaranje entiteta u relacije
 
@@ -627,19 +615,23 @@ CTRL+Z
     ODRAĐENI_POSLOVI (id_zaposlenik, id_posao, datum)
     POSAO (id, naziv)
 
+    <!-- odrađeni_poslovi je pivot tablica između zaposlenika i posla -->
     ZAPOSLENIK 1 - n ODRAĐENI_POSLOVI n - 1 POSAO
  ```
 
----
+
 
 ### SQL procedura
+
+- mini tutorial za mysql procedure
+
+ ```
+ https://www.dolthub.com/blog/2024-01-17-writing-mysql-procedures/
+ ```
 
 - napraviti proceduru koja će u tablici proizvodi mijenjati količine ovisno o količini prodanih proizvoda
  
  ```
- https://www.dolthub.com/blog/2024-01-17-writing-mysql-procedures/
- <!-- mini tutorial za mysql procedure -->
-
 DROP DATABASE IF EXISTS `pekara`;
 
 CREATE DATABASE IF NOT EXISTS `pekara` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
@@ -701,16 +693,15 @@ BEGIN
 END //
 
 DELIMITER ;
-
  ```
 
----
+
 
 ### SQL migracije
 
-- prijenos sheme (database schema migration) i podataka (sql data migration) iz jedne u drugu (odredišne u ciljnu) bazu
+- prijenos sheme (database schema migration) i podataka (sql data migration) iz jedne u drugu (početne u ciljnu) bazu
 
----
+
 
 ### Laravel migracije
 
@@ -729,11 +720,11 @@ php artisan migrate:fresh
 php artisan migrate:fresh --seed
  ```
 
----
+
 
 ### Continuous integration
 
-- CI/CD pipeline (continuous integration/delivery/deployment) uvodi stalnu automatizaciju i kontinuirani nadzor tokom čitavog životnog ciklusa aplikacije, od faza integracije i testiranja do isporuke i primjene
+- CI/CD pipeline (continuous integration/delivery/deployment) uvodi stalnu automatizaciju i kontinuirani nadzor tokom kompletnog životnog ciklusa aplikacije, od faza integracije i testiranja do isporuke i primjene
 
 - CI je praksa prilikom razvoja aplikacije gdje programeri redovito (ponekad svakodnevno) dodaju vlastite promjene koda na zajednički repozitorij, nakon čega se aplikacija gradi te izvode testovi
 - obavezni koraci koje bi trebalo dodati u CI (Continuous Integration) pipeline:
@@ -745,11 +736,11 @@ php artisan migrate:fresh --seed
 https://group.miletic.net/hr/nastava/materijali/web-kontinuirana-integracija/#tijek-rada-kontinuirane-integracije-12
  ```
 
----
+
 
 ### PHP Unit config xml
 
-- napraviti PHPUnit config xml koji će napraviti exclude određene datoteke (u našem slučaju config)
+- napraviti PHPUnit config xml koji će napraviti exclude određene datoteke
  
  ```
 https://docs.phpunit.de/en/10.5/configuration.html#the-exclude-element
@@ -781,13 +772,13 @@ https://laraveldaily.com/lesson/testing-laravel/db-configuration-refreshdatabase
         <include>
             <directory>app</directory>
         </include>
-        <!-- primjer excludeanja direktorija/filea -->
+        <!-- primjer isključivanja direktorija/filea iz provjere -->
         <exclude>
             <directory suffix=".php">app/Providers</directory> 
             <file suffix=".php">app/Providers/AppServiceProvider.php</file>
         </exclude>
     </source>
-    <!-- za env varijable umjesto ovog možemo koristiti .env.testing file -->
+    <!-- za env varijable umjesto definiranja u phpunit.xml fileu možemo koristiti .env.testing file -->
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
@@ -804,11 +795,11 @@ https://laraveldaily.com/lesson/testing-laravel/db-configuration-refreshdatabase
 </phpunit>
  ```
 
----
+
 
 ### Instaliranje Laravel projekta pomoću Composera
 
-- s obzirom da već imamo instalirane php i composer, Laravel možemo instalirati ovom naredbom:
+- s obzirom da već imamo instalirane php i composer (ako smo instalirali LAMP stack pomoću setup.sh datoteke), Laravel možemo instalirati ovom naredbom:
 
  ```
 composer global require laravel/installer
@@ -826,7 +817,7 @@ laravel new ime_aplikacije
  https://laravel.com/docs/11.x/installation#installing-php
  ```
 
----
+
 
 ### Postavljanje aplikacije na server
 
@@ -877,6 +868,10 @@ sudo rsync -a /var/www/backend_developer/laravel-videoteka algebra@192.168.1.225
 - opcija 2 - prebacivanje aplikacije na udaljeni server pomoću git clone
 
 - prvo trebate kopirati link projekta sa githuba koji želite klonirati, te na serveru napraviti git clone
+
+```
+git clone link_projekta
+```
 
 - nakon toga, treba prekopirati .env.example file u .env te dodati APP_KEY
 
@@ -955,4 +950,3 @@ php artisan migrate --seed
 192.168.1.225:8000
 ```
 
----
