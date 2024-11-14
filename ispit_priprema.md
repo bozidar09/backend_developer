@@ -4,8 +4,6 @@
  ```
  <!-- kontroler i rute -->
  https://dev.to/thatcoolguy/token-based-authentication-in-laravel-9-using-laravel-sanctum-3b61
- <!-- kontroler i rute -->
- https://dev.to/thatcoolguy/token-based-authentication-in-laravel-9-using-laravel-sanctum-3b61
 
  <!-- middleware -->
  https://stackoverflow.com/questions/58730579/laravel-bearer-token-authentication
@@ -364,14 +362,24 @@ $zbroj->sum(4, 5);
 
 ### array_map()
 
-- funkcija array_map() kao prvi argument može primiti ili ime druge funkcije, ili anonimnu "callback" funkciju, a kao ostale argumente prima jedno ili više polja vrijednosti (koje onda redom koristi u funkciji danoj sa prvim argumentom)
+- funkcija array_map() kao prvi argument može primiti callback ili anonimnu funkciju, a kao ostale argumente prima jedno ili više polja vrijednosti (koje onda redom koristi u funkciji danoj sa prvim argumentom)
  
  ```
+ <!-- array_map prima callback funkciju -->
 function squares($n)
 {
     return ($n * $n);
 }
 $squares = array_map('squares', [2, 3, 4, 5, 6]);
+
+<!-- array_map prima anonimnu funkciju (može i skraćeni zapis - fn($n) => return $n*$n) -->
+$squares = array_map(function($n) {return ($n * $n);}, [2, 3, 4, 5, 6]);
+
+<!-- kombinacija callback i anonimne funkcije -->
+$squares = fn($n) => return $n*$n;
+$squares = array_map($squares, [2, 3, 4, 5, 6]);
+
+<!-- rezultat je u sva 3 slučaja isti -->
 print_r($squares);
 
 array(
@@ -387,7 +395,7 @@ https://www.php.net/manual/en/function.array-map.php
 
 
 
-### Git grananje
+### Git naredbe
  
  ```
 <!-- inicijalizacija -->
