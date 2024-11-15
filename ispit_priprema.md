@@ -372,10 +372,10 @@ function squares($n)
 }
 $squares = array_map('squares', [2, 3, 4, 5, 6]);
 
-<!-- array_map prima anonimnu funkciju (može i skraćeni zapis - fn($n) => return $n*$n) -->
+<!-- array_map prima anonimnu funkciju (može i skraćeni zapis, array funkcija - fn($n) => return $n*$n) -->
 $squares = array_map(function($n) {return ($n * $n);}, [2, 3, 4, 5, 6]);
 
-<!-- kombinacija callback i anonimne funkcije -->
+<!-- kombinacija callback i anonimne (array) funkcije -->
 $squares = fn($n) => return $n*$n;
 $squares = array_map($squares, [2, 3, 4, 5, 6]);
 
@@ -585,8 +585,12 @@ php --ini
 
 <!-- promjena privilegija (read 2^2, write 2^1, execute 2^1) određene datoteke/direktorija, -R oznakom mijenjamo vlasništvo i nad fileovima, te poddirektorijima koji se nalaze unutar navedenog direktorija -->
  chmod -R 777 ime_datoteke
-<!-- primjer sa User/Group/Other i Read/Write/eXecute -->
- chmod u:rwx, g:rx, o:r ime_datoteke
+<!-- primjer dodavanja privilegija sa User/Group/Other i Read/Write/eXecute -->
+ chmod u+rwx, g+rx, o+r ime_datoteke
+<!-- oduzimanje read i exacute privilegija grupi nad određenom datotekom -->
+ chmod g-rx ime_datoteke
+<!-- davanje privilegija read i write svima, user, group i other (oznaka a) -->
+ chmod a+rw ime_datoteke
 
  <!-- promjena vlasništva (user:group) nad datotekom/direktorijem, -R oznakom mijenjamo vlasništvo i nad fileovima, te poddirektorijima koji se nalaze unutar navedenog direktorija -->
  chown -R algebra:algebra ime_direktorija
@@ -701,6 +705,9 @@ BEGIN
 END //
 
 DELIMITER ;
+
+-- poziv procedure
+CALL izmjena_kolicine(2, 5);
  ```
 
 
