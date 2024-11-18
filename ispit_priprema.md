@@ -681,18 +681,18 @@ BEGIN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Izmjena nije potrebna';
     END IF;
 
-    IF prodan_proizvod_id NOT IN (SELECT proizvod.id FROM proizvod)
+    IF prodan_proizvod_id NOT IN (SELECT proizvod.id FROM proizvodi)
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Proizvod ne postoji';
     ELSE
         SELECT kolicina
             INTO stara_kolicina
-            FROM proizvod
+            FROM proizvodi
             WHERE id = prodan_proizvod_id
             FOR UPDATE; -- race condition (osigurava da nema stranih upisa u navedenu tablicu, zaključava je dok se ne izvrši naša transakcija)
     END IF;
 
     IF (stara_kolicina - prodana_kolicina) >= 0 THEN
-        UPDATE proizvod
+        UPDATE proizvodi
             SET kolicina = (stara_kolicina - prodana_kolicina)
             WHERE id = prodan_proizvod_id;
 
