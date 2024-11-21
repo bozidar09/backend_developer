@@ -1,6 +1,8 @@
 ### Git osnove
-
-[<!-- osnovne git naredbe, grananje, itd. -->](https://medium.com/@bojanzarkovic/git-za-po%C4%8Detnike-1b15db615a53)
+ ```
+ <!-- osnovne git naredbe, grananje, itd. -->
+ https://medium.com/@bojanzarkovic/git-za-po%C4%8Detnike-1b15db615a53
+ ```
 
 
 ### Linux osnove
