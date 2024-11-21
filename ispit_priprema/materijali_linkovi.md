@@ -40,8 +40,8 @@ https://drive.google.com/file/d/1sfaIg_uq9gPghFenfpcr5voWfgB-67XU/view?usp=drive
 <!-- carnet skripta (sve definicije potražiti ovdje - html forme, varijable, petlje, otvaranje-zatvaranje pdo/msqli baze, nizovi/polja, funkcije, datoteke) -->
 https://drive.google.com/file/d/1DJHA5wZdhJbsJPHW8bcgtek9kx92XrhA/view?usp=drive_link
 
-<!-- w3schools tryit editor za provjeru što će kod ispisat -->
-https://www.w3schools.com/php/phptryit.asp?filename=tryphp_intro
+<!-- editor za provjeru što će kod ispisat -->
+https://onlinephp.io/
 
 <!-- php manual -->
 https://www.php.net/manual/en/index.php
