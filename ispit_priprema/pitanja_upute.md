@@ -14,6 +14,17 @@ user: algebra
 pass: Pa$$w0rd
  ```
 
+- kopirati ili prepisati pitanje iz testne aplikacije u VS Code pa potom provjeriti sa AI kroz web browser
+ ```
+ <!-- označiti cijeli tekst pa copy/paste -->
+ CTRL + A
+ CTRL + C
+ CTRL + V
+
+ <!-- chatgpt -->
+ https://chatgpt.com/
+ ```
+
 TODO (sami instalirat Ubuntu na Hyper-V i shvatit kako se snaći u tom virtualnom okruženju)
 
 
@@ -36,35 +47,13 @@ TODO (sami instalirat Ubuntu na Hyper-V i shvatit kako se snaći u tom virtualno
 
 
 
-### Instalacija wsl i ubuntu na virtualnim Windowsima
+### Document root (korijenska mapa)
 
-- upute za instalaciju wsl i Ubuntu iz command prompta (Windows+R, pa upišite cmd, te potom ctrl+shift+enter da bi ga otvorili sa administratorskim ovlastima)
+```
+- document root (korijenska mapa) odnosi se na direktorij najvišeg nivoa gdje web server poslužuje datoteke za određenu web stranicu ili aplikaciju
 
- ```
-https://learn.microsoft.com/en-us/windows/wsl/install
- ```
-
-- nakon toga trebate spojiti wsl sa VS Code prema sljedećim uputama (koristite "from VS Code" dio)
-
- ```
-https://code.visualstudio.com/docs/remote/wsl
- ```
-
-- sljedeće pristupite Ubuntu putem terminala na VS Code te napravite naredbu za update i upgrade
-
- ```
-sudo apt-get update && sudo apt-get upgrade -y
- ```
-
-- zatim kopirajte .setup.sh sa gita (imate link dolje) i pohranite u setup.sh na Ubuntu (sa sudo nano), dajte mu 777 ovlasti (sudo chmod 777), te ga pokrenite kako bi instalirali LAMP stack (php, mysql, apache, composer)
-
- ```
-https://github.com/adobrini-algebra/radno_okruzenje/blob/master/setup.sh
-
-sudo nano setup.sh
-sudo chmod 777 setup.sh
-setup.sh
- ```
+- za web servere na Linux sustavima obično je postavljen na /var/www/html
+```
 
 
 
@@ -159,13 +148,102 @@ $result = $statement->fetchAll();
         </div>
         <hr>
         <div>
-            <button type="submit" value="Suubmit">Submit</button>
+            <button type="submit" value="Submit">Submit</button>
         </div>
     </form>
+ ```
 
-<!-- za file u form treba dodati enctype="multipart/form-data" te type="file" -->
+- primjer unosa filea (u form treba dodati enctype="multipart/form-data" te type="file")
 
  ```
+<?php 
+
+    <form action="/data" method="POST" enctype="multipart/form-data">
+        <div>
+            <label for="file">Username</label>
+            <input type="file" id="file" name="file" required>
+        </div>
+        <div>
+            <button type="submit" value="Submit">Submit</button>
+        </div>
+    </form>
+ ```
+
+ - primjer update forme (za delete umjesto PATCH/PUT stavite DELETE)
+
+ ```
+<?php 
+
+    <form action="/update" method="POST">
+    <input type="hidden" name="_method" value="PATCH">
+    <input type="hidden" name="id" value="<?= $user['id'] ?>">
+        <div>
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" value="$user['username]" required>
+        </div>
+        <div>
+            <label for="old_password">Password</label>
+            <input type="password"id="old_password" name="old_password" required>
+        </div>
+        <div>
+            <label for="new_password">Password</label>
+            <input type="password"id="new_password" name="new_password" required>
+        </div>
+        <div>
+            <label for="confirm_password">Password</label>
+            <input type="password"id="confirm_password" name="confirm_password" required>
+        </div>
+        <hr>
+        <div>
+            <button type="submit" value="Submit">Submit</button>
+        </div>
+    </form>
+ ```
+
+
+
+### PHP sesije ($_SESSION)
+
+Sesije omogućuju pohranu podataka između različitih stranica i zahtjeva, koriste se za pohranu podataka o korisnicima, kao što su korisnički podaci, preferencije i druge informacije koje želite pratiti dok korisnik navigira kroz vašu web stranicu.
+
+```
+<!-- pokretanje sesije -->
+session_start()
+
+<!-- regeneracija ID-a (poboljšava sigurnost) -->
+session_regenerate_id()
+
+<!-- zatvaranje sesije -->
+session_unset()  // uklanja podatke sesije
+session_destroy()  // uništava samu sesiju
+```
+
+
+
+### Poziv po referenci
+
+Poziv po referenci omogućava funkciji da izmijeni vrijednost varijable koja je proslijeđena, umjesto da radi s kopijom te varijable. Kada varijablu proslijedite po referenci, promjene koje se naprave u funkciji odražavaju se i izvan funkcije.
+
+```
+<?php
+
+// &$num: Ampersand & ispred $num znači da se $num prosljeđuje po referenci, a ne po vrijednosti.
+
+function addTen(&$num) {
+    $num += 10;  // Ovo će modificirati originalnu varijablu
+}
+
+$number = 5;
+echo "Prije poziva funkcije: $number\n"; // Ispisuje: Prije poziva funkcije: 5
+
+addTen($number);
+
+echo "Nakon poziva funkcije: $number\n"; // Ispisuje: Nakon poziva funkcije: 15
+?>
+```
+
+Poziv po vrijednosti: Funkcija radi s kopijom varijable i sve promjene unutar funkcije ne utječu na originalnu varijablu.
+Poziv po referenci: Funkcija izravno radi na stvarnoj varijabli i promjene utječu izvan funkcije.
 
 
 
@@ -175,7 +253,49 @@ $result = $statement->fetchAll();
 
 
 
-### Pretvaranje funkcije u klasu
+### do-while petlja
+
+```
+<?php
+	
+	$i = 0;
+	
+	do {
+	  echo $i . "\n";
+	  $i++;
+	} while ($i <= 77);
+```
+
+
+
+### spl_autoload_register
+
+Funkcija `spl_autoload_register()` pojednostavljuje proces uključivanja datoteka klasa u PHP-u, ona se koristi za definiranje i registraciju autoload funkcije, što je mehanizam koji automatski učitava PHP klase kada su potrebne, bez potrebe za ručnim uključivanjem ili zahtijevanjem datoteka s klasama.
+
+```
+spl_autoload_register(function ($class) {
+    // u tijelu anonimne autoload funkcije definiramo kako učitati datoteku klase (u ovom slučaju iz direktorija classes)
+    require_once 'classes/' . $class . '.class.php';
+});
+```
+
+
+
+### OOP $this-> i self::
+
+```
+$this - odnosi se na trenutnu instancu klase, koristi se za pristupanje nestatičkim svojstvima i metodama
+
+-> - operator objekta koji se koristi za pristup svojstvima i metodama objekta instance
+
+self - odnosi se na trenutnu klasu (ne na instancu) i koristi se u statičkim metodama za pristupanje statičkim svojstvima i metodama
+
+:: - operator rezolucije opsega koji se koristi za pristupanje statičkim metodama/svojstvima i konstantama, ili za referenciranje klase izvan instanciranja objekta
+```
+
+
+
+### Pretvaranje funkcije zbroj u klasu
 
 - u klasi definiramo dvije privatne varijable, numberA i numberB, dvije public metode za dohvaćanje njihovih vrijednosti (settere), te public funkciju za zbrajanje
  
@@ -187,8 +307,8 @@ function sum(int $a, int $b): int
 
 class Sum 
 {
-    private int $numberA;
-    private int $numberB;
+    private int $numberA = 0;
+    private int $numberB = 0;
 
     public function setA(int $a) 
     {
@@ -203,7 +323,7 @@ class Sum
     public function sum(?int $a = null, ?int $b = null ): int
     {
          
-        return (a ?? $this->numberA ?? 0) + (b ?? $this->numberB ?? 0);
+        return ($a ?? $this->numberA) + ($b ?? $this->numberB);
     }
 }
 
@@ -219,6 +339,75 @@ $zbroj->sum();
 
 $zbroj->sum(4, 5);
 <!-- vratit će 9 -->
+ ```
+
+
+
+### Klasa kalkulator
+
+ ```
+ <?php
+class Calculator 
+{
+    // property promotion - deklariramo svojstva i ujedno im pridjeljujemo vrijednost
+    public function __construct(
+        private float $a, 
+        private string $operator,
+        private float $b, 
+    ) {}
+
+    // metoda koja poziva jednu od metoda za izračun ovisno o unesenom operatoru
+    public function calculate(): float {
+        return match ($this->operator) {
+            '+' => $this->add(),
+            '-' => $this->subtract(),
+            '*' => $this->multiply(),
+            '/' => $this->divide(),
+            default => throw new InvalidArgumentException("Unesen nepostojeći operator za izračun"),
+        };
+    }
+
+    private function add(): float {
+        return $this->a + $this->b;
+    }
+
+    private function subtract(): float {
+        return $this->a - $this->b;
+    }
+
+    private function multiply(): float {
+        return $this->a * $this->b;
+    }
+
+    private function divide(): float {
+        if ($this->b == 0) {
+            throw new InvalidArgumentException("Nemože se dijeliti sa nulom");
+        }
+        return $this->a / $this->b;
+    }
+}
+
+// Primjer korištenja:
+try {
+    $calc1 = new Calculator(10, '+', 5);
+    echo "Zbroj: " . $calc1->calculate() . "\n";
+
+    $calc2 = new Calculator(10, '-', 5);
+    echo "Oduzimanje: " . $calc2->calculate() . "\n";
+
+    $calc3 = new Calculator(10, '*', 5);
+    echo "Množenje: " . $calc3->calculate() . "\n";
+
+    $calc4 = new Calculator(10, '/', 5);
+    echo "Dijeljenje: " . $calc4->calculate() . "\n";
+
+    // Primjer dijeljenja sa nulom
+    $calc5 = new Calculator(10, '/', 0);
+    echo "Dijeljenje sa nulom: " . $calc5->calculate() . "\n";
+} catch (Exception $e) {
+    echo "Greška: " . $e->getMessage() . "\n";
+}
+?> 
  ```
 
 
@@ -481,6 +670,37 @@ CTRL+Z
 
 
 
+### MySQL relacije (1-1, 1-n, n-m)
+
+| **Odnos**       | **Opis**                                               | **Implementacija** |
+|-----------------|--------------------------------------------------------|--------------------|
+| `1-1`          | Jedan zapis u tablici A odnosi se na jedan zapis u tablici B. | Dodajte vanjski ključ u jednu tablicu koji referencira primarni ključ druge tablice. |
+| `1-n`        | Jedan zapis u tablici A odnosi se na mnoge zapise u tablici B. | Dodajte vanjski ključ u "mnogo" tablicu koji referencira primarni ključ "jedne" tablice. |
+| `n-m`     | Mnogi zapisi u tablici A odnose se na mnoge zapise u tablici B. | Kreirajte spojnu (pivot) tablicu sa vanjskim ključevima koji referenciraju obje tablice. |
+
+```
+Strani ključevi - uvijek koristite strane ključeve za održavanje referencijalne cjelovitosti kako bi se osiguralo da su odnosi između tablica očuvani.
+Indeksiranje - kreirajte indekse na stranim ključevima kako biste poboljšali performanse upita.
+Normalizacija - normalizirajte shemu baze podataka kako biste smanjili redundanciju i poboljšali integritet podataka.
+```
+
+
+
+### Normalizacija
+
+```
+MySQL normalizacija odnosi se na proces organiziranja podataka u relacijskom sustavu baze podataka kako bi se smanjila redundantnost i poboljšao integritet podataka. To uključuje razbijanje velikih, složenih tablica na manje, jednostavnije tablice i uspostavljanje odnosa između njih.
+
+Glavni ciljevi normalizacije su eliminacija redundantnosti, osiguranje integriteta podataka te poboljšanje učinkovitosti upita
+
+Normalne forme
+1NF: Osiguranje atomskih vrijednosti (nema više od jednog predmeta u jednom stupcu).
+2NF: Osiguranje da nema parcijalnih zavisnosti (npr. atributi koji ovise samo o dijelu kompozitnog ključa).
+3NF: Osiguranje da nema tranzitivnih zavisnosti (npr. neključni atributi ovise o drugim neključnim atributima).
+```
+
+
+
 ### SQL pretvaranje entiteta u relacije
 
 - zaposlenik može tokom vremena odraditi više poslova, a na svakom poslu može raditi više zaposlenika
@@ -496,7 +716,28 @@ CTRL+Z
 
 
 
-### SQL procedura
+### Primjer ograničavanja korisnika na samo čitanje iz baze podataka
+
+```
+-- Kreiranje korisnika
+CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
+
+-- Dodjela privilegija za samo čitanje
+GRANT SELECT ON database.* TO 'user'@'localhost';
+
+-- Opcionalno - oduzimanje drugih privilegija
+REVOKE INSERT, UPDATE, DELETE ON database.* FROM 'user'@'localhost';
+
+-- Primjena promjena
+FLUSH PRIVILEGES;
+
+-- Provjera privilegija
+SHOW GRANTS FOR 'user'@'localhost';
+```
+
+
+
+### SQL procedura za izmjenu količine
 
 - mini tutorial za mysql procedure
 
@@ -513,9 +754,9 @@ CREATE DATABASE IF NOT EXISTS `pekara` DEFAULT CHARACTER SET utf8mb4 COLLATE utf
 USE `pekara`;
 
 CREATE TABLE IF NOT EXISTS `proizvodi` (
-    `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-    `naziv` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-    `kolicina` int UNSIGNED NOT NULL
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `naziv` VARCHAR(100) COLLATE utf8mb4_general_ci NOT NULL,
+    `kolicina` INT UNSIGNED NOT NULL
 );
 
 INSERT INTO `proizvodi` (`naziv`, `kolicina`) VALUES
@@ -534,45 +775,198 @@ CREATE PROCEDURE IF NOT EXISTS `izmjena_kolicine`(
     IN prodan_proizvod_id INT UNSIGNED,
     IN prodana_kolicina INT UNSIGNED
 )
-
 BEGIN
     DECLARE stara_kolicina INT UNSIGNED;
 
     START TRANSACTION;
 
-    IF prodana_kolicina = 0 THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Izmjena nije potrebna';
+    -- provjera postoji li dovoljna količina
+    IF prodana_kolicina <= 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Prodana količina mora biti veća od nule';
     END IF;
 
-    IF prodan_proizvod_id NOT IN (SELECT proizvod.id FROM proizvodi)
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Proizvod ne postoji';
-    ELSE
-        SELECT kolicina
-            INTO stara_kolicina
-            FROM proizvodi
-            WHERE id = prodan_proizvod_id
-            FOR UPDATE; -- race condition (osigurava da nema stranih upisa u navedenu tablicu, zaključava je dok se ne izvrši naša transakcija)
+    -- provjera postoji li proizvod
+    SELECT kolicina INTO stara_kolicina
+    FROM proizvodi
+    WHERE id = prodan_proizvod_id
+    FOR UPDATE; -- Zaključavamo red dok se ne završi transakcija
+
+    -- ako ne postoji
+    IF stara_kolicina IS NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Proizvod s tim ID-om ne postoji';
     END IF;
 
+    -- provjera i ažuriranje količine
     IF (stara_kolicina - prodana_kolicina) >= 0 THEN
         UPDATE proizvodi
-            SET kolicina = (stara_kolicina - prodana_kolicina)
-            WHERE id = prodan_proizvod_id;
+        SET kolicina = (stara_kolicina - prodana_kolicina)
+        WHERE id = prodan_proizvod_id;
 
+        -- slanje promjena
         COMMIT;
     ELSE
+        -- ako nema dovoljno proizvoda
         ROLLBACK;
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Nema dovoljno na zalihi';
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Nema dovoljno proizvoda na skladištu';
     END IF;
 
 END //
-
-DELIMITER ;
 
 -- poziv procedure
 CALL izmjena_kolicine(2, 5);
  ```
 
+
+
+### SQL transakcija, procedura i funkcija za prijenos i ispis količine
+
+```
+-- kreiramo novu bazu podataka
+DROP DATABASE IF EXISTS `banka`;
+CREATE DATABASE IF NOT EXISTS banka;
+USE banka;
+
+-- kreiramo tablicu račun
+CREATE TABLE IF NOT EXISTS accounts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    iban VARCHAR(34) UNIQUE NOT NULL, 
+    balance DECIMAL(15, 2) DEFAULT 0.00,
+);
+
+-- primjer transakcije za prebacivanje iznosa iz jednog računa na drugi
+START TRANSACTION;
+
+-- provjera ima li na računu dovoljno sredstava za plaćanje
+SELECT balance INTO sender_balance
+FROM accounts
+WHERE iban = sender_iban; 
+
+-- ako ima dovoljno sredstava pokreni transakciju
+IF sender_balance >= transfer_amount THEN
+
+    -- oduzmi sumu iz računa pošiljatelja
+    UPDATE accounts
+        SET balance = balance - transfer_amount
+        WHERE iban = sender_iban;
+
+    -- dodaj sumu na račun primatelja
+    UPDATE accounts
+    SET balance = balance + transfer_amount
+    WHERE iban = receiver_iban;
+
+    -- provjera jesu li oba ažuriranja prošla uspješno
+    IF ROW_COUNT() = 2 THEN
+        COMMIT;  -- ako je napravimo commit
+    ELSE
+        ROLLBACK;  -- inače povratak na početno stanje
+    END IF;
+
+ELSE
+    -- ako nema dovoljno sredstava na računu vrati na početno stanje
+    ROLLBACK;
+END IF;
+
+
+-- primjer procedure za prebacivanje iznosa iz jednog računa na drugi
+DELIMITER $$
+
+CREATE PROCEDURE make_transaction(
+    IN sender_iban VARCHAR(34),
+    IN receiver_iban VARCHAR(34),
+    IN transfer_amount DECIMAL(15, 2)
+)
+
+BEGIN
+    DECLARE receiver_exists INT;
+    DECLARE sender_balance DECIMAL(15, 2);
+    -- kreiramo handler gdje određujemo što učiniti u slučaju greške (sql exceptiona)
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+        BEGIN
+            -- vrati transakciju na početno stanje ako se dogodi greška
+            ROLLBACK;
+        END;
+
+    START TRANSACTION;
+
+    IF transfer_amount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Transakcija nije potrebna';
+    END IF;
+
+    -- dohvati stanje na računu pošiljatelja
+    SELECT amount INTO sender_balance
+        FROM accounts
+        WHERE iban = sender_iban;
+        FOR UPDATE; -- ovime eliminiramo race condition, odnosno mogućnost da netko promjeni stanje prije no što mi obavimo update
+
+    -- provjera je li dohvat prošao uspješno
+    IF amount IS NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Pošiljatelj nije pronađen';
+    END IF;
+
+    IF sender_balance < transfer_amount THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Nedovoljno sredstava';
+    END IF;
+
+    -- provjera postoji li primatelj
+    SELECT COUNT(*) 
+    INTO receiver_exists
+    FROM accounts 
+    WHERE iban = receiver_iban;
+
+    IF receiver_exists = 0 THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Primatelj nije pronađen';
+    END IF;
+
+    -- izvođenje updatea (ažuriranje računa pošiljatelja i primatelja)
+    UPDATE accounts
+        SET amount = amount - transfer_amount
+        WHERE id = sender_id;
+
+    UPDATE accounts
+        SET amount = amount + transfer_amount
+        WHERE id = receiver_id;
+
+    -- ako je sve uspješno prošlo commit transakcije
+    COMMIT; 
+END $$
+
+DELIMITER ;
+
+
+-- primjer poziva procedure
+CALL make_transaction('DE1234567890', 'DE0987654321', 100.00);
+
+
+-- primjer funkcije za dohvat stanja računa
+DELIMITER $$
+
+CREATE FUNCTION get_balance(input_iban VARCHAR(34))
+RETURNS DECIMAL(15, 2)
+
+BEGIN
+    DECLARE result DECIMAL(15, 2);
+
+    -- upit za dohvat stanja računa
+    SELECT balance INTO balance
+        FROM accounts
+        WHERE iban = input_iban;
+
+    -- provjera je li dohvat podataka bio uspješan
+    IF balance IS NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Račun nije pronađen';
+    END IF;
+
+    -- povrat podatka
+    RETURN balance;
+END $$
+
+DELIMITER ;
+
+
+-- primjer poziva funkcije
+SELECT get_balance('HR4890942042048');
+```
 
 
 ### SQL migracije
@@ -600,19 +994,67 @@ php artisan migrate:fresh --seed
 
 
 
-### Continuous integration
+### Laravel MVC arhitektura
 
-- CI/CD pipeline (continuous integration/delivery/deployment) uvodi stalnu automatizaciju i kontinuirani nadzor tokom kompletnog životnog ciklusa aplikacije, od faza integracije i testiranja do isporuke i primjene
+Laravel koristi MVC arhitekturu za jasno odvajanje odgovornosti i bolju organizaciju koda, čineći razvoj aplikacija lakšim i održivijim.
 
-- CI je praksa prilikom razvoja aplikacije gdje programeri redovito (ponekad svakodnevno) dodaju vlastite promjene koda na zajednički repozitorij, nakon čega se aplikacija gradi te izvode testovi
-- obavezni koraci koje bi trebalo dodati u CI (Continuous Integration) pipeline:
-    - izvrtiti testove i vidjeti da li prolaze
-    - statički analizirati kod te validirati da nema nikakvih pogrešaka
-    - napraviti cache konfiguracijskih datoteka projekta te provjeriti da nema pogrešaka
+```
+Model (M): Odgovoran je za pohranu i manipulaciju podacima.
+View (V): Odgovoran je za prikaz podataka korisnicima putem HTML-a.
+Controller (C): Odgovoran je za logiku aplikacije i povezuje modele i prikaze.
+```
 
- ```
-https://group.miletic.net/hr/nastava/materijali/web-kontinuirana-integracija/#tijek-rada-kontinuirane-integracije-12
- ```
+
+
+### Laravel metode za dohvat podataka iz baze
+
+| Metoda   | Opis                                                       | Vraća                     |
+|----------|------------------------------------------------------------|---------------------------|
+| `all()`  | Dohvaća sve zapise iz tablice.                             | Kolekcija svih modela.     |
+| `get()`  | Dohvaća kolekciju zapisa s mogućim uvjetima.               | Kolekcija modela temeljenih na upitu. |
+| `first()`| Dohvaća prvi zapis koji odgovara uvjetima.                 | Jedan model ili `null`.    |
+| `find()` | Dohvaća zapis po njegovom primarnom ključu (ID).           | Jedan model ili `null`.    |
+
+```
+`all()` - kada želite dohvatiti sve zapise bez ikakvih uvjeta ili filtera
+`get()` - kada trebate dohvatiti kolekciju zapisa s određenim uvjetima
+`first()` - kada vam treba prvi zapis koji odgovara određenim uvjetima (obično uz `where`)
+`find()` - kada imate primarni ključ (ID) i želite dohvatiti specifičan zapis (primjer find($id))
+```
+
+
+
+### Laravel funkcije za prosljeđivanje podataka iz controllera u view
+
+```
+view('view_name', $data) - osnovna metoda za prosljeđivanje podataka
+view()->with() - druga metoda za prosljeđivanje podataka
+view()->share() - za dijeljenje globalnih podataka sa svim pogledima
+compact() - prečica za prosljeđivanje varijabli u pogled
+session() - za podatke koji se čuvaju u sesiji između zahtjeva
+
+// podatci koji se šalju u pogled mogu biti bilo kojeg tipa, skalarni (brojke, string, bool), polja (indeksirana, asocijativna), objekti (instance klasa, kolekcije)
+```
+
+
+
+### Blade {{ }} sintaksa
+
+{{ }} u Bladeu koristi se za echo (ispisivanje) podataka
+
+```
+<!-- Prikazivanje varijable u Bladeu -->
+<h1>{{ $title }}</h1>
+```
+
+
+
+### Laravel Dusk - click()
+
+```
+Laravel Dusk je alat za testiranje koji omogućava interakciju s web stranicama kao stvarni korisnik.
+Funkcija click() koristi se za simuliranje klika na HTML element na stranici prilikom izvođenja automatiziranih testova korisničkog sučelja (UI testova).
+```
 
 
 
@@ -671,6 +1113,22 @@ https://laraveldaily.com/lesson/testing-laravel/db-configuration-refreshdatabase
         <env name="TELESCOPE_ENABLED" value="false"/>
     </php>
 </phpunit>
+ ```
+
+
+
+### Continuous integration
+
+- CI/CD pipeline (continuous integration/delivery/deployment) uvodi stalnu automatizaciju i kontinuirani nadzor tokom kompletnog životnog ciklusa aplikacije, od faza integracije i testiranja do isporuke i primjene
+
+- CI je praksa prilikom razvoja aplikacije gdje programeri redovito (ponekad svakodnevno) dodaju vlastite promjene koda na zajednički repozitorij, nakon čega se aplikacija gradi te izvode testovi
+- obavezni koraci koje bi trebalo dodati u CI (Continuous Integration) pipeline:
+    - izvrtiti testove i vidjeti da li prolaze
+    - statički analizirati kod te validirati da nema nikakvih pogrešaka
+    - napraviti cache konfiguracijskih datoteka projekta te provjeriti da nema pogrešaka
+
+ ```
+https://group.miletic.net/hr/nastava/materijali/web-kontinuirana-integracija/#tijek-rada-kontinuirane-integracije-12
  ```
 
 
@@ -763,6 +1221,7 @@ class AuthController extends Controller
  ```
 <?php
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -774,7 +1233,7 @@ class AuthToken
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $token = $request->input('auth_token');
+        $token = $request->header('Authorization');
         if (User::where('auth_token', $token)->first()) {
             return $next($request);
         }
@@ -810,6 +1269,113 @@ Route:controller(AuthController::class)->group(function () {
 });
  ```
  
+
+
+### Spajanje domene s poslužiteljem
+
+```
+1. Kupiti web (VPS) server i domenu od nekog pružatelja usluga (preporuka Hertzner) i registrara za domene (preporuka Cloudflare).
+
+2. Postaviti Web Server i provjeriti da li ispravno radi, te je li dostupan na internetu ( preporuka Apache ili Nginx na Linux serverima)
+   Ako se koristi dijeljeno hostiranje, VPS ili cloud hosting, pružatelj hostinga bi trebao imati upute za postavljanje servera.
+
+3. Javna IP adresu servera dobije se od strane pružatelja hostinga (ali se može saznati i pomoću naredbe 'curl ifconfig.me')
+
+4. Prijaviti se na upravljačku ploču registrara te ažurirati DNS postavke, ovo je ključni korak u povezivanju domene sa serverom gdje se domena usmjerava na IP adresu web servera. 
+
+Na DNS management ili name server:
+Dodati A zapis koji će usmjeriti domenu na IP adresu servera:
+    Tip: A
+    Ime/Host: @ (ovo usmjerava na osnovnu domenu, npr. example.com) ili www (ako koristimo poddomenu, npr. www.example.com)
+    Vrijednost/Points to: javna IP adresa servera (npr. 192.0.2.123).
+    TTL (Time to Live): može se ostaviti zadano, ili postaviti na npr. 3600 sekundi (1 sat).
+Opcionalno, može se dodati CNAME zapis za www (ako želimo da www.ime_domene.com također bude funkcionalno):
+    Tip: CNAME
+    Ime/Host: www
+    Vrijednost/Points to: ime_domene.com
+
+Primjer DNS zapisa:
+    A Zapis:
+        @ → 192.0.2.123
+    CNAME Zapis (opcionalno):
+        www → ime_domene.com
+
+6. Pričekati propagaciju DNS-a, promjene mogu potrajati od nekoliko minuta do nekoliko dana da se potpuno propagiraju kroz internet (obično 1-2 sata)
+
+7. Konfigurirati web server da prepozna domenu (opcije Apache ili Nginx)
+
+Apache:
+- uredite Apache konfiguracijsku datoteku (/etc/apache2/sites-available/ime_domene.conf):
+
+    <VirtualHost *:80>
+        ServerName ime_domene.com
+        ServerAlias www.ime_domene.com
+        DocumentRoot /var/www/ime_domene
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+    </VirtualHost>
+
+- omogućite stranicu: sudo a2ensite ime_domene.conf
+- ponovno učitajte Apache: sudo systemctl reload apache2
+
+Nginx:
+- uredite Nginx konfiguracijsku datoteku (/etc/nginx/sites-available/ime_domene):
+
+            server {
+                listen 80;
+                server_name ime_domene.com www.ime_domene.com;
+                root /var/www/ime_domene;
+                
+                index index.html;
+                access_log /var/log/nginx/ime_domene_access.log;
+                error_log /var/log/nginx/ime_domene_error.log;
+            }
+
+- kreirajte simboličku poveznicu: sudo ln -s /etc/nginx/sites-available/ime_domene /etc/nginx/sites-enabled/
+- ponovno učitajte Nginx: sudo systemctl reload nginx
+
+8. Testirati domenu nakon propagacije DNS promjena, otvorimo preglednik i pokušamo otvoriti url (primjerice http://ime_domene.com) kako bi provjerili je li povezana sa serverom i prikazuje li web stranicu
+
+
+Dodatni koraci:
+- postavljanje SSL-a kako bi mogli koristiti HTTPS (potrebno je dohvatiti SSL certifikat i postaviti ga na server)
+- postavljanje mail severa kako bi mogli slati ili primati e-mailove putem domene (potrebno je postaviti MX zapise u DNS-u i konfigurirati mail server)
+
+Ovaj proces će povezati domenu sa web serverom, a web stranica bi trebala biti dostupna prilikom pristupa domeni u web pregledniku.
+```
+
+
+
+### Instalacija wsl i ubuntu na virtualnim Windowsima
+
+- upute za instalaciju wsl i Ubuntu iz command prompta (Windows+R, pa upišite cmd, te potom ctrl+shift+enter da bi ga otvorili sa administratorskim ovlastima)
+
+ ```
+https://learn.microsoft.com/en-us/windows/wsl/install
+ ```
+
+- nakon toga trebate spojiti wsl sa VS Code prema sljedećim uputama (koristite "from VS Code" dio)
+
+ ```
+https://code.visualstudio.com/docs/remote/wsl
+ ```
+
+- sljedeće pristupite Ubuntu putem terminala na VS Code te napravite naredbu za update i upgrade
+
+ ```
+sudo apt-get update && sudo apt-get upgrade -y
+ ```
+
+- zatim kopirajte .setup.sh sa gita (imate link dolje) i pohranite u setup.sh na Ubuntu (sa sudo nano), dajte mu 777 ovlasti (sudo chmod 777), te ga pokrenite kako bi instalirali LAMP stack (php, mysql, apache, composer)
+
+ ```
+https://github.com/adobrini-algebra/radno_okruzenje/blob/master/setup.sh
+
+sudo nano setup.sh
+sudo chmod 777 setup.sh
+setup.sh
+ ```
+
 
 
 ### Instaliranje Laravel projekta pomoću Composera
