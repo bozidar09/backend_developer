@@ -16,12 +16,12 @@ pass: Pa$$w0rd
 
 - kopirati ili prepisati pitanje iz testne aplikacije u VS Code pa potom provjeriti sa AI kroz web browser
  ```
- <!-- označiti cijeli tekst pa copy/paste -->
+ // označiti cijeli tekst pa copy/paste
  CTRL + A
  CTRL + C
  CTRL + V
 
- <!-- chatgpt -->
+ // chatgpt
  https://chatgpt.com/
  ```
 
@@ -33,7 +33,7 @@ TODO (sami instalirat Ubuntu na Hyper-V i shvatit kako se snaći u tom virtualno
 
 - downloadajte najnoviji XAMPP i instalirajte ga (ako već ne postoji na sustavu)
 
-- na localdisk C: pronađite xampp, i u njemu php direktorij te iskopirajte adresu iz putanje (desni klik na php i copy address)
+- na localdisk C: pronađite xampp, i u njemu php direktorij te kopirajte adresu putanje (desni klik na php i copy address)
 
 - adresu (koja bi trebala ovako izgledati - C:\xampp\php) spremite u system environment path varijablu vaših Windowsa (upute kako doći do nje na linku)
 
@@ -64,27 +64,27 @@ $hostname = localhost;
 $username = algebra;
 $password = algebra;
 $database = videoteka;
-<!-- opcionalno -->
+// opcionalno
 $port = 3306;
 
- <!-- stvaranje konekcije na bazu -->
+// stvaranje konekcije na bazu
 $connection = mysqli_connect($hostname, $username, $password, $database, $port);
 
-<!-- provjera je li sve prošlo bez grešaka -->
+// provjera je li sve prošlo bez grešaka
 if (mysqli_connect_errno()) {
     die("Pogreška kod spajanja na poslužitelj: " . mysqli_connect_error());
 }
 echo "Spojeni ste na bazu";
 
-<!-- zatvaranje konekcije -->
+// zatvaranje konekcije
 mysqli_close($connection);
 
 
-<!-- query i podaci -->
+// query i podaci
 $query = 'SELECT * FROM users WHERE city = ? ORDER BY name';
 $param = 'Zagreb';
 
-<!-- funkcija za pripremu SQL naredbe, sigurno vezanje parametara, te izvođenje naredbe, sve u jednom -->
+// funkcija za pripremu SQL naredbe, sigurno vezanje parametara, te izvođenje naredbe, sve u jednom
 $result = mysqli_execute_query($connection, $query, $param);
  ```
 
@@ -93,37 +93,37 @@ $result = mysqli_execute_query($connection, $query, $param);
 ### Spajanje na bazu (i dohvat podataka) pomoću PDO klase
 
  ```
- <!-- potrebni podaci -->
+// potrebni podaci
 $host = 'localhost';
 $database = 'videoteka';
 $username = 'algebra';
 $password = 'algebra';
-<!-- opcionalno -->
+// opcionalno
 $port = 3306;
 $charset = 'utf8mb4';
 
-<!-- dodatne opcije, kako će se dohvaćati podaci (fetch - associjativno polje) i kako će se prikazivati greške (error mode - exception) -->
+// dodatne opcije, kako će se dohvaćati podaci (fetch - associjativno polje) i kako će se prikazivati greške (error mode - exception)
 $options = [PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
 
-<!-- osnovni podaci o bazi, tip, naziv, host i (opcionalno) port, charset -->
+// osnovni podaci o bazi, tip (u ovom slučaju mysql), host, naziv i (opcionalno) port, charset
 $dsn = "mysql:host={$host};port={$port};dbname={$database};charset={$charset}" 
 
-<!-- konekcija sa dns (data source name), username, password i dodatnim opcijama (dohvat podataka, greške i slično) -->
+// konekcija sa dns (data name source), username, password i dodatnim opcijama (dohvat podataka, greške i slično)
 $pdo = new PDO($dsn, $username, $password, $options);
 
-<!-- zatvaranje konekcije (u biti nuliranje varijable koja sadrži konekciju na bazu) -->
+// zatvaranje konekcije (u biti nuliranje varijable koja sadrži konekciju na bazu)
 $pdo = NULL;
 
 
-<!-- query i podaci -->
+// query i podaci
 $query = 'SELECT * FROM users WHERE city = ? ORDER BY name';
 $param = 'Zagreb';
 
-<!-- metode za pripremu i izvođenje naredbe -->
+// metode za pripremu i izvođenje naredbe
 $statement = $pdo->prepare($sql);
 $statement->execute($param);
 
-<!-- metode za dohvat podataka (fetch dohvati samo jedan redak, fetchAll dohvati sve) -->
+// metode za dohvat podataka (fetch dohvati samo jedan redak, fetchAll dohvati sve)
 $result = $statement->fetch();
 $result = $statement->fetchAll();
  ```
@@ -144,11 +144,11 @@ $result = $statement->fetchAll();
         </div>
         <div>
             <label for="password">Password</label>
-            <input type="password"id="password" name="password" required>
+            <input type="password" id="password" name="password" required>
         </div>
         <hr>
         <div>
-            <button type="submit" value="Submit">Submit</button>
+            <button type="submit">Login</button>
         </div>
     </form>
  ```
@@ -160,11 +160,11 @@ $result = $statement->fetchAll();
 
     <form action="/data" method="POST" enctype="multipart/form-data">
         <div>
-            <label for="file">Username</label>
+            <label for="file">Datoteka</label>
             <input type="file" id="file" name="file" required>
         </div>
         <div>
-            <button type="submit" value="Submit">Submit</button>
+            <button type="submit">Upload</button>
         </div>
     </form>
  ```
@@ -175,27 +175,27 @@ $result = $statement->fetchAll();
 <?php 
 
     <form action="/update" method="POST">
-    <input type="hidden" name="_method" value="PATCH">
-    <input type="hidden" name="id" value="<?= $user['id'] ?>">
+        <input type="hidden" name="_method" value="PATCH">
+        <input type="hidden" name="id" value="<?= $user['id'] ?>">
         <div>
             <label for="username">Username</label>
-            <input type="text" id="username" name="username" value="$user['username]" required>
+            <input type="text" id="username" name="username" value="$user['username']" required>
         </div>
         <div>
-            <label for="old_password">Password</label>
+            <label for="old_password">Old password</label>
             <input type="password"id="old_password" name="old_password" required>
         </div>
         <div>
-            <label for="new_password">Password</label>
+            <label for="new_password">New password</label>
             <input type="password"id="new_password" name="new_password" required>
         </div>
         <div>
-            <label for="confirm_password">Password</label>
+            <label for="confirm_password">Confirm password</label>
             <input type="password"id="confirm_password" name="confirm_password" required>
         </div>
         <hr>
         <div>
-            <button type="submit" value="Submit">Submit</button>
+            <button type="submit">Update</button>
         </div>
     </form>
  ```
@@ -207,15 +207,25 @@ $result = $statement->fetchAll();
 Sesije omogućuju pohranu podataka između različitih stranica i zahtjeva, koriste se za pohranu podataka o korisnicima, kao što su korisnički podaci, preferencije i druge informacije koje želite pratiti dok korisnik navigira kroz vašu web stranicu.
 
 ```
-<!-- pokretanje sesije -->
-session_start()
+// pokretanje sesije
+session_start();
 
-<!-- regeneracija ID-a (poboljšava sigurnost) -->
-session_regenerate_id()
+// regeneracija ID-a (poboljšava sigurnost, primjerice koristimo je nakon logina)
+session_regenerate_id();
 
-<!-- zatvaranje sesije -->
-session_unset()  // uklanja podatke sesije
-session_destroy()  // uništava samu sesiju
+// zatvaranje sesije
+session_unset();  // uklanja podatke sesije
+session_destroy();  // uništava samu sesiju
+```
+
+
+
+### PHP tipovi podataka
+
+```
+skalarni tipovi podataka - brojčani (int, float, double), tekstualni (string), boolean (true ili false)
+složeni tipovi podataka - polja/nizovi (indeksirana, asocijativna), objekti (instance klasa, kolekcije)
+specijalni tipovi - NULL, resource (primjerice konekcije na baze podataka ili datoteke)
 ```
 
 
@@ -227,29 +237,31 @@ Poziv po referenci omogućava funkciji da izmijeni vrijednost varijable koja je 
 ```
 <?php
 
-// &$num: Ampersand & ispred $num znači da se $num prosljeđuje po referenci, a ne po vrijednosti.
+// &$num - & ispred $num znači da se $num prosljeđuje po referenci, a ne po vrijednosti.
 
 function addTen(&$num) {
-    $num += 10;  // Ovo će modificirati originalnu varijablu
+    $num += 10;  // ovo će modificirati originalnu varijablu
 }
 
 $number = 5;
-echo "Prije poziva funkcije: $number\n"; // Ispisuje: Prije poziva funkcije: 5
+echo "Prije poziva funkcije: $number\n"; // prije poziva funkcije ispisuje 5
 
 addTen($number);
 
-echo "Nakon poziva funkcije: $number\n"; // Ispisuje: Nakon poziva funkcije: 15
+echo "Nakon poziva funkcije: $number\n"; // nakon poziva funkcije ispisuje 15
 ?>
 ```
 
-Poziv po vrijednosti: Funkcija radi s kopijom varijable i sve promjene unutar funkcije ne utječu na originalnu varijablu.
-Poziv po referenci: Funkcija izravno radi na stvarnoj varijabli i promjene utječu izvan funkcije.
+Poziv po vrijednosti - funkcija radi s kopijom varijable i sve promjene unutar funkcije ne utječu na originalnu varijablu.
+Poziv po referenci - funkcija radi izravno na stvarnoj varijabli i promjene utječu na varijablu i izvan funkcije.
 
 
 
 ### Programske petlje (foreach, for, while)
 
-- programske petlje su strukture koje omogućavaju da se dijelovi programa/koda izvrše, odnosno iteriraju više puta (zadani broj ili sve dok je određeni uvjet ispunjen), te na taj način ubrzavaju/automatiziraju obradu podataka, pretraživanja lista, polja i slično.
+```
+- programske petlje su strukture koje omogućavaju da se dijelovi programa/koda izvrše, odnosno iteriraju više puta (zadani broj ili sve dok je određeni uvjet ispunjen), te na taj način ubrzavaju/automatiziraju obradu podataka (izbjegavamo repetitivno ponavljanje koda), posebno su korisne kada treba obaviti akciju nad nizom elemenata (primjerice prilikom pretraživanja lista, polja i slično).
+```
 
 
 
@@ -284,13 +296,13 @@ spl_autoload_register(function ($class) {
 ### OOP $this-> i self::
 
 ```
-$this - odnosi se na trenutnu instancu klase, koristi se za pristupanje nestatičkim svojstvima i metodama
+$this - odnosi se na trenutnu instancu klase (objekt), koristi se za pristupanje svojstvima i metodama koje nisu označene kao static
 
--> - operator objekta koji se koristi za pristup svojstvima i metodama objekta instance
+-> - operator koji se koristi za pristup svojstvima i metodama objekta instance
 
-self - odnosi se na trenutnu klasu (ne na instancu) i koristi se u statičkim metodama za pristupanje statičkim svojstvima i metodama
+self - odnosi se na trenutnu klasu (ne na instancu klase/objekt) i koristi se za pristupanje statičkim svojstvima i metodama
 
-:: - operator rezolucije opsega koji se koristi za pristupanje statičkim metodama/svojstvima i konstantama, ili za referenciranje klase izvan instanciranja objekta
+:: - operator rezolucije opsega (scope operator) koji se koristi za pristupanje statičkim metodama/svojstvima i konstantama, ili za referenciranje same klase
 ```
 
 
@@ -307,8 +319,10 @@ function sum(int $a, int $b): int
 
 class Sum 
 {
-    private int $numberA = 0;
-    private int $numberB = 0;
+    public function __construct(
+        private int $numberA = 0,
+        private int $numberB = 0,
+    ) {}
 
     public function setA(int $a) 
     {
@@ -329,16 +343,13 @@ class Sum
 
 $zbroj = new Sum();
 
-$zbroj->sum();
-<!-- vratit će 0 -->
+$zbroj->sum();  // vratit će 0 
 
 $zbroj->setA(7);
 $zbroj->setB(10);
-$zbroj->sum(); 
-<!-- vratit će 17 -->
+$zbroj->sum();  // vratit će 17
 
-$zbroj->sum(4, 5);
-<!-- vratit će 9 -->
+$zbroj->sum(4, 5);  // vratit će 9
  ```
 
 
@@ -387,7 +398,7 @@ class Calculator
     }
 }
 
-// Primjer korištenja:
+// primjer korištenja
 try {
     $calc1 = new Calculator(10, '+', 5);
     echo "Zbroj: " . $calc1->calculate() . "\n";
@@ -401,7 +412,7 @@ try {
     $calc4 = new Calculator(10, '/', 5);
     echo "Dijeljenje: " . $calc4->calculate() . "\n";
 
-    // Primjer dijeljenja sa nulom
+    // primjer dijeljenja sa nulom
     $calc5 = new Calculator(10, '/', 0);
     echo "Dijeljenje sa nulom: " . $calc5->calculate() . "\n";
 } catch (Exception $e) {
@@ -417,21 +428,21 @@ try {
 - funkcija array_map() kao prvi argument može primiti callback ili anonimnu funkciju, a kao ostale argumente prima jedno ili više polja vrijednosti (koje onda redom koristi u funkciji danoj sa prvim argumentom)
  
  ```
- <!-- array_map prima callback funkciju -->
+// array_map prima callback funkciju
 function squares($n)
 {
     return ($n * $n);
 }
 $squares = array_map('squares', [2, 3, 4, 5, 6]);
 
-<!-- array_map prima anonimnu funkciju (može i skraćeni zapis, array funkcija - fn($n) => return $n*$n) -->
+// array_map prima anonimnu funkciju (može i skraćeni zapis, array funkcija - fn($n) => return $n*$n)
 $squares = array_map(function($n) {return ($n * $n);}, [2, 3, 4, 5, 6]);
 
-<!-- kombinacija callback i anonimne (array) funkcije -->
+// kombinacija callback i anonimne (array) funkcije
 $squares = fn($n) => return $n*$n;
 $squares = array_map($squares, [2, 3, 4, 5, 6]);
 
-<!-- rezultat je u sva 3 slučaja isti -->
+// rezultat je u sva 3 slučaja isti
 print_r($squares);
 
 array(
@@ -450,79 +461,79 @@ https://www.php.net/manual/en/function.array-map.php
 ### Git naredbe
  
  ```
-<!-- inicijalizacija -->
+// inicijalizacija 
 git init
 
-<!-- postavljanje username i email u git konfiguracijsku datoteku (global označava da se postavka primjenjuje za sve git repozitorije na vašem računalu) -->
+// postavljanje username i email u git konfiguracijsku datoteku (global označava da se postavka primjenjuje za sve git repozitorije na vašem računalu) 
 git config --global user.name <username>
 git config --global user.email <mailaddress>
 
-<!-- prikaz podataka iz git konfiguracijske datoteke -->
+// prikaz podataka iz git konfiguracijske datoteke 
 git config --global --list
 
-<!-- postupak spajanja sa udaljenim repozitorijem -->
-<!-- postavljanje promjena koje želimo poslati na udaljeni repozitorij, . označava da postavljamo sve, a možemo dodavati i zasebno fileove ili foldere -->
+// postupak spajanja sa udaljenim repozitorijem 
+// postavljanje promjena koje želimo poslati na udaljeni repozitorij, . označava da postavljamo sve, a možemo dodavati i zasebno fileove ili foldere 
 git add .
-<!-- svakom commitu (odnosno slanju podataka) se mora dodati poruka -->
+// svakom commitu (odnosno slanju podataka) se mora dodati poruka 
 git commit -m "prvi commit"
-<!-- označavamo udaljeni repozitorij kao origin -->
+// označavamo udaljeni repozitorij kao origin 
 git remote add origin adresa_repozitorija
-<!-- šaljemo sa master grane lokalnog repozitorija na udaljeni origin repozitorij, -u (set upstream) konfigurira lokalnu granu da prati udaljeni repozitorij -->
+// šaljemo sa master grane lokalnog repozitorija na udaljeni origin repozitorij, -u (set upstream) konfigurira lokalnu granu da prati udaljeni repozitorij 
 git push -u origin master
 
-<!-- kopiranje projekta sa nekog repozitorija -->
+// kopiranje projekta sa nekog repozitorija 
 git clone repo_path
 
-<!-- dohvat te spajanje podataka sa udaljenog repozitorija -->
+// dohvat te spajanje podataka sa udaljenog repozitorija 
 git fetch
 git merge
-<!-- skraćeni način, automatski napravi i dohvat, i spajanje -->
+// skraćeni način, automatski napravi i dohvat, i spajanje 
 git pull
 
-<!-- skraćeni način slanja podataka sa lokalne grane na udaljeni repozitorij, nakon što smo prilikom prvog pusha sve konfigurirali (origin i set upstream) -->
+// skraćeni način slanja podataka sa lokalne grane na udaljeni repozitorij, nakon što smo prilikom prvog pusha sve konfigurirali (origin i set upstream) 
 git push
 
-<!-- trenutno stanje gita, grana, promjene, itd. -->
+// trenutno stanje gita, grana, promjene, itd. 
 git status
 
-<!-- undo svih promjena ako nismo napravili add-commit, . sve promjene, a mogu se i zasebno navesti pojedini folderi i fileovi -->
+// undo svih promjena ako nismo napravili add-commit, . sve promjene, a mogu se i zasebno navesti pojedini folderi i fileovi 
 git checkout .
-<!-- undo add -->
+// undo add 
 git reset
-<!-- undo samo commita -->
+// undo samo commita 
 git reset --soft HEAD^
-<!-- undo commit i add -->
+// undo commit i add 
 git reset HEAD^
-<!-- undo commit, add i svih promjena -->
+// undo commit, add i svih promjena 
 git reset --hard HEAD^
 
-<!-- ispis grane na kojoj smo trenutno -->
+// ispis grane na kojoj smo trenutno 
 git branch
-<!-- kreiranje nove grane lokalno, ali ne i automatski prijelaz na nju -->
+// kreiranje nove grane lokalno, ali ne i automatski prijelaz na nju 
 git branch nova
-<!-- prijelaz na novu granu -->
+// prijelaz na novu granu 
 git checkout nova
 
-<!-- stavljanje novostvorene grane na udaljeni repozitorij -->
+// stavljanje novostvorene grane na udaljeni repozitorij 
 git push -u origin nova
 
-<!-- dohvaćanje najnovije verzije nove grane sa udaljenog repozitorija -->
+// dohvaćanje najnovije verzije nove grane sa udaljenog repozitorija 
 git fetch
 git merge origin nova
-<!-- uzastopno odrađene fetch i merge naredbe -->
+// uzastopno odrađene fetch i merge naredbe 
 git pull origin nova
 
-<!-- prebacivanje na master granu -->
+// prebacivanje na master granu 
 git checkout master
 
-<!-- dohvat filea iz nove grane u master -->
+// dohvat filea iz nove grane u master 
 git checkout nova ime_filea
-<!-- spajanje svih podataka iz nove grane u master -->
+// spajanje svih podataka iz nove grane u master 
 git merge nova
 
-<!-- brisanje nove grane na udaljenom repozitoriju -->
+// brisanje nove grane na udaljenom repozitoriju 
 git push -d origin nova
-<!-- brisanje nove grane lokalno, prije toga se sa checkout morate premjestiti na neku drugu granu -->
+// brisanje nove grane lokalno, prije toga se sa checkout morate premjestiti na neku drugu granu 
 git branch -d nova
  ```
 
@@ -531,27 +542,27 @@ git branch -d nova
 ### Prikaz, kreiranje, brisanje direktorija i datoteka u Linux terminalu
 
  ```
-<!-- prikaz svih datoteka i poddirektorija unutar navedenog direktorija, -al određuje prikaz svih elemenata (i onih skrivenih - a kao all), i to poredanih u listu sa prikazom ovlasti (l kao list)  -->
+// prikaz svih datoteka i poddirektorija unutar navedenog direktorija, -al određuje prikaz svih elemenata (i onih skrivenih - a kao all), i to poredanih u listu sa prikazom ovlasti (l kao list)  
 ls -al ime_direktorija
-<!-- alias za ls -al spremljen u .bashrc -->
+// ll je alias za ls -al spremljen u .bashrc 
 ll ime_direktorija
 
-<!-- kreiranje direktorija -->
+// kreiranje direktorija 
 mkdir ime_direktorija
 
-<!-- brisanje praznog! direktorija -->
+// brisanje praznog! direktorija 
 rmdir ime_direktorija
 
-<!-- kreiranje nove datoteke -->
+// kreiranje nove datoteke 
 touch ime_datoteke
 
-<!-- brisanje direktorija i datoteka, možemo ih navesti više jedno iza drugog, ponekad potrebne sudo ovlasti (r oznaka da obriše sve poddirektorije i datoteke unutar navedenog direktorija) -->
+// brisanje direktorija i datoteka, možemo ih navesti više jedno iza drugog, ponekad potrebne sudo ovlasti (r oznaka da obriše sve poddirektorije i datoteke unutar navedenog direktorija) 
 rm -r ime_direktorija ime_datoteke
 
-<!-- ispis u Linux terminalu -->
+// ispis u Linux terminalu 
 cat ime_datoteke
 
-<!-- otvaranje/prikaz datoteke sa posebnim programom, datoteka se ako ne postoji automatski stvori, potrebna sudo ovlast -->
+// otvaranje/prikaz datoteke sa posebnim programom, datoteka se ako ne postoji automatski stvori, potrebna sudo ovlast 
 nano ime_datoteke
 vim ime_datoteke
  ```
@@ -561,10 +572,10 @@ vim ime_datoteke
 ### Zapisivanje u file kroz Linux terminal
 
  ```
-<!-- sa operatorom >> i naredbom echo dodajemo tekst kao novu liniju na kraj datoteke -->
+// sa operatorom >> i naredbom echo dodajemo tekst kao novu liniju na kraj datoteke 
 echo "Hello World" >> file.txt
 
-<!-- sa operatorom > dodajemo tekst i brišemo stari sadržaj datoteke -->
+// sa operatorom > dodajemo tekst i brišemo stari sadržaj datoteke 
 echo "Hello World" > file.txt
  ```
 
@@ -581,11 +592,11 @@ https://www.baeldung.com/linux/file-append-text-no-redirection
 php -v
 php --version
 
-<!-- ispis cijelog phpinfo() filea -->
+// ispis cijelog phpinfo() filea 
 php -i
 php --info
 
-<!-- prikaz putanja svih php konfiguracijskih datoteka -->
+// prikaz putanja svih php konfiguracijskih datoteka 
 php --ini
  ```
 
@@ -594,77 +605,77 @@ php --ini
 ### Ostale Linux terminal naredbe
 
  ```
- <!-- prikaz patha direktorija u kojem se trenutno nalazimo -->
+ // prikaz patha direktorija u kojem se trenutno nalazimo 
  pwd 
 
- <!-- promjena direktorija -->
+ // promjena direktorija 
  cd path
- <!-- prijelaz u direktorij koji se nalazi unutar trenutnog direktorija -->
+ // prijelaz u direktorij koji se nalazi unutar trenutnog direktorija 
  cd ime_direktorija 
- <!-- prijelaz na nivo iznad trenutnog direktorija -->
+ // prijelaz na nivo iznad trenutnog direktorija 
  cd .. 
- <!-- povratak nivo iznad te ulazak u neki drugi poddirektorij -->
+ // povratak nivo iznad te ulazak u neki drugi poddirektorij 
  cd ../ime_direktorija 
- <!-- povratak u home direktorij korisnika -->
+ // povratak u home direktorij korisnika 
  cd ~
 
-<!-- prikaz opisa naredbe -->
+// prikaz opisa naredbe 
  man ime_naredbe
  ime_naredbe --help
 
- <!-- kopiranje datoteke -->
+ // kopiranje datoteke 
  cp stara_datoteka neki_direktorij/nova_datoteka
 
-<!-- preimenovanje datoteke ako je ishodište i odredište u istome direktoriju -->
+// preimenovanje datoteke (ako je ishodište i odredište u istome direktoriju) 
  mv staro_ime novo_ime
 
- <!-- premještanje datoteke ako je odredište u nekom drugom direktoriju, moguće joj je dati i novo ime -->
+ // premještanje datoteke (ako je odredište u nekom drugom direktoriju, a moguće joj je dati i novo ime)
  mv stara_datoteka drugi_direktorij/nova_datoteka
 
-<!-- super user do - oznaka da naredbu izvodimo sa root privilegijama -->
- sudo
+// super user do - oznaka da naredbu izvodimo sa root privilegijama 
+ sudo ime_naredbe
 
- <!-- prikaz veličine datoteke/direktorija, -m prikazuje veličinu u megabajtima -->
+ // prikaz veličine datoteke/direktorija (oznakom -m prikazujemo veličinu u megabajtima) 
  du -m ime_datoteke
 
- <!-- kompresija/dekompresija datoteka/direktorija -->
+ // kompresija/dekompresija datoteka/direktorija 
  zip ime_direktorija
  unzip ime_direktorija
 
-<!-- dohvat updatea i upgrade nekog paketa ili svih programa Linux sustava (ako ne navedemo određeni paket) -->
+// dohvat updatea i upgrade nekog paketa ili svih programa Linux sustava (ako ne navedemo određeni paket), oznakom -y odgovaramo potvrdno (yes) na sve upite tokom instalacije
  sudo apt-get update ime_paketa
- sudo apt-get upgrade ime_paketa
+ sudo apt-get upgrade -y ime_paketa
 
-<!-- promjena privilegija (read 2^2, write 2^1, execute 2^1) određene datoteke/direktorija, -R oznakom mijenjamo vlasništvo i nad fileovima, te poddirektorijima koji se nalaze unutar navedenog direktorija -->
+// promjena privilegija (read 2^2, write 2^1, execute 2^0) određene datoteke/direktorija, -R oznakom (recursive) mijenjamo vlasništvo nad fileovima, te poddirektorijima koji se nalaze unutar navedenog direktorija 
  chmod -R 777 ime_datoteke
-<!-- primjer dodavanja privilegija sa User/Group/Other i Read/Write/eXecute -->
+// primjer dodavanja privilegija sa User/Group/Other i Read/Write/eXecute 
  chmod u+rwx, g+rx, o+r ime_datoteke
-<!-- oduzimanje read i exacute privilegija grupi nad određenom datotekom -->
+// oduzimanje read i execute privilegija grupi nad određenom datotekom 
  chmod g-rx ime_datoteke
-<!-- davanje privilegija read i write svima, user, group i other (oznaka a) -->
+// davanje privilegija read i write svima, user, group i other (oznaka a - all) 
  chmod a+rw ime_datoteke
 
- <!-- promjena vlasništva (user:group) nad datotekom/direktorijem, -R oznakom mijenjamo vlasništvo i nad fileovima, te poddirektorijima koji se nalaze unutar navedenog direktorija -->
+ // promjena vlasništva (user:group) nad datotekom/direktorijem, -R oznakom mijenjamo vlasništvo nad fileovima, te poddirektorijima koji se nalaze unutar navedenog direktorija 
  chown -R algebra:algebra ime_direktorija
 
- <!-- prikaz ip adrese -->
+ // prikaz ip adrese 
  hostname -I 
  
- <!-- provjera konekcije prema navedenoj ip adresom -->
+ // provjera konekcije prema navedenoj ip adresom 
  ping neki_ip
 
- <!-- prikaz id trenutnog korisnika -->
+ // prikaz id trenutnog korisnika 
  echo $UID
  
- <!-- brisanje zaslona terminala -->
+ // brisanje zaslona terminala 
  clear
 
-<!-- zaustavljanje izvođenja naredbe u terminalu -->
+// zaustavljanje izvođenja naredbe u terminalu 
 CTRL+C
-<!-- prisilno zaustavljanje izvođenja naredbe u terminalu -->
+// prisilno zaustavljanje izvođenja naredbe u terminalu 
 CTRL+Z
 
- <!-- izlazak iz terminala -->
+ // izlazak iz terminala 
  exit
  ```
 
@@ -674,29 +685,22 @@ CTRL+Z
 
 | **Odnos**       | **Opis**                                               | **Implementacija** |
 |-----------------|--------------------------------------------------------|--------------------|
-| `1-1`          | Jedan zapis u tablici A odnosi se na jedan zapis u tablici B. | Dodajte vanjski ključ u jednu tablicu koji referencira primarni ključ druge tablice. |
-| `1-n`        | Jedan zapis u tablici A odnosi se na mnoge zapise u tablici B. | Dodajte vanjski ključ u "mnogo" tablicu koji referencira primarni ključ "jedne" tablice. |
-| `n-m`     | Mnogi zapisi u tablici A odnose se na mnoge zapise u tablici B. | Kreirajte spojnu (pivot) tablicu sa vanjskim ključevima koji referenciraju obje tablice. |
-
-```
-Strani ključevi - uvijek koristite strane ključeve za održavanje referencijalne cjelovitosti kako bi se osiguralo da su odnosi između tablica očuvani.
-Indeksiranje - kreirajte indekse na stranim ključevima kako biste poboljšali performanse upita.
-Normalizacija - normalizirajte shemu baze podataka kako biste smanjili redundanciju i poboljšali integritet podataka.
-```
+| `1-1`          | Jedan zapis u tablici A odnosi se na jedan zapis u tablici B. | Dodajte strani ključ u jednu tablicu koji referencira primarni ključ druge tablice. |
+| `1-n`        | Jedan zapis u tablici A odnosi se na mnoge zapise u tablici B. | Dodajte strani ključ u "mnogo" tablicu koji referencira primarni ključ "jedne" tablice. |
+| `n-m`     | Mnogi zapisi u tablici A odnose se na mnoge zapise u tablici B. | Kreirajte spojnu (pivot) tablicu sa stranim ključevima koji referenciraju obje tablice. |
 
 
 
 ### Normalizacija
 
 ```
-MySQL normalizacija odnosi se na proces organiziranja podataka u relacijskom sustavu baze podataka kako bi se smanjila redundantnost i poboljšao integritet podataka. To uključuje razbijanje velikih, složenih tablica na manje, jednostavnije tablice i uspostavljanje odnosa između njih.
-
-Glavni ciljevi normalizacije su eliminacija redundantnosti, osiguranje integriteta podataka te poboljšanje učinkovitosti upita
+MySQL normalizacija odnosi se na proces organiziranja podataka u relacijskim bazama kako bi se smanjila redundantnost i poboljšao integritet podataka te učinkovitosti upita.
+To uključuje razbijanje velikih, složenih tablica na manje, jednostavnije te uspostavljanje odnosa (zavisnosti, strani ključevi) između njih.
 
 Normalne forme
-1NF: Osiguranje atomskih vrijednosti (nema više od jednog predmeta u jednom stupcu).
-2NF: Osiguranje da nema parcijalnih zavisnosti (npr. atributi koji ovise samo o dijelu kompozitnog ključa).
-3NF: Osiguranje da nema tranzitivnih zavisnosti (npr. neključni atributi ovise o drugim neključnim atributima).
+1NF - osiguranje atomskih vrijednosti (nema više od jednog predmeta u jednom stupcu)
+2NF - osiguranje da nema parcijalnih zavisnosti (npr. atributi koji ovise samo o dijelu kompozitnog ključa)
+3NF - osiguranje da nema tranzitivnih zavisnosti (npr. neključni atributi ovise o drugim neključnim atributima)
 ```
 
 
@@ -710,7 +714,7 @@ Normalne forme
     ODRAĐENI_POSLOVI (id_zaposlenik, id_posao, datum)
     POSAO (id, naziv)
 
-    <!-- odrađeni_poslovi je pivot tablica između zaposlenika i posla -->
+    // odrađeni_poslovi je pivot tablica između zaposlenika i posla
     ZAPOSLENIK 1 - n ODRAĐENI_POSLOVI n - 1 POSAO
  ```
 
@@ -719,19 +723,19 @@ Normalne forme
 ### Primjer ograničavanja korisnika na samo čitanje iz baze podataka
 
 ```
--- Kreiranje korisnika
+-- kreiranje korisnika
 CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
 
--- Dodjela privilegija za samo čitanje
+-- dodjela privilegija za samo čitanje
 GRANT SELECT ON database.* TO 'user'@'localhost';
 
--- Opcionalno - oduzimanje drugih privilegija
+-- opcionalno - oduzimanje drugih privilegija
 REVOKE INSERT, UPDATE, DELETE ON database.* FROM 'user'@'localhost';
 
--- Primjena promjena
+-- primjena/reset promjena
 FLUSH PRIVILEGES;
 
--- Provjera privilegija
+-- provjera privilegija
 SHOW GRANTS FOR 'user'@'localhost';
 ```
 
@@ -789,7 +793,7 @@ BEGIN
     SELECT kolicina INTO stara_kolicina
     FROM proizvodi
     WHERE id = prodan_proizvod_id
-    FOR UPDATE; -- Zaključavamo red dok se ne završi transakcija
+    FOR UPDATE; -- zaključavamo element dok se ne izvrši transakcija
 
     -- ako ne postoji
     IF stara_kolicina IS NULL THEN
@@ -828,7 +832,7 @@ USE banka;
 
 -- kreiramo tablicu račun
 CREATE TABLE IF NOT EXISTS accounts (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     iban VARCHAR(34) UNIQUE NOT NULL, 
     balance DECIMAL(15, 2) DEFAULT 0.00,
 );
@@ -877,14 +881,10 @@ CREATE PROCEDURE make_transaction(
 )
 
 BEGIN
-    DECLARE receiver_exists INT;
     DECLARE sender_balance DECIMAL(15, 2);
-    -- kreiramo handler gdje određujemo što učiniti u slučaju greške (sql exceptiona)
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
-        BEGIN
-            -- vrati transakciju na početno stanje ako se dogodi greška
-            ROLLBACK;
-        END;
+    DECLARE new_sender_balance DECIMAL(15, 2);
+    DECLARE receiver_balance DECIMAL(15, 2);
+    DECLARE new_receiver_balance DECIMAL(15, 2);
 
     START TRANSACTION;
 
@@ -893,42 +893,64 @@ BEGIN
     END IF;
 
     -- dohvati stanje na računu pošiljatelja
-    SELECT amount INTO sender_balance
+    SELECT balance INTO sender_balance
         FROM accounts
         WHERE iban = sender_iban;
         FOR UPDATE; -- ovime eliminiramo race condition, odnosno mogućnost da netko promjeni stanje prije no što mi obavimo update
 
     -- provjera je li dohvat prošao uspješno
-    IF amount IS NULL THEN
+    IF sender_balance IS NULL THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Pošiljatelj nije pronađen';
     END IF;
 
-    IF sender_balance < transfer_amount THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Nedovoljno sredstava';
+    -- dohvati stanje na računu primatelja
+    SELECT balance INTO receiver_balance
+        FROM accounts
+        WHERE iban = receiver_iban;
+        FOR UPDATE; 
+
+    IF receiver_balance IS NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Primatelj nije pronađen';
     END IF;
 
-    -- provjera postoji li primatelj
-    SELECT COUNT(*) 
-    INTO receiver_exists
-    FROM accounts 
-    WHERE iban = receiver_iban;
+    -- ako ima dovoljno sredstava pokreni transakciju
+    IF sender_balance >= transfer_amount THEN
 
-    IF receiver_exists = 0 THEN
-        SIGNAL SQLSTATE '45000' 
-        SET MESSAGE_TEXT = 'Primatelj nije pronađen';
+        -- oduzmi sumu iz računa pošiljatelja
+        UPDATE accounts
+            SET balance = balance - transfer_amount
+            WHERE iban = sender_iban;
+
+        -- provjera je li ažuriranje računa pošiljatelja prošlo uspješno
+        SELECT balance INTO new_sender_balance
+            FROM accounts
+            WHERE iban = sender_iban;
+
+        IF new_sender_balance <> sender_balance - transfer_amount THEN
+            ROLLBACK;
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Greška pri ažuriranju računa pošiljatelja';
+        END IF;
+
+        -- dodaj sumu na račun primatelja
+        UPDATE accounts
+        SET balance = balance + transfer_amount
+        WHERE iban = receiver_iban;
+
+        -- provjera je li ažuriranje računa primatelja prošlo uspješno
+        SELECT balance INTO new_receiver_balance
+            FROM accounts
+            WHERE iban = receiver_iban;
+
+        IF new_receiver_balance <> receiver_balance + transfer_amount THEN
+            ROLLBACK;
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Greška pri ažuriranju računa primatelja';
+        END IF;
+
+    ELSE
+        -- ako nema dovoljno sredstava na računu vrati na početno stanje
+        ROLLBACK;
     END IF;
-
-    -- izvođenje updatea (ažuriranje računa pošiljatelja i primatelja)
-    UPDATE accounts
-        SET amount = amount - transfer_amount
-        WHERE id = sender_id;
-
-    UPDATE accounts
-        SET amount = amount + transfer_amount
-        WHERE id = receiver_id;
-
-    -- ako je sve uspješno prošlo commit transakcije
-    COMMIT; 
+    
 END $$
 
 DELIMITER ;
@@ -945,7 +967,7 @@ CREATE FUNCTION get_balance(input_iban VARCHAR(34))
 RETURNS DECIMAL(15, 2)
 
 BEGIN
-    DECLARE result DECIMAL(15, 2);
+    DECLARE balance DECIMAL(15, 2);
 
     -- upit za dohvat stanja računa
     SELECT balance INTO balance
@@ -954,7 +976,8 @@ BEGIN
 
     -- provjera je li dohvat podataka bio uspješan
     IF balance IS NULL THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Račun nije pronađen';
+        -- ako nije vraćamo null
+        RETURN NULL;
     END IF;
 
     -- povrat podatka
@@ -971,7 +994,7 @@ SELECT get_balance('HR4890942042048');
 
 ### SQL migracije
 
-- prijenos sheme (database schema migration) i podataka (sql data migration) iz jedne u drugu (početne u ciljnu) bazu
+- prijenos sheme (database schema migration, tablice, indeksi, veze) i podataka (sql data migration, podaci, retci) iz jedne u drugu (početne u ciljnu) bazu
 
 
 
@@ -982,13 +1005,13 @@ SELECT get_balance('HR4890942042048');
  ```
 https://laravel.com/docs/11.x/migrations#introduction
 
- <!-- kreiranje nove baze prema shemi u database/migrations folderu -->
+ // kreiranje nove baze prema shemi u database/migrations folderu 
 php artisan migrate
 
-<!-- brisanje stare i kreiranje nove baze -->
+// brisanje stare i kreiranje nove baze 
 php artisan migrate:fresh
 
-<!-- brisanje stare, kreiranje nove baze te punjenje podacima prema shemi u database/seeders i database/factories folderima -->
+// brisanje stare, kreiranje nove baze te punjenje podacima prema shemi u database/seeders i database/factories folderima 
 php artisan migrate:fresh --seed
  ```
 
@@ -999,9 +1022,9 @@ php artisan migrate:fresh --seed
 Laravel koristi MVC arhitekturu za jasno odvajanje odgovornosti i bolju organizaciju koda, čineći razvoj aplikacija lakšim i održivijim.
 
 ```
-Model (M): Odgovoran je za pohranu i manipulaciju podacima.
-View (V): Odgovoran je za prikaz podataka korisnicima putem HTML-a.
-Controller (C): Odgovoran je za logiku aplikacije i povezuje modele i prikaze.
+Model (M) - odgovoran za pohranu i manipulaciju podacima
+View (V) - odgovoran za prikaz podataka korisnicima putem HTML-a
+Controller (C) - odgovoran za logiku aplikacije, povezuje modele i prikaze
 ```
 
 
@@ -1010,16 +1033,16 @@ Controller (C): Odgovoran je za logiku aplikacije i povezuje modele i prikaze.
 
 | Metoda   | Opis                                                       | Vraća                     |
 |----------|------------------------------------------------------------|---------------------------|
-| `all()`  | Dohvaća sve zapise iz tablice.                             | Kolekcija svih modela.     |
-| `get()`  | Dohvaća kolekciju zapisa s mogućim uvjetima.               | Kolekcija modela temeljenih na upitu. |
-| `first()`| Dohvaća prvi zapis koji odgovara uvjetima.                 | Jedan model ili `null`.    |
-| `find()` | Dohvaća zapis po njegovom primarnom ključu (ID).           | Jedan model ili `null`.    |
+| `all()`  | dohvaća sve zapise iz tablice                              | kolekcija svih modela tablice     |
+| `get()`  | dohvaća kolekciju zapisa s mogućim uvjetima                | kolekcija modela temeljenih na upitu nad tablicom |
+| `first()`| dohvaća prvi zapis koji odgovara uvjetima                  | jedan model ili `null`    |
+| `find()` | dohvaća zapis po njegovom primarnom ključu (ID)            | jedan model ili `null`    |
 
 ```
-`all()` - kada želite dohvatiti sve zapise bez ikakvih uvjeta ili filtera
-`get()` - kada trebate dohvatiti kolekciju zapisa s određenim uvjetima
-`first()` - kada vam treba prvi zapis koji odgovara određenim uvjetima (obično uz `where`)
-`find()` - kada imate primarni ključ (ID) i želite dohvatiti specifičan zapis (primjer find($id))
+all() - kada želite dohvatiti sve zapise bez ikakvih uvjeta ili filtera
+get() - kada trebate dohvatiti kolekciju zapisa s određenim uvjetima
+first() - kada vam treba prvi zapis koji odgovara određenim uvjetima (obično uz `where`)
+find() - kada imate primarni ključ (ID) i želite dohvatiti specifičan zapis (primjer find($id))
 ```
 
 
@@ -1043,7 +1066,7 @@ session() - za podatke koji se čuvaju u sesiji između zahtjeva
 {{ }} u Bladeu koristi se za echo (ispisivanje) podataka
 
 ```
-<!-- Prikazivanje varijable u Bladeu -->
+// Prikazivanje varijable u Bladeu
 <h1>{{ $title }}</h1>
 ```
 
@@ -1053,14 +1076,14 @@ session() - za podatke koji se čuvaju u sesiji između zahtjeva
 
 ```
 Laravel Dusk je alat za testiranje koji omogućava interakciju s web stranicama kao stvarni korisnik.
-Funkcija click() koristi se za simuliranje klika na HTML element na stranici prilikom izvođenja automatiziranih testova korisničkog sučelja (UI testova).
+Njegova funkcija click() koristi se za simuliranje klika na HTML element na stranici prilikom izvođenja automatiziranih testova korisničkog sučelja (UI testova).
 ```
 
 
 
 ### PHP Unit config xml
 
-- napraviti PHPUnit config xml koji će napraviti exclude određene datoteke
+- napraviti PHPUnit config xml koji će napraviti include/exclude određenih datoteka
  
  ```
 https://docs.phpunit.de/en/10.5/configuration.html#the-exclude-element
@@ -1077,7 +1100,7 @@ https://laraveldaily.com/lesson/testing-laravel/db-configuration-refreshdatabase
          convertWarningsToExceptions="true"
          convertNoticesToExceptions="true"
          stopOnFailure="false">
-    <!-- testovi -->
+    <!-- definiranje direktorija sa testovima koji će se izvoditi -->
     <testsuites>
         <testsuite name="Unit">
             <directory>tests/Unit</directory>
@@ -1274,19 +1297,19 @@ Route:controller(AuthController::class)->group(function () {
 ### Spajanje domene s poslužiteljem
 
 ```
-1. Kupiti web (VPS) server i domenu od nekog pružatelja usluga (preporuka Hertzner) i registrara za domene (preporuka Cloudflare).
+1. Kupiti web (VPS) server i domenu od nekog pružatelja usluga (primjerice Hertzner) i registrara za domene (primjerice Cloudflare).
 
-2. Postaviti Web Server i provjeriti da li ispravno radi, te je li dostupan na internetu ( preporuka Apache ili Nginx na Linux serverima)
+2. Postaviti Web Server i provjeriti da li ispravno radi, te je li dostupan na internetu (preporuka Apache ili Nginx na Linux serverima)
    Ako se koristi dijeljeno hostiranje, VPS ili cloud hosting, pružatelj hostinga bi trebao imati upute za postavljanje servera.
 
-3. Javna IP adresu servera dobije se od strane pružatelja hostinga (ali se može saznati i pomoću naredbe 'curl ifconfig.me')
+3. Javna IP adresa servera dobije se od strane pružatelja hostinga (ali se može saznati i pomoću naredbe 'curl ifconfig.me')
 
-4. Prijaviti se na upravljačku ploču registrara te ažurirati DNS postavke, ovo je ključni korak u povezivanju domene sa serverom gdje se domena usmjerava na IP adresu web servera. 
+4. Prijaviti se na upravljačku ploču registrara te ažurirati DNS postavke, ovo je ključan korak u povezivanju domene sa serverom gdje se domena usmjerava na IP adresu web servera. 
 
 Na DNS management ili name server:
 Dodati A zapis koji će usmjeriti domenu na IP adresu servera:
     Tip: A
-    Ime/Host: @ (ovo usmjerava na osnovnu domenu, npr. example.com) ili www (ako koristimo poddomenu, npr. www.example.com)
+    Ime/Host: @ (ovo usmjerava na osnovnu domenu, npr. ime_domene.com) ili www (ako koristimo poddomenu, npr. www.ime_domene.com)
     Vrijednost/Points to: javna IP adresa servera (npr. 192.0.2.123).
     TTL (Time to Live): može se ostaviti zadano, ili postaviti na npr. 3600 sekundi (1 sat).
 Opcionalno, može se dodati CNAME zapis za www (ako želimo da www.ime_domene.com također bude funkcionalno):
@@ -1338,7 +1361,7 @@ Nginx:
 
 
 Dodatni koraci:
-- postavljanje SSL-a kako bi mogli koristiti HTTPS (potrebno je dohvatiti SSL certifikat i postaviti ga na server)
+- postavljanje SSL-a (secure sockets layer) kako bi mogli koristiti HTTPS (potrebno je dobaviti SSL certifikat i postaviti ga na server)
 - postavljanje mail severa kako bi mogli slati ili primati e-mailove putem domene (potrebno je postaviti MX zapise u DNS-u i konfigurirati mail server)
 
 Ovaj proces će povezati domenu sa web serverom, a web stranica bi trebala biti dostupna prilikom pristupa domeni u web pregledniku.
@@ -1530,4 +1553,5 @@ php artisan migrate --seed
 ```
 192.168.1.225:8000
 ```
+
 
