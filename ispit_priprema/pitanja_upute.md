@@ -223,21 +223,29 @@ session_destroy();  // uništava samu sesiju
 ### PHP tipovi podataka
 
 ```
-skalarni tipovi podataka - brojčani (int, float, double), tekstualni (string), boolean (true ili false)
+skalarni tipovi podataka - brojčani (int, float), tekstualni (string), boolean (true ili false)
 složeni tipovi podataka - polja/nizovi (indeksirana, asocijativna), objekti (instance klasa, kolekcije)
 specijalni tipovi - NULL, resource (primjerice konekcije na baze podataka ili datoteke)
 ```
 
 
 
+### Varijable
+
+Varijabla je imenovana memorijska lokacija koja sadrži podatke kojima je moguće manipulirati izvođenjem programa.
+Lokalne varijable su deklarirane u funkciji, globalnim varijablama nije moguće direktno pristupiti unutar funkcije (mora im se dodati GLOBAL ili ih predati prilikom poziva funkcije), statične varijable (oznaka STATIC) zadržavaju svoju vrijednost i nakon izlaska iz funkcije, superglobalne varijable su dostupne bilo gdje unutar skripte (primjer $_SERVER).
+
+
+
 ### Poziv po referenci
 
+Vrijednosti se funkciji mogu proslijediti kao statične vrijednosti (direktan upis neke vrijednosti, odnosno brojke prilikom poziva funkcije), kao vrijednosti iz varijabli (poziv po vrijednosti) ili po referenci.
 Poziv po referenci omogućava funkciji da izmijeni vrijednost varijable koja je proslijeđena, umjesto da radi s kopijom te varijable. Kada varijablu proslijedite po referenci, promjene koje se naprave u funkciji odražavaju se i izvan funkcije.
 
 ```
 <?php
 
-// &$num - & ispred $num znači da se $num prosljeđuje po referenci, a ne po vrijednosti.
+// &$num - & (adresni operator - vraća memorijsku lokaciju varijable) ispred $num znači da se $num prosljeđuje po referenci, a ne po vrijednosti.
 
 function addTen(&$num) {
     $num += 10;  // ovo će modificirati originalnu varijablu
@@ -678,6 +686,35 @@ CTRL+Z
  // izlazak iz terminala 
  exit
  ```
+
+
+
+### Git/Linux zadatak
+
+```
+1. Kreirajte datoteku `app.php` i dodajte echo liniju:
+touch app.php
+echo '<?php echo "pozdrav";' > app.php
+
+2. Inicijalizirajte Git repozitorij i dodajte datoteku u staging area:
+git init
+git add app.php
+
+3. Napravite commit sa porukom "My first commit":
+git commit -m "My first commit"
+
+4. Kreirajte novu granu `feature-remove-echo` i prebacite se na nju:
+git checkout -b feature-remove-echo  # kreiranje i prebacivanje u jednom sa oznakom -b (inače bi morali napraviti git branch za kreiranje, pa git checkout za prebacivanje)
+
+5. Dodajte još jednu echo liniju u `app.php` i napravite commit:
+echo 'echo "pozdrav ponovno";' >> app.php  # dodavanje na kraj filea (sa > bi prebrisali prijašnji sadržaj)
+git add app.php  
+git commit -m "Added second echo line" 
+
+6. Sjedinite (merge) granu `feature-remove-echo` u master:
+git checkout master  # prebacivanje na master
+git merge feature-remove-echo  # merge u master granu
+```
 
 
 
