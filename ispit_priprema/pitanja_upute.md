@@ -45,6 +45,8 @@ TODO (sami instalirat Ubuntu na Hyper-V i shvatit kako se snaći u tom virtualno
 
 - rezultate možete provjeriti otvaranjem localhost stranice u web browseru (localhost/ime_stranice ako ih imate više)
 
+- preporuka instalirati PHP intelephense ekstenziju ako već nije
+
 
 
 ### Document root (korijenska mapa)
@@ -57,7 +59,7 @@ TODO (sami instalirat Ubuntu na Hyper-V i shvatit kako se snaći u tom virtualno
 
 
 
-### Spajanje na bazu (i dohvat podataka) pomoću Mysqli funkcije
+### Spajanje na bazu (i dohvat podataka) pomoću Mysqli funkcije - proceduralno
 
  ```
 $hostname = localhost;
@@ -105,10 +107,10 @@ $charset = 'utf8mb4';
 // dodatne opcije, kako će se dohvaćati podaci (fetch - associjativno polje) i kako će se prikazivati greške (error mode - exception)
 $options = [PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
 
-// osnovni podaci o bazi, tip (u ovom slučaju mysql), host, naziv i (opcionalno) port, charset
+// dsn (data source name) - osnovni podaci o bazi, tip (u ovom slučaju mysql), host, naziv i (opcionalno) port, charset
 $dsn = "mysql:host={$host};port={$port};dbname={$database};charset={$charset}" 
 
-// konekcija sa dns (data name source), username, password i dodatnim opcijama (dohvat podataka, greške i slično)
+// konekcija sa dsn, username, password i dodatnim opcijama (dohvat podataka, greške i slično)
 $pdo = new PDO($dsn, $username, $password, $options);
 
 // zatvaranje konekcije (u biti nuliranje varijable koja sadrži konekciju na bazu)
@@ -202,9 +204,158 @@ $result = $statement->fetchAll();
 
 
 
+### Sortiranje
+
+```
+// funkcije za sortiranje nizova:
+    sort() – indeksirani nizovi, rastući redoslijed (ASC)
+    rsort() – indeksirani nizovi, padajući redoslijed (DESC)
+    asort() – asocijativni nizovi, rastući redoslijed (ASC), čuva key-value parove
+    arsort() – asocijativni nizovi, opadajući redoslijed (DESC), čuva key-value parove
+    ksort() – asocijativni nizovi, rastući redoslijed prema ključevima (ASC)
+    krsort() – asocijativni nizovi, opadajući redoslijed prema ključevima (DESC)
+
+// sortiranje sa uključenom anonimnom funkcijom:
+usort() – indeksirani nizovi
+uasort() – Korisničko sortiranje (čuva ključeve, asocijativni nizovi)
+uksort() – Korisničko sortiranje prema ključevima (asocijativni nizovi)
+
+// sortiranje više nizova:
+array_multisort() – Sortiranje više nizova ili više-dimenzionalnog niza
+
+// prirodno sortiranje (znači da je primjerice a10 iza a2)
+natsort() – ne osjetljivo na velika i mala slova
+natcasesort() – osjetljivo na velika i mala slova
+```
+
+
+
+### .txt .csv .json datoteke
+
+Kreiranje direktorija, otvaranje, čitanje i pisanje u datoteke
+
+```
+// podaci
+$data = [
+    ['Name', 'Age', 'City'],
+    ['John Doe', 30, 'New York'],
+    ['Jane Smith', 25, 'Los Angeles']
+];
+
+// postavljanje putanje direktorija
+$dir = 'putanja/do/direktorija';
+
+// kreiranje direktorija
+if (!is_dir($dir)) {
+    mkdir($dir, 0777, true);  // ako direktorij ne postoji, kreira ga s dozvolama 0777
+}
+
+// putanje do datoteka
+$txtFile = $dir . '/file.txt';
+$csvFile = $dir . '/file.csv';
+$jsonFile = $dir . '/file.json';
+
+// TXT
+
+// čitanje cijele .txt datoteke
+if (file_exists($txtFile)) {
+    $txtContent = file_get_contents($txtFile);  // učitava cijeli sadržaj u varijablu
+    echo "Content of file.txt:\n$txtContent\n";
+} else {
+    exit("file.txt does not exist");  // ako datoteka ne postoji, izlazi iz skripte
+}
+
+// čitanje .txt datoteke redak po redak
+$txtFileHandle = fopen($txtFile, 'r');  // otvara datoteku u modu za čitanje
+if ($txtFileHandle === false) {
+    exit("Unable to open file for reading");  // ako nije moguće otvoriti datoteku, izlazi iz skripte
+}
+
+while (($txtRow = fgets($txtFileHandle)) !== false) {
+    echo "TXT Row: " . $txtRow . "\n";  // ispisuje svaki redak iz datoteke
+}
+fclose($txtFileHandle);  // Zatvaramo datoteku
+
+// pisanje u .txt datoteku redak po redak
+$file = fopen($txtFile, 'a');  // otvara datoteku u "append" modu za dodavanje novih podataka
+if ($file === false) {
+    exit("Unable to open file for writing");  // ako nije moguće otvoriti datoteku za pisanje, izlazi iz skripte
+}
+
+foreach ($data as $row) {
+    fwrite($file, implode(", ", $row) . "\n");  // pretvara svaki redak u string i zapisuje u datoteku
+}
+fclose($file);  // zatvaramo datoteku
+
+
+// CSV
+
+// čitanje .csv datoteke
+if (file_exists($csvFile)) {
+    $csvFileHandle = fopen($csvFile, 'r');  // otvara csv datoteku u modu za čitanje
+    if ($csvFileHandle === false) {
+        exit("Unable to open file for reading");  // ako nije moguće otvoriti datoteku, izlazi iz skripte
+    }
+
+    $csvHeader = fgetcsv($csvFileHandle);  // čita zaglavlje csv datoteke
+    echo "CSV Header: " . implode(", ", $csvHeader) . "\n";  // ispisuje zaglavlje
+
+    while (($csvRow = fgetcsv($csvFileHandle)) !== false) {  // čita svaki redak csv datoteke
+        echo "CSV Row: " . implode(", ", $csvRow) . "\n";  // ispisuje redak
+    }
+    fclose($csvFileHandle);  // zatvara datoteku
+} else {
+    exit("file.csv does not exist");  // ako csv datoteka ne postoji, izlazi iz skripte
+}
+
+// pisanje u .csv datoteku
+$file = fopen($csvFile, 'a');  // otvara datoteku u "append" modu za dodavanje novih podataka
+if ($file === false) {
+    exit("Unable to open file for writing");  // ako nije moguće otvoriti datoteku za pisanje, izlazi iz skripte
+}
+
+foreach ($data as $row) {
+    fputcsv($file, $row);  // zapisuje redak u csv datoteku
+}
+fclose($file);  // zatvara datoteku
+
+
+// JSON FILE
+
+// čitanje i dekodiranje .json datoteke
+if (file_exists($jsonFile)) {
+    $jsonContent = file_get_contents($jsonFile);  // učitava cijeli sadržaj json datoteke
+    if ($jsonContent === false) {
+        exit("Unable to open file for reading");  // ako nije moguće otvoriti datoteku, izlazi iz skripte
+    }
+
+    $jsonData = json_decode($jsonContent, true);  // dekodira json u asocijativno polje
+    if ($jsonData === false) {
+        exit("Unable to decode file for reading");  // ako dođe do greške pri dekodiranju json-a, izlazi iz skripte
+    }
+
+    print_r($jsonData);  // ispisuje sadržaj dekodiranog json-a
+} else {
+    exit("file.json does not exist");  // ako json datoteka ne postoji, izlazi iz skripte
+}
+
+// enkodiranje i pisanje u .json datoteku
+$jsonData = json_encode($data, JSON_PRETTY_PRINT);  // pretvara podatke u json format, sa "pretty print" formatiranjem
+if ($jsonData === false) {
+    exit("Unable to encode data for writing");  // ako dođe do greške pri enkodiranju, izlazi iz skripte
+}
+
+// dodavanje novih podataka u json datoteku
+if (file_put_contents($jsonFile, $jsonData, FILE_APPEND) === false) {  // zapisuje nove podatke na kraj json datoteke
+    exit("Unable to open file for writing");  // ako nije moguće zapisati podatke u datoteku, izlazi iz skripte
+}
+```
+
+
+
 ### PHP sesije ($_SESSION)
 
-Sesije omogućuju pohranu podataka između različitih stranica i zahtjeva, koriste se za pohranu podataka o korisnicima, kao što su korisnički podaci, preferencije i druge informacije koje želite pratiti dok korisnik navigira kroz vašu web stranicu.
+Sesije omogućuju pohranu podataka između različitih stranica i zahtjeva, koriste se za pohranu podataka o korisnicima, preferencije i druge informacije koje želite pratiti dok korisnik navigira kroz vašu web stranicu.
 
 ```
 // pokretanje sesije
@@ -245,19 +396,17 @@ Poziv po referenci omogućava funkciji da izmijeni vrijednost varijable koja je 
 ```
 <?php
 
-// &$num - & (adresni operator - vraća memorijsku lokaciju varijable) ispred $num znači da se $num prosljeđuje po referenci, a ne po vrijednosti.
+// &$num - & (adresni operator - vraća memorijsku lokaciju varijable) ispred $num znači da se $num prosljeđuje po referenci, a ne po vrijednosti
 
 function addTen(&$num) {
     $num += 10;  // ovo će modificirati originalnu varijablu
 }
 
 $number = 5;
-echo "Prije poziva funkcije: $number\n"; // prije poziva funkcije ispisuje 5
+echo $number; // prije poziva funkcije ispisuje 5
 
 addTen($number);
-
-echo "Nakon poziva funkcije: $number\n"; // nakon poziva funkcije ispisuje 15
-?>
+echo $number; // nakon poziva funkcije ispisuje 15
 ```
 
 Poziv po vrijednosti - funkcija radi s kopijom varijable i sve promjene unutar funkcije ne utječu na originalnu varijablu.
@@ -290,12 +439,12 @@ Poziv po referenci - funkcija radi izravno na stvarnoj varijabli i promjene utje
 
 ### spl_autoload_register
 
-Funkcija `spl_autoload_register()` pojednostavljuje proces uključivanja datoteka klasa u PHP-u, ona se koristi za definiranje i registraciju autoload funkcije, što je mehanizam koji automatski učitava PHP klase kada su potrebne, bez potrebe za ručnim uključivanjem ili zahtijevanjem datoteka s klasama.
+Funkcija `spl_autoload_register()` pojednostavljuje proces uključivanja datoteka klasa u PHP-u, ona se koristi za definiranje i registraciju autoload funkcije, te zajedno sa njom čini mehanizam koji automatski učitava PHP klase kada su potrebne, bez potrebe za ručnim uključivanjem ili zahtijevanjem datoteka s klasama.
 
 ```
 spl_autoload_register(function ($class) {
     // u tijelu anonimne autoload funkcije definiramo kako učitati datoteku klase (u ovom slučaju iz direktorija classes)
-    require_once 'classes/' . $class . '.class.php';
+    require_once 'classes/' . $class . '.php';
 });
 ```
 
@@ -317,7 +466,7 @@ self - odnosi se na trenutnu klasu (ne na instancu klase/objekt) i koristi se za
 
 ### Pretvaranje funkcije zbroj u klasu
 
-- u klasi definiramo dvije privatne varijable, numberA i numberB, dvije public metode za dohvaćanje njihovih vrijednosti (settere), te public funkciju za zbrajanje
+- u klasi kroz konstruktor definiramo dvije privatne varijable, numberA i numberB, dvije public metode za dohvaćanje/promjenu njihovih vrijednosti (settere), te public funkciju za zbrajanje
  
  ```
 function sum(int $a, int $b): int
@@ -368,7 +517,7 @@ $zbroj->sum(4, 5);  // vratit će 9
  <?php
 class Calculator 
 {
-    // property promotion - deklariramo svojstva i ujedno im pridjeljujemo vrijednost
+    // property promotion - deklariramo svojstva (varijable) i ujedno im pridjeljujemo vrijednost
     public function __construct(
         private float $a, 
         private string $operator,
@@ -376,31 +525,36 @@ class Calculator
     ) {}
 
     // metoda koja poziva jednu od metoda za izračun ovisno o unesenom operatoru
-    public function calculate(): float {
+    public function calculate(): float 
+    {
         return match ($this->operator) {
             '+' => $this->add(),
             '-' => $this->subtract(),
             '*' => $this->multiply(),
             '/' => $this->divide(),
-            default => throw new InvalidArgumentException("Unesen nepostojeći operator za izračun"),
+            default => throw new InvalidArgumentException("unesen nepostojeći operator za izračun"),
         };
     }
 
-    private function add(): float {
+    private function add(): float 
+    {
         return $this->a + $this->b;
     }
 
-    private function subtract(): float {
+    private function subtract(): float 
+    {
         return $this->a - $this->b;
     }
 
-    private function multiply(): float {
+    private function multiply(): float 
+    {
         return $this->a * $this->b;
     }
 
-    private function divide(): float {
+    private function divide(): float 
+    {
         if ($this->b == 0) {
-            throw new InvalidArgumentException("Nemože se dijeliti sa nulom");
+            throw new InvalidArgumentException("nemože se dijeliti sa nulom");
         }
         return $this->a / $this->b;
     }
@@ -424,7 +578,7 @@ try {
     $calc5 = new Calculator(10, '/', 0);
     echo "Dijeljenje sa nulom: " . $calc5->calculate() . "\n";
 } catch (Exception $e) {
-    echo "Greška: " . $e->getMessage() . "\n";
+    echo "Greška - " . $e->getMessage() . "\n";
 }
 ?> 
  ```
@@ -473,8 +627,8 @@ https://www.php.net/manual/en/function.array-map.php
 git init
 
 // postavljanje username i email u git konfiguracijsku datoteku (global označava da se postavka primjenjuje za sve git repozitorije na vašem računalu) 
-git config --global user.name <username>
-git config --global user.email <mailaddress>
+git config --global user.name ime_korisnika
+git config --global user.email email_korisnika
 
 // prikaz podataka iz git konfiguracijske datoteke 
 git config --global --list
@@ -521,6 +675,8 @@ git branch
 git branch nova
 // prijelaz na novu granu 
 git checkout nova
+// kreiranje nove grane i automatski prijelaz na nju u jednoj naredbi (-b oznaka je ključna)
+git checkout -b nova
 
 // stavljanje novostvorene grane na udaljeni repozitorij 
 git push -u origin nova
@@ -564,7 +720,7 @@ rmdir ime_direktorija
 // kreiranje nove datoteke 
 touch ime_datoteke
 
-// brisanje direktorija i datoteka, možemo ih navesti više jedno iza drugog, ponekad potrebne sudo ovlasti (r oznaka da obriše sve poddirektorije i datoteke unutar navedenog direktorija) 
+// brisanje direktorija i datoteka, možemo ih navesti više jedno iza drugog, ponekad potrebne sudo ovlasti (-r oznaka da obriše sve poddirektorije i datoteke unutar navedenog direktorija) 
 rm -r ime_direktorija ime_datoteke
 
 // ispis u Linux terminalu 
@@ -583,7 +739,7 @@ vim ime_datoteke
 // sa operatorom >> i naredbom echo dodajemo tekst kao novu liniju na kraj datoteke 
 echo "Hello World" >> file.txt
 
-// sa operatorom > dodajemo tekst i brišemo stari sadržaj datoteke 
+// sa operatorom > dodajemo tekst i brišemo stari sadržaj datoteke ako postoji
 echo "Hello World" > file.txt
  ```
 
@@ -654,7 +810,7 @@ php --ini
  sudo apt-get update ime_paketa
  sudo apt-get upgrade -y ime_paketa
 
-// promjena privilegija (read 2^2, write 2^1, execute 2^0) određene datoteke/direktorija, -R oznakom (recursive) mijenjamo vlasništvo nad fileovima, te poddirektorijima koji se nalaze unutar navedenog direktorija 
+// promjena privilegija (read 2^2, write 2^1, execute 2^0) nad određenom datotekom/direktorijem, -R oznakom (recursive) mijenjamo vlasništvo nad fileovima, te poddirektorijima koji se nalaze unutar navedenog direktorija 
  chmod -R 777 ime_datoteke
 // primjer dodavanja privilegija sa User/Group/Other i Read/Write/eXecute 
  chmod u+rwx, g+rx, o+r ime_datoteke
@@ -692,9 +848,9 @@ CTRL+Z
 ### Git/Linux zadatak
 
 ```
-1. Kreirajte datoteku `app.php` i dodajte echo liniju:
+1. Kreirajte datoteku `app.php` i dodajte u nju liniju teksta sa echo naredbom:
 touch app.php
-echo '<?php echo "pozdrav";' > app.php
+echo "pozdrav" > app.php
 
 2. Inicijalizirajte Git repozitorij i dodajte datoteku u staging area:
 git init
@@ -703,15 +859,15 @@ git add app.php
 3. Napravite commit sa porukom "My first commit":
 git commit -m "My first commit"
 
-4. Kreirajte novu granu `feature-remove-echo` i prebacite se na nju:
+4. Kreirajte novu granu feature-remove-echo i prebacite se na nju:
 git checkout -b feature-remove-echo  # kreiranje i prebacivanje u jednom sa oznakom -b (inače bi morali napraviti git branch za kreiranje, pa git checkout za prebacivanje)
 
-5. Dodajte još jednu echo liniju u `app.php` i napravite commit:
-echo 'echo "pozdrav ponovno";' >> app.php  # dodavanje na kraj filea (sa > bi prebrisali prijašnji sadržaj)
+5. Dodajte još jednu echo liniju u app.php i napravite commit:
+echo "pozdrav ponovno" >> app.php  # dodavanje na kraj filea (sa > bi prebrisali prijašnji sadržaj)
 git add app.php  
 git commit -m "Added second echo line" 
 
-6. Sjedinite (merge) granu `feature-remove-echo` u master:
+6. Sjedinite (merge) granu feature-remove-echo u master:
 git checkout master  # prebacivanje na master
 git merge feature-remove-echo  # merge u master granu
 ```
@@ -723,7 +879,7 @@ git merge feature-remove-echo  # merge u master granu
 | **Odnos**       | **Opis**                                               | **Implementacija** |
 |-----------------|--------------------------------------------------------|--------------------|
 | `1-1`          | Jedan zapis u tablici A odnosi se na jedan zapis u tablici B. | Dodajte strani ključ u jednu tablicu koji referencira primarni ključ druge tablice. |
-| `1-n`        | Jedan zapis u tablici A odnosi se na mnoge zapise u tablici B. | Dodajte strani ključ u "mnogo" tablicu koji referencira primarni ključ "jedne" tablice. |
+| `1-n`        | Jedan zapis u tablici A odnosi se na mnoge zapise u tablici B. | Dodajte strani ključ u "n" tablicu koji referencira primarni ključ "1" tablice. |
 | `n-m`     | Mnogi zapisi u tablici A odnose se na mnoge zapise u tablici B. | Kreirajte spojnu (pivot) tablicu sa stranim ključevima koji referenciraju obje tablice. |
 
 
@@ -736,8 +892,8 @@ To uključuje razbijanje velikih, složenih tablica na manje, jednostavnije te u
 
 Normalne forme
 1NF - osiguranje atomskih vrijednosti (nema više od jednog predmeta u jednom stupcu)
-2NF - osiguranje da nema parcijalnih zavisnosti (npr. atributi koji ovise samo o dijelu kompozitnog ključa)
-3NF - osiguranje da nema tranzitivnih zavisnosti (npr. neključni atributi ovise o drugim neključnim atributima)
+2NF - osiguranje da nema parcijalnih zavisnosti (npr. atributa koji ovise samo o dijelu kompozitnog ključa)
+3NF - osiguranje da nema tranzitivnih zavisnosti (npr. neključni atributi koji ovise o drugim neključnim atributima)
 ```
 
 
@@ -840,8 +996,8 @@ BEGIN
     -- provjera i ažuriranje količine
     IF (stara_kolicina - prodana_kolicina) >= 0 THEN
         UPDATE proizvodi
-        SET kolicina = (stara_kolicina - prodana_kolicina)
-        WHERE id = prodan_proizvod_id;
+            SET kolicina = (stara_kolicina - prodana_kolicina)
+            WHERE id = prodan_proizvod_id;
 
         -- slanje promjena
         COMMIT;
@@ -863,7 +1019,7 @@ CALL izmjena_kolicine(2, 5);
 
 ```
 -- kreiramo novu bazu podataka
-DROP DATABASE IF EXISTS `banka`;
+DROP DATABASE IF EXISTS banka;
 CREATE DATABASE IF NOT EXISTS banka;
 USE banka;
 
@@ -879,8 +1035,8 @@ START TRANSACTION;
 
 -- provjera ima li na računu dovoljno sredstava za plaćanje
 SELECT balance INTO sender_balance
-FROM accounts
-WHERE iban = sender_iban; 
+    FROM accounts
+    WHERE iban = sender_iban; 
 
 -- ako ima dovoljno sredstava pokreni transakciju
 IF sender_balance >= transfer_amount THEN
@@ -925,8 +1081,8 @@ BEGIN
 
     START TRANSACTION;
 
-    IF transfer_amount = 0 THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Transakcija nije potrebna';
+    IF transfer_amount <= 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Količina mora biti veća od nule';
     END IF;
 
     -- dohvati stanje na računu pošiljatelja
@@ -1031,13 +1187,13 @@ SELECT get_balance('HR4890942042048');
 
 ### SQL migracije
 
-- prijenos sheme (database schema migration, tablice, indeksi, veze) i podataka (sql data migration, podaci, retci) iz jedne u drugu (početne u ciljnu) bazu
+- prijenos sheme (database schema migration - tablice, indeksi, veze) i podataka (sql data migration - podaci, retci) iz jedne u drugu (početne u ciljnu) bazu
 
 
 
 ### Laravel migracije
 
-- služe za definiranje sheme baze podataka određene aplikacije (kreiranje i modificiranje tablica/entiteta i njenih atributa) sa ciljem olakšavanja prijenosa i rada u timu (primjerice laka dostupnost najnovije verzije i u slučaju promjena od strane drugog člana tima koji radi na istoj aplikaciji)
+- služe za definiranje sheme baze podataka određene aplikacije (kreiranje i modificiranje tablica/entiteta i njenih atributa) sa ciljem olakšavanja prijenosa i rada u timu (primjerice laka dostupnost najnovije verzije baze i u slučaju promjena od strane drugog člana tima koji radi na istoj aplikaciji)
  
  ```
 https://laravel.com/docs/11.x/migrations#introduction
@@ -1077,8 +1233,8 @@ Controller (C) - odgovoran za logiku aplikacije, povezuje modele i prikaze
 
 ```
 all() - kada želite dohvatiti sve zapise bez ikakvih uvjeta ili filtera
-get() - kada trebate dohvatiti kolekciju zapisa s određenim uvjetima
-first() - kada vam treba prvi zapis koji odgovara određenim uvjetima (obično uz `where`)
+get() - kada trebate dohvatiti kolekciju zapisa s određenim uvjetima (primjerice where)
+first() - kada vam treba prvi zapis koji odgovara određenim uvjetima (obično uz where)
 find() - kada imate primarni ključ (ID) i želite dohvatiti specifičan zapis (primjer find($id))
 ```
 
@@ -1088,7 +1244,7 @@ find() - kada imate primarni ključ (ID) i želite dohvatiti specifičan zapis (
 
 ```
 view('view_name', $data) - osnovna metoda za prosljeđivanje podataka
-view()->with() - druga metoda za prosljeđivanje podataka
+view()->with() - view sa dodatnom metodom za prosljeđivanje podataka
 view()->share() - za dijeljenje globalnih podataka sa svim pogledima
 compact() - prečica za prosljeđivanje varijabli u pogled
 session() - za podatke koji se čuvaju u sesiji između zahtjeva
@@ -1100,7 +1256,7 @@ session() - za podatke koji se čuvaju u sesiji između zahtjeva
 
 ### Blade {{ }} sintaksa
 
-{{ }} u Bladeu koristi se za echo (ispisivanje) podataka
+{{ }} u Bladeu koristi se za echo (ispisivanje) podataka/varijabli
 
 ```
 // Prikazivanje varijable u Bladeu
@@ -1112,7 +1268,7 @@ session() - za podatke koji se čuvaju u sesiji između zahtjeva
 ### Laravel Dusk - click()
 
 ```
-Laravel Dusk je alat za testiranje koji omogućava interakciju s web stranicama kao stvarni korisnik.
+Laravel Dusk je alat za testiranje koji omogućava interakciju sa web stranicama imitiranjem stvarnog korisnika.
 Njegova funkcija click() koristi se za simuliranje klika na HTML element na stranici prilikom izvođenja automatiziranih testova korisničkog sučelja (UI testova).
 ```
 
@@ -1334,14 +1490,14 @@ Route:controller(AuthController::class)->group(function () {
 ### Spajanje domene s poslužiteljem
 
 ```
-1. Kupiti web (VPS) server i domenu od nekog pružatelja usluga (primjerice Hertzner) i registrara za domene (primjerice Cloudflare).
+1. Kupiti web server (VPS) i domenu od nekog pružatelja usluga (primjerice Hertzner) i registrara za domene (primjerice Cloudflare).
 
-2. Postaviti Web Server i provjeriti da li ispravno radi, te je li dostupan na internetu (preporuka Apache ili Nginx na Linux serverima)
-   Ako se koristi dijeljeno hostiranje, VPS ili cloud hosting, pružatelj hostinga bi trebao imati upute za postavljanje servera.
+2. Postaviti web server, instalirati aplikacije (primjerice LAMP/LEMP stack na Linux serveru) i provjeriti da li ispravno radi, te je li dostupan na internetu. 
 
-3. Javna IP adresa servera dobije se od strane pružatelja hostinga (ali se može saznati i pomoću naredbe 'curl ifconfig.me')
+Ako se koristi dijeljeno hostiranje, VPS ili cloud hosting, pružatelj hostinga bi trebao imati upute za postavljanje servera.
+Javna IP adresa servera dobije se od strane pružatelja hostinga (ali se može saznati i pomoću naredbe 'curl ifconfig.me')
 
-4. Prijaviti se na upravljačku ploču registrara te ažurirati DNS postavke, ovo je ključan korak u povezivanju domene sa serverom gdje se domena usmjerava na IP adresu web servera. 
+3. Prijaviti se na upravljačku ploču registrara te ažurirati DNS postavke, ovo je ključan korak u povezivanju domene sa serverom gdje se domena usmjerava na IP adresu web servera. 
 
 Na DNS management ili name server:
 Dodati A zapis koji će usmjeriti domenu na IP adresu servera:
@@ -1360,9 +1516,9 @@ Primjer DNS zapisa:
     CNAME Zapis (opcionalno):
         www → ime_domene.com
 
-6. Pričekati propagaciju DNS-a, promjene mogu potrajati od nekoliko minuta do nekoliko dana da se potpuno propagiraju kroz internet (obično 1-2 sata)
+4. Pričekati propagaciju DNS-a, promjene mogu potrajati od nekoliko minuta do nekoliko dana da se potpuno propagiraju kroz internet (obično 1-2 sata)
 
-7. Konfigurirati web server da prepozna domenu (opcije Apache ili Nginx)
+5. Konfigurirati web server da prepozna domenu (opcije Apache ili Nginx)
 
 Apache:
 - uredite Apache konfiguracijsku datoteku (/etc/apache2/sites-available/ime_domene.conf):
@@ -1394,12 +1550,11 @@ Nginx:
 - kreirajte simboličku poveznicu: sudo ln -s /etc/nginx/sites-available/ime_domene /etc/nginx/sites-enabled/
 - ponovno učitajte Nginx: sudo systemctl reload nginx
 
-8. Testirati domenu nakon propagacije DNS promjena, otvorimo preglednik i pokušamo otvoriti url (primjerice http://ime_domene.com) kako bi provjerili je li povezana sa serverom i prikazuje li web stranicu
+6. Testirati domenu nakon propagacije DNS promjena, otvorimo preglednik i pokušamo otvoriti url (primjerice http://ime_domene.com) kako bi provjerili je li povezana sa serverom i prikazuje li web stranicu
 
-
-Dodatni koraci:
+7. Dodatni koraci:
 - postavljanje SSL-a (secure sockets layer) kako bi mogli koristiti HTTPS (potrebno je dobaviti SSL certifikat i postaviti ga na server)
-- postavljanje mail severa kako bi mogli slati ili primati e-mailove putem domene (potrebno je postaviti MX zapise u DNS-u i konfigurirati mail server)
+- postavljanje mail servera kako bi mogli slati ili primati e-mailove putem domene (potrebno je postaviti MX zapise u DNS-u i konfigurirati mail server)
 
 Ovaj proces će povezati domenu sa web serverom, a web stranica bi trebala biti dostupna prilikom pristupa domeni u web pregledniku.
 ```
