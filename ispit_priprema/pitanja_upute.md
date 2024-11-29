@@ -52,8 +52,9 @@ TODO (sami instalirat Ubuntu na Hyper-V i shvatit kako se snaći u tom virtualno
 ### Document root (korijenska mapa)
 
 ```
-- document root (korijenska mapa) odnosi se na direktorij najvišeg nivoa gdje web server poslužuje datoteke za određenu web stranicu ili aplikaciju
+- korijenska mapa Linux Ubuntu sustava predstavljena je kosom linijom / 
 
+- document root (korijenska mapa) web servera (Apache/Nginx) odnosi se na direktorij najvišeg nivoa gdje on poslužuje datoteke za određenu web stranicu ili aplikaciju
 - za web servere na Linux sustavima obično je postavljen na /var/www/html
 ```
 
@@ -208,24 +209,24 @@ $result = $statement->fetchAll();
 
 ```
 // funkcije za sortiranje nizova:
-    sort() – indeksirani nizovi, rastući redoslijed (ASC)
-    rsort() – indeksirani nizovi, padajući redoslijed (DESC)
-    asort() – asocijativni nizovi, rastući redoslijed (ASC), čuva key-value parove
-    arsort() – asocijativni nizovi, opadajući redoslijed (DESC), čuva key-value parove
-    ksort() – asocijativni nizovi, rastući redoslijed prema ključevima (ASC)
-    krsort() – asocijativni nizovi, opadajući redoslijed prema ključevima (DESC)
+    sort() - indeksirani nizovi, rastući redoslijed (ASC)
+    rsort() - indeksirani nizovi, padajući redoslijed (DESC)
+    asort() - asocijativni nizovi, rastući redoslijed (ASC), čuva key-value parove
+    arsort() - asocijativni nizovi, opadajući redoslijed (DESC), čuva key-value parove
+    ksort() - asocijativni nizovi, rastući redoslijed prema ključevima (ASC)
+    krsort() - asocijativni nizovi, opadajući redoslijed prema ključevima (DESC)
 
 // sortiranje sa uključenom anonimnom funkcijom:
-usort() – indeksirani nizovi
-uasort() – Korisničko sortiranje (čuva ključeve, asocijativni nizovi)
-uksort() – Korisničko sortiranje prema ključevima (asocijativni nizovi)
+usort() - indeksirani nizovi
+uasort() - asocijativni nizovi, čuva ključeve
+uksort() - asocijativni nizovi, sortiranje prema ključevima
 
 // sortiranje više nizova:
-array_multisort() – Sortiranje više nizova ili više-dimenzionalnog niza
+array_multisort() - sortiranje više nizova ili više-dimenzionalnog niza
 
 // prirodno sortiranje (znači da je primjerice a10 iza a2)
-natsort() – ne osjetljivo na velika i mala slova
-natcasesort() – osjetljivo na velika i mala slova
+natsort() - ne osjetljivo na velika i mala slova
+natcasesort() - osjetljivo na velika i mala slova
 ```
 
 
@@ -242,8 +243,8 @@ $data = [
     ['Jane Smith', 25, 'Los Angeles']
 ];
 
-// postavljanje putanje direktorija
-$dir = 'putanja/do/direktorija';
+// postavljanje putanje direktorija (koristimo _DIR_ za apsolutnu putanju do trenutnog direktorija)
+$dir = _DIR_ . '/ime_direktorija';
 
 // kreiranje direktorija
 if (!is_dir($dir)) {
@@ -356,6 +357,7 @@ if (file_put_contents($jsonFile, $jsonData, FILE_APPEND) === false) {  // zapisu
 ### PHP sesije ($_SESSION)
 
 Sesije omogućuju pohranu podataka između različitih stranica i zahtjeva, koriste se za pohranu podataka o korisnicima, preferencije i druge informacije koje želite pratiti dok korisnik navigira kroz vašu web stranicu.
+Uništavaju se prilikom zatvaranja preglednika.
 
 ```
 // pokretanje sesije
@@ -626,6 +628,9 @@ https://www.php.net/manual/en/function.array-map.php
 // inicijalizacija 
 git init
 
+// opis git naredbe
+git help ime_naredbe
+
 // postavljanje username i email u git konfiguracijsku datoteku (global označava da se postavka primjenjuje za sve git repozitorije na vašem računalu) 
 git config --global user.name ime_korisnika
 git config --global user.email email_korisnika
@@ -810,7 +815,7 @@ php --ini
  sudo apt-get update ime_paketa
  sudo apt-get upgrade -y ime_paketa
 
-// promjena privilegija (read 2^2, write 2^1, execute 2^0) nad određenom datotekom/direktorijem, -R oznakom (recursive) mijenjamo vlasništvo nad fileovima, te poddirektorijima koji se nalaze unutar navedenog direktorija 
+// promjena privilegija (read 2^2, write 2^1, execute 2^0) nad određenom datotekom/direktorijem, -R oznakom (recursive) mijenjamo privilegije nad fileovima, te poddirektorijima koji se nalaze unutar navedenog direktorija 
  chmod -R 777 ime_datoteke
 // primjer dodavanja privilegija sa User/Group/Other i Read/Write/eXecute 
  chmod u+rwx, g+rx, o+r ime_datoteke
@@ -876,11 +881,15 @@ git merge feature-remove-echo  # merge u master granu
 
 ### MySQL relacije (1-1, 1-n, n-m)
 
+Entiteti su osnovni elementi, objekti koji se pohranjuju u nekoj bazi podataka, o kojima želimo čuvati informacije.
+Relacije su odnosi, veze između entiteta koje čuvamo u bazi podataka (one mogu biti 1-1, 1-n, n-m).
+
+
 | **Odnos**       | **Opis**                                               | **Implementacija** |
 |-----------------|--------------------------------------------------------|--------------------|
 | `1-1`          | Jedan zapis u tablici A odnosi se na jedan zapis u tablici B. | Dodajte strani ključ u jednu tablicu koji referencira primarni ključ druge tablice. |
-| `1-n`        | Jedan zapis u tablici A odnosi se na mnoge zapise u tablici B. | Dodajte strani ključ u "n" tablicu koji referencira primarni ključ "1" tablice. |
-| `n-m`     | Mnogi zapisi u tablici A odnose se na mnoge zapise u tablici B. | Kreirajte spojnu (pivot) tablicu sa stranim ključevima koji referenciraju obje tablice. |
+| `1-n`        | Jedan zapis u tablici A odnosi se na više zapisa u tablici B. | Dodajte strani ključ u "n" tablicu koji referencira primarni ključ "1" tablice. |
+| `n-m`     | Više zapisa u tablici A odnosi se na više zapisa u tablici B. | Kreirajte spojnu (pivot) tablicu sa stranim ključevima koji referenciraju obje tablice. |
 
 
 
@@ -891,7 +900,7 @@ MySQL normalizacija odnosi se na proces organiziranja podataka u relacijskim baz
 To uključuje razbijanje velikih, složenih tablica na manje, jednostavnije te uspostavljanje odnosa (zavisnosti, strani ključevi) između njih.
 
 Normalne forme
-1NF - osiguranje atomskih vrijednosti (nema više od jednog predmeta u jednom stupcu)
+1NF - osiguranje atomičnih vrijednosti (nema više od jednog predmeta u jednom stupcu)
 2NF - osiguranje da nema parcijalnih zavisnosti (npr. atributa koji ovise samo o dijelu kompozitnog ključa)
 3NF - osiguranje da nema tranzitivnih zavisnosti (npr. neključni atributi koji ovise o drugim neključnim atributima)
 ```
@@ -1148,7 +1157,6 @@ END $$
 
 DELIMITER ;
 
-
 -- primjer poziva procedure
 CALL make_transaction('DE1234567890', 'DE0987654321', 100.00);
 
@@ -1178,7 +1186,6 @@ BEGIN
 END $$
 
 DELIMITER ;
-
 
 -- primjer poziva funkcije
 SELECT get_balance('HR4890942042048');
@@ -1487,20 +1494,36 @@ Route:controller(AuthController::class)->group(function () {
  
 
 
-### Spajanje domene s poslužiteljem
+### Spajanje domene s web poslužiteljem (Apache) na Linux Ubuntu
 
 ```
-1. Kupiti web server (VPS) i domenu od nekog pružatelja usluga (primjerice Hertzner) i registrara za domene (primjerice Cloudflare).
+1. Kupimo domenu od nekog pružatelja usluga ili registrara za domene (primjerice Hertzner, Cloudflare) te opcionalno kupimo i fizički poslužitelj, host (recimo VPS).
 
-2. Postaviti web server, instalirati aplikacije (primjerice LAMP/LEMP stack na Linux serveru) i provjeriti da li ispravno radi, te je li dostupan na internetu. 
+2. Postavimo web server (u našem primjeru Apache), odnosno instaliramo sve potrebne aplikacije (LAMP stack na Linux serveru) i provjerimo da li ispravno radi, te je li dostupan na internetu. 
 
-Ako se koristi dijeljeno hostiranje, VPS ili cloud hosting, pružatelj hostinga bi trebao imati upute za postavljanje servera.
+Ako se koristi dijeljeno hostiranje, VPS ili cloud hosting, pružatelj hostinga bi trebao imati detaljne upute za postavljanje servera (primjerice upute za instalaciju LAMP stacka sa Digital Ocean stranice).
 Javna IP adresa servera dobije se od strane pružatelja hostinga (ali se može saznati i pomoću naredbe 'curl ifconfig.me')
 
-3. Prijaviti se na upravljačku ploču registrara te ažurirati DNS postavke, ovo je ključan korak u povezivanju domene sa serverom gdje se domena usmjerava na IP adresu web servera. 
+3. Primjer instalacije Apache web servera:
+
+- napravimo update Linux sustava, te potom instaliramo Apache
+sudo apt update && sudo apt upgrade -y
+sudo apt install apache2
+
+- nakon toga pokrenemo Apache i omogućimo da se automatski pokreće prilikom pokretanja Linuxa
+sudo systemctl start apache2
+sudo systemctl enable apache2
+
+- provjerimo firewall, te ako Apache nije omogućen, dajemo mu dozvolu i provjerimo status
+sudo ufw app list
+sudo ufw allow in "Apache"
+sudo ufw enable
+sudo ufw status
+
+4. Prijavimo se na upravljačku ploču registrara te ažuriramo DNS postavke, ovo je ključan korak u povezivanju domene sa web serverom gdje se domena usmjerava na IP adresu web servera. 
 
 Na DNS management ili name server:
-Dodati A zapis koji će usmjeriti domenu na IP adresu servera:
+Dodamo A zapis koji će usmjeriti domenu na IP adresu servera:
     Tip: A
     Ime/Host: @ (ovo usmjerava na osnovnu domenu, npr. ime_domene.com) ili www (ako koristimo poddomenu, npr. www.ime_domene.com)
     Vrijednost/Points to: javna IP adresa servera (npr. 192.0.2.123).
@@ -1516,47 +1539,47 @@ Primjer DNS zapisa:
     CNAME Zapis (opcionalno):
         www → ime_domene.com
 
-4. Pričekati propagaciju DNS-a, promjene mogu potrajati od nekoliko minuta do nekoliko dana da se potpuno propagiraju kroz internet (obično 1-2 sata)
+Nakon toga treba pričekati propagaciju DNS-a, promjene mogu potrajati od nekoliko minuta do nekoliko dana da se potpuno propagiraju kroz internet (obično 1-2 sata)
 
-5. Konfigurirati web server da prepozna domenu (opcije Apache ili Nginx)
+5. Konfiguriramo web server da prepozna domenu (primjer za Apache)
 
-Apache:
-- uredite Apache konfiguracijsku datoteku (/etc/apache2/sites-available/ime_domene.conf):
+- uredite (ili stvorite ako ne postoji) Apache konfiguracijsku datoteku:
+sudo nano /etc/apache2/sites-available/ime_domene.conf
+
+- dodajte konfiguraciju za virtualni poslužitelj
 
     <VirtualHost *:80>
+        ServerAdmin webmaster@ime_domene.com
         ServerName ime_domene.com
         ServerAlias www.ime_domene.com
         DocumentRoot /var/www/ime_domene
         ErrorLog ${APACHE_LOG_DIR}/error.log
         CustomLog ${APACHE_LOG_DIR}/access.log combined
+        <Directory /var/www/ime_domene>
+            Options Indexes FollowSymLinks
+            AllowOverride All
+            Require all granted
+        </Directory>
+        Alias /phpmyadmin /usr/share/phpmyadmin
+        <Directory /usr/share/phpmyadmin>
+            Options FollowSymLinks
+            DirectoryIndex index.php
+            Require all granted
+        </Directory>
     </VirtualHost>
 
+- kreiramo direktorij za web stranicu: sudo mkdir -p /var/www/ime_domene
 - omogućite stranicu: sudo a2ensite ime_domene.conf
+- opcionalno se može onemogućiti defaultna konfiguracija: sudo a2dissite 000-default.conf
 - ponovno učitajte Apache: sudo systemctl reload apache2
+- testiranje apache konfiguracije: sudo apache2ctl configtest
 
-Nginx:
-- uredite Nginx konfiguracijsku datoteku (/etc/nginx/sites-available/ime_domene):
-
-            server {
-                listen 80;
-                server_name ime_domene.com www.ime_domene.com;
-                root /var/www/ime_domene;
-                
-                index index.html;
-                access_log /var/log/nginx/ime_domene_access.log;
-                error_log /var/log/nginx/ime_domene_error.log;
-            }
-
-- kreirajte simboličku poveznicu: sudo ln -s /etc/nginx/sites-available/ime_domene /etc/nginx/sites-enabled/
-- ponovno učitajte Nginx: sudo systemctl reload nginx
-
-6. Testirati domenu nakon propagacije DNS promjena, otvorimo preglednik i pokušamo otvoriti url (primjerice http://ime_domene.com) kako bi provjerili je li povezana sa serverom i prikazuje li web stranicu
+6. Testiramo domenu nakon propagacije DNS promjena, otvorimo preglednik i pokušamo otvoriti url (primjerice http://ime_domene.com) kako bi provjerili je li povezana sa serverom i prikazuje li web stranicu
 
 7. Dodatni koraci:
+- ako koristimo Apache web server, postavljanje .htaccess datoteke i omogućavanje mod-rewrite
 - postavljanje SSL-a (secure sockets layer) kako bi mogli koristiti HTTPS (potrebno je dobaviti SSL certifikat i postaviti ga na server)
 - postavljanje mail servera kako bi mogli slati ili primati e-mailove putem domene (potrebno je postaviti MX zapise u DNS-u i konfigurirati mail server)
-
-Ovaj proces će povezati domenu sa web serverom, a web stranica bi trebala biti dostupna prilikom pristupa domeni u web pregledniku.
 ```
 
 
