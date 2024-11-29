@@ -1,6 +1,6 @@
 ### PHP/MySql sandbox (online editor)
  ```
- https://onecompiler.com/mysql
+ https://onecompiler.com/php
  ```
 
 
@@ -60,6 +60,6 @@ https://www.php.net/manual/en/language.operators.precedence.php
 https://drive.google.com/file/d/19Gg9eXhHKnKrjr-X-rq5vnf4Dy3aYcBp/view?usp=drive_link
 
 
-<!-- još malo općenito o php i oop (od str.89) -->
+<!-- još malo općenito o php i oop (možda i bolje od carnet skripte) -->
 https://drive.google.com/file/d/1M9_WGctZYYpQvRvKstwWZx_ngc7u9L_a/view?usp=drive_link
  ```

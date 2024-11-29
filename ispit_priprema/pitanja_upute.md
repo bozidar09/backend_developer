@@ -73,7 +73,7 @@ $port = 3306;
 // stvaranje konekcije na bazu
 $connection = mysqli_connect($hostname, $username, $password, $database, $port);
 
-// provjera je li sve prošlo bez grešaka
+// provjera je li sve prošlo bez greške
 if (mysqli_connect_errno()) {
     die("Pogreška kod spajanja na poslužitelj: " . mysqli_connect_error());
 }
@@ -135,7 +135,7 @@ $result = $statement->fetchAll();
 
 ### HTML forma
 
-- napraviti formu koja će slati username i password sa POST metodom (potreban je i submit button)
+- napraviti login formu koja će slati username i password sa POST metodom (potreban je i submit button)
  
  ```
 <?php 
@@ -156,15 +156,15 @@ $result = $statement->fetchAll();
     </form>
  ```
 
-- primjer unosa filea (u form treba dodati enctype="multipart/form-data" te type="file")
+- primjer unosa datoteke (u form treba dodati enctype="multipart/form-data" te type="file")
 
  ```
 <?php 
 
     <form action="/data" method="POST" enctype="multipart/form-data">
         <div>
-            <label for="file">Datoteka</label>
-            <input type="file" id="file" name="file" required>
+            <label for="datoteka">Datoteka</label>
+            <input type="file" id="datoteka" name="datoteka" required>
         </div>
         <div>
             <button type="submit">Upload</button>
@@ -172,7 +172,7 @@ $result = $statement->fetchAll();
     </form>
  ```
 
- - primjer update forme (za delete umjesto PATCH/PUT stavite DELETE)
+- primjer update forme (sa submitom pomoću input umjesto button tagova, može i tako)
 
  ```
 <?php 
@@ -186,20 +186,32 @@ $result = $statement->fetchAll();
         </div>
         <div>
             <label for="old_password">Old password</label>
-            <input type="password"id="old_password" name="old_password" required>
+            <input type="password" id="old_password" name="old_password" required>
         </div>
         <div>
             <label for="new_password">New password</label>
-            <input type="password"id="new_password" name="new_password" required>
+            <input type="password" id="new_password" name="new_password" required>
         </div>
         <div>
             <label for="confirm_password">Confirm password</label>
-            <input type="password"id="confirm_password" name="confirm_password" required>
+            <input type="password" id="confirm_password" name="confirm_password" required>
         </div>
         <hr>
         <div>
-            <button type="submit">Update</button>
+            <input type="submit" value="Update">
         </div>
+    </form>
+ ```
+
+- primjer delete forme (ima samo hidden inpute i submit)
+
+ ```
+<?php 
+
+    <form action="/update" method="POST">
+        <input type="hidden" name="_method" value="DELETE">
+        <input type="hidden" name="id" value="<?= $user['id'] ?>">
+        <input type="submit" value="Delete">
     </form>
  ```
 
@@ -209,24 +221,25 @@ $result = $statement->fetchAll();
 
 ```
 // funkcije za sortiranje nizova:
-    sort() - indeksirani nizovi, rastući redoslijed (ASC)
-    rsort() - indeksirani nizovi, padajući redoslijed (DESC)
-    asort() - asocijativni nizovi, rastući redoslijed (ASC), čuva key-value parove
-    arsort() - asocijativni nizovi, opadajući redoslijed (DESC), čuva key-value parove
-    ksort() - asocijativni nizovi, rastući redoslijed prema ključevima (ASC)
-    krsort() - asocijativni nizovi, opadajući redoslijed prema ključevima (DESC)
+sort() - indeksirani nizovi, rastući redoslijed (ASC)
+rsort() - indeksirani nizovi, padajući redoslijed (DESC)
+asort() - asocijativni nizovi, rastući redoslijed (ASC), čuva key-value parove
+arsort() - asocijativni nizovi, opadajući redoslijed (DESC), čuva key-value parove
+ksort() - asocijativni nizovi, rastući redoslijed prema ključevima (ASC)
+krsort() - asocijativni nizovi, opadajući redoslijed prema ključevima (DESC)
 
 // sortiranje sa uključenom anonimnom funkcijom:
 usort() - indeksirani nizovi
 uasort() - asocijativni nizovi, čuva ključeve
 uksort() - asocijativni nizovi, sortiranje prema ključevima
 
-// sortiranje više nizova:
-array_multisort() - sortiranje više nizova ili više-dimenzionalnog niza
+// array_multisort() - sortiranje više nizova ili više-dimenzionalnog niza
 
 // prirodno sortiranje (znači da je primjerice a10 iza a2)
 natsort() - ne osjetljivo na velika i mala slova
 natcasesort() - osjetljivo na velika i mala slova
+
+// shuffle() - random poredak uz očuvanje key-value parova
 ```
 
 
@@ -236,7 +249,7 @@ natcasesort() - osjetljivo na velika i mala slova
 Kreiranje direktorija, otvaranje, čitanje i pisanje u datoteke
 
 ```
-// podaci
+// podaci (asocijativno polje/niz)
 $data = [
     ['Name', 'Age', 'City'],
     ['John Doe', 30, 'New York'],
@@ -256,6 +269,7 @@ $txtFile = $dir . '/file.txt';
 $csvFile = $dir . '/file.csv';
 $jsonFile = $dir . '/file.json';
 
+
 // TXT
 
 // čitanje cijele .txt datoteke
@@ -266,25 +280,20 @@ if (file_exists($txtFile)) {
     exit("file.txt does not exist");  // ako datoteka ne postoji, izlazi iz skripte
 }
 
-// čitanje .txt datoteke redak po redak
-$txtFileHandle = fopen($txtFile, 'r');  // otvara datoteku u modu za čitanje
+// otvara datoteku u modu za dodavanje i čitanje
+$txtFileHandle = fopen($txtFile, 'a+');  
 if ($txtFileHandle === false) {
-    exit("Unable to open file for reading");  // ako nije moguće otvoriti datoteku, izlazi iz skripte
+    exit("Unable to open file for append and read");  // ako nije moguće otvoriti datoteku, izlazi iz skripte
 }
 
+// čitanje .txt datoteke redak po redak
 while (($txtRow = fgets($txtFileHandle)) !== false) {
     echo "TXT Row: " . $txtRow . "\n";  // ispisuje svaki redak iz datoteke
 }
-fclose($txtFileHandle);  // Zatvaramo datoteku
 
 // pisanje u .txt datoteku redak po redak
-$file = fopen($txtFile, 'a');  // otvara datoteku u "append" modu za dodavanje novih podataka
-if ($file === false) {
-    exit("Unable to open file for writing");  // ako nije moguće otvoriti datoteku za pisanje, izlazi iz skripte
-}
-
 foreach ($data as $row) {
-    fwrite($file, implode(", ", $row) . "\n");  // pretvara svaki redak u string i zapisuje u datoteku
+    fwrite($file, implode(", ", $row) . "\n");  // pretvara redak u string i zapisuje u datoteku
 }
 fclose($file);  // zatvaramo datoteku
 
@@ -293,35 +302,29 @@ fclose($file);  // zatvaramo datoteku
 
 // čitanje .csv datoteke
 if (file_exists($csvFile)) {
-    $csvFileHandle = fopen($csvFile, 'r');  // otvara csv datoteku u modu za čitanje
+    $csvFileHandle = fopen($csvFile, 'a+');  // otvara csv datoteku u modu za dodavanje i čitanje
     if ($csvFileHandle === false) {
-        exit("Unable to open file for reading");  // ako nije moguće otvoriti datoteku, izlazi iz skripte
+        exit("Unable to open file for append and read");  // ako nije moguće otvoriti datoteku, izlazi iz skripte
     }
 
     $csvHeader = fgetcsv($csvFileHandle);  // čita zaglavlje csv datoteke
     echo "CSV Header: " . implode(", ", $csvHeader) . "\n";  // ispisuje zaglavlje
 
     while (($csvRow = fgetcsv($csvFileHandle)) !== false) {  // čita svaki redak csv datoteke
-        echo "CSV Row: " . implode(", ", $csvRow) . "\n";  // ispisuje redak
+        echo "CSV Row: " . implode(", ", $csvRow) . "\n";  // pretvara elemente u string i ispisuje redak
     }
-    fclose($csvFileHandle);  // zatvara datoteku
 } else {
     exit("file.csv does not exist");  // ako csv datoteka ne postoji, izlazi iz skripte
 }
 
 // pisanje u .csv datoteku
-$file = fopen($csvFile, 'a');  // otvara datoteku u "append" modu za dodavanje novih podataka
-if ($file === false) {
-    exit("Unable to open file for writing");  // ako nije moguće otvoriti datoteku za pisanje, izlazi iz skripte
-}
-
 foreach ($data as $row) {
     fputcsv($file, $row);  // zapisuje redak u csv datoteku
 }
 fclose($file);  // zatvara datoteku
 
 
-// JSON FILE
+// JSON
 
 // čitanje i dekodiranje .json datoteke
 if (file_exists($jsonFile)) {
@@ -341,7 +344,7 @@ if (file_exists($jsonFile)) {
 }
 
 // enkodiranje i pisanje u .json datoteku
-$jsonData = json_encode($data, JSON_PRETTY_PRINT);  // pretvara podatke u json format, sa "pretty print" formatiranjem
+$jsonData = json_encode($data, JSON_PRETTY_PRINT);  // pretvara podatke u json format, sa "pretty print" formatom
 if ($jsonData === false) {
     exit("Unable to encode data for writing");  // ako dođe do greške pri enkodiranju, izlazi iz skripte
 }
@@ -357,7 +360,7 @@ if (file_put_contents($jsonFile, $jsonData, FILE_APPEND) === false) {  // zapisu
 ### PHP sesije ($_SESSION)
 
 Sesije omogućuju pohranu podataka između različitih stranica i zahtjeva, koriste se za pohranu podataka o korisnicima, preferencije i druge informacije koje želite pratiti dok korisnik navigira kroz vašu web stranicu.
-Uništavaju se prilikom zatvaranja preglednika.
+Uništavaju se prilikom zatvaranja preglednika, ako od posljednjeg zahtjeva prođe određeno vrijeme (24 minute za PHP), sesija će se automatski zatvoriti.
 
 ```
 // pokretanje sesije
@@ -386,14 +389,23 @@ specijalni tipovi - NULL, resource (primjerice konekcije na baze podataka ili da
 ### Varijable
 
 Varijabla je imenovana memorijska lokacija koja sadrži podatke kojima je moguće manipulirati izvođenjem programa.
-Lokalne varijable su deklarirane u funkciji, globalnim varijablama nije moguće direktno pristupiti unutar funkcije (mora im se dodati GLOBAL ili ih predati prilikom poziva funkcije), statične varijable (oznaka STATIC) zadržavaju svoju vrijednost i nakon izlaska iz funkcije, superglobalne varijable su dostupne bilo gdje unutar skripte (primjer $_SERVER).
+Lokalne varijable su deklarirane u funkciji, globalnim varijablama nije moguće direktno pristupiti unutar funkcije (mora im se dodati GLOBAL ili ih predati prilikom poziva funkcije), statične varijable (oznaka STATIC) zadržavaju svoju vrijednost i nakon izlaska iz funkcije, superglobalne varijable su dostupne bilo gdje unutar aplikacije (primjer $_SERVER).
+
+
+
+### echo bool tipa podataka
+
+```
+echo true;  // ispisuje 1
+echo false;  // '' (prazan string / ne ispisuje ništa)
+```
 
 
 
 ### Poziv po referenci
 
-Vrijednosti se funkciji mogu proslijediti kao statične vrijednosti (direktan upis neke vrijednosti, odnosno brojke prilikom poziva funkcije), kao vrijednosti iz varijabli (poziv po vrijednosti) ili po referenci.
-Poziv po referenci omogućava funkciji da izmijeni vrijednost varijable koja je proslijeđena, umjesto da radi s kopijom te varijable. Kada varijablu proslijedite po referenci, promjene koje se naprave u funkciji odražavaju se i izvan funkcije.
+Vrijednosti se funkciji mogu proslijediti kao statične vrijednosti (direktan upis neke vrijednosti, primjerice brojke kao argumenta prilikom poziva funkcije), kao vrijednosti iz varijabli (poziv po vrijednosti) ili po referenci.
+Poziv po referenci omogućava funkciji da izmijeni vrijednost varijable koja je proslijeđena, umjesto da radi s kopijom te varijable. Kada varijablu proslijedite po referenci, promjene koje se naprave nad varijablom u funkciji odražavaju se i izvan funkcije ( jer dijele istu memorijsku lokaciju).
 
 ```
 <?php
@@ -461,7 +473,7 @@ $this - odnosi se na trenutnu instancu klase (objekt), koristi se za pristupanje
 
 self - odnosi se na trenutnu klasu (ne na instancu klase/objekt) i koristi se za pristupanje statičkim svojstvima i metodama
 
-:: - operator rezolucije opsega (scope operator) koji se koristi za pristupanje statičkim metodama/svojstvima i konstantama, ili za referenciranje same klase
+:: - operator rezolucije opsega (scope operator) koji se koristi za pristupanje statičkim metodama/svojstvima i konstantama ili za referenciranje same klase
 ```
 
 
@@ -476,7 +488,7 @@ function sum(int $a, int $b): int
     return $a + $b;
 }
 
-class Sum 
+class Calculator
 {
     public function __construct(
         private int $numberA = 0,
@@ -500,7 +512,7 @@ class Sum
     }
 }
 
-$zbroj = new Sum();
+$zbroj = new Calculator();
 
 $zbroj->sum();  // vratit će 0 
 
@@ -519,16 +531,20 @@ $zbroj->sum(4, 5);  // vratit će 9
  <?php
 class Calculator 
 {
-    // property promotion - deklariramo svojstva (varijable) i ujedno im pridjeljujemo vrijednost
+    // property promotion - deklariramo svojstva (varijable) kroz argumente konstruktora i ujedno im pridjeljujemo vrijednost
     public function __construct(
-        private float $a, 
-        private string $operator,
-        private float $b, 
+        private float $a = 0, 
+        private ?string $operator = NULL,
+        private float $b = 0, 
     ) {}
 
-    // metoda koja poziva jednu od metoda za izračun ovisno o unesenom operatoru
-    public function calculate(): float 
+    // metoda koja poziva jednu od metoda za izračun ovisno o unesenom operatoru (takoreći ruter za kalkulator)
+    public function calculate(?int $a = NULL, ?string $operator = NULL, ?int $b = NULL): float 
     {
+        $this->a = $a ?? $this->a;
+        $this->operator = $operator ?? $this->operator;
+        $this->b = $b ?? $this->b;
+
         return match ($this->operator) {
             '+' => $this->add(),
             '-' => $this->subtract(),
@@ -674,9 +690,9 @@ git reset HEAD^
 // undo commit, add i svih promjena 
 git reset --hard HEAD^
 
-// ispis grane na kojoj smo trenutno 
+// ispis svih grana (ona na kojoj smo trenutno će biti označena sa točkom i drugom bojom) 
 git branch
-// kreiranje nove grane lokalno, ali ne i automatski prijelaz na nju 
+// kreiranje nove grane lokalno
 git branch nova
 // prijelaz na novu granu 
 git checkout nova
@@ -774,78 +790,78 @@ php --ini
 ### Ostale Linux terminal naredbe
 
  ```
- // prikaz patha direktorija u kojem se trenutno nalazimo 
- pwd 
+// prikaz putanje direktorija u kojem se trenutno nalazimo 
+pwd 
 
- // promjena direktorija 
- cd path
- // prijelaz u direktorij koji se nalazi unutar trenutnog direktorija 
- cd ime_direktorija 
- // prijelaz na nivo iznad trenutnog direktorija 
- cd .. 
- // povratak nivo iznad te ulazak u neki drugi poddirektorij 
- cd ../ime_direktorija 
- // povratak u home direktorij korisnika 
- cd ~
+// promjena direktorija 
+cd path
+// prijelaz u direktorij koji se nalazi unutar trenutnog direktorija 
+cd ime_direktorija 
+// prijelaz na nivo iznad trenutnog direktorija 
+cd .. 
+// povratak nivo iznad te ulazak u neki drugi poddirektorij 
+cd ../ime_direktorija 
+// povratak u home direktorij korisnika 
+cd ~
 
 // prikaz opisa naredbe 
- man ime_naredbe
- ime_naredbe --help
+man ime_naredbe
+ime_naredbe --help
 
- // kopiranje datoteke 
- cp stara_datoteka neki_direktorij/nova_datoteka
+// kopiranje datoteke 
+cp stara_datoteka neki_direktorij/nova_datoteka
 
 // preimenovanje datoteke (ako je ishodište i odredište u istome direktoriju) 
- mv staro_ime novo_ime
+mv staro_ime novo_ime
 
- // premještanje datoteke (ako je odredište u nekom drugom direktoriju, a moguće joj je dati i novo ime)
- mv stara_datoteka drugi_direktorij/nova_datoteka
+// premještanje datoteke (ako je odredište u nekom drugom direktoriju, a moguće joj je dati i novo ime)
+mv stara_datoteka drugi_direktorij/nova_datoteka
 
 // super user do - oznaka da naredbu izvodimo sa root privilegijama 
- sudo ime_naredbe
+sudo ime_naredbe
 
- // prikaz veličine datoteke/direktorija (oznakom -m prikazujemo veličinu u megabajtima) 
- du -m ime_datoteke
+// prikaz veličine datoteke/direktorija (oznakom -m prikazujemo veličinu u megabajtima) 
+du -m ime_datoteke
 
- // kompresija/dekompresija datoteka/direktorija 
- zip ime_direktorija
- unzip ime_direktorija
+// kompresija/dekompresija datoteka/direktorija 
+zip ime_direktorija
+unzip ime_direktorija
 
 // dohvat updatea i upgrade nekog paketa ili svih programa Linux sustava (ako ne navedemo određeni paket), oznakom -y odgovaramo potvrdno (yes) na sve upite tokom instalacije
- sudo apt-get update ime_paketa
- sudo apt-get upgrade -y ime_paketa
+sudo apt-get update ime_paketa
+sudo apt-get upgrade -y ime_paketa
 
 // promjena privilegija (read 2^2, write 2^1, execute 2^0) nad određenom datotekom/direktorijem, -R oznakom (recursive) mijenjamo privilegije nad fileovima, te poddirektorijima koji se nalaze unutar navedenog direktorija 
- chmod -R 777 ime_datoteke
+chmod -R 777 ime_datoteke
 // primjer dodavanja privilegija sa User/Group/Other i Read/Write/eXecute 
- chmod u+rwx, g+rx, o+r ime_datoteke
+chmod u+rwx, g+rx, o+r ime_datoteke
 // oduzimanje read i execute privilegija grupi nad određenom datotekom 
- chmod g-rx ime_datoteke
+chmod g-rx ime_datoteke
 // davanje privilegija read i write svima, user, group i other (oznaka a - all) 
- chmod a+rw ime_datoteke
+chmod a+rw ime_datoteke
 
- // promjena vlasništva (user:group) nad datotekom/direktorijem, -R oznakom mijenjamo vlasništvo nad fileovima, te poddirektorijima koji se nalaze unutar navedenog direktorija 
- chown -R algebra:algebra ime_direktorija
+// promjena vlasništva (user:group) nad datotekom/direktorijem, -R oznakom mijenjamo vlasništvo nad fileovima, te poddirektorijima koji se nalaze unutar navedenog direktorija 
+chown -R algebra:algebra ime_direktorija
 
- // prikaz ip adrese 
- hostname -I 
- 
- // provjera konekcije prema navedenoj ip adresom 
- ping neki_ip
+// prikaz ip adrese 
+hostname -I 
 
- // prikaz id trenutnog korisnika 
- echo $UID
- 
- // brisanje zaslona terminala 
- clear
+// provjera konekcije prema navedenoj ip adresom 
+ping neki_ip
+
+// prikaz id trenutnog korisnika 
+echo $UID
+
+// brisanje zaslona terminala 
+clear
 
 // zaustavljanje izvođenja naredbe u terminalu 
 CTRL+C
 // prisilno zaustavljanje izvođenja naredbe u terminalu 
 CTRL+Z
 
- // izlazak iz terminala 
- exit
+// izlazak iz terminala 
+exit
  ```
 
 
@@ -865,7 +881,8 @@ git add app.php
 git commit -m "My first commit"
 
 4. Kreirajte novu granu feature-remove-echo i prebacite se na nju:
-git checkout -b feature-remove-echo  # kreiranje i prebacivanje u jednom sa oznakom -b (inače bi morali napraviti git branch za kreiranje, pa git checkout za prebacivanje)
+git checkout -b feature-remove-echo  
+# kreiranje i prebacivanje u jednom sa oznakom -b (inače bi morali napraviti git branch za kreiranje, pa git checkout za prebacivanje)
 
 5. Dodajte još jednu echo liniju u app.php i napravite commit:
 echo "pozdrav ponovno" >> app.php  # dodavanje na kraj filea (sa > bi prebrisali prijašnji sadržaj)
@@ -881,7 +898,7 @@ git merge feature-remove-echo  # merge u master granu
 
 ### MySQL relacije (1-1, 1-n, n-m)
 
-Entiteti su osnovni elementi, objekti koji se pohranjuju u nekoj bazi podataka, o kojima želimo čuvati informacije.
+Entiteti su osnovni elementi, objekti koji se pohranjuju u nekoj bazi podataka, o kojima želimo čuvati informacije. Za svaku vrstu entiteta koji će se pohranjivati u bazu podataka stvara se odgovarajuća tablica koja će sadržavati podatke o entitetu.
 Relacije su odnosi, veze između entiteta koje čuvamo u bazi podataka (one mogu biti 1-1, 1-n, n-m).
 
 
@@ -897,7 +914,7 @@ Relacije su odnosi, veze između entiteta koje čuvamo u bazi podataka (one mogu
 
 ```
 MySQL normalizacija odnosi se na proces organiziranja podataka u relacijskim bazama kako bi se smanjila redundantnost i poboljšao integritet podataka te učinkovitosti upita.
-To uključuje razbijanje velikih, složenih tablica na manje, jednostavnije te uspostavljanje odnosa (zavisnosti, strani ključevi) između njih.
+To uključuje razbijanje velikih, složenih tablica na manje, jednostavnije te uspostavljanje odnosa - relacija (zavisnosti, strani ključevi) između njih.
 
 Normalne forme
 1NF - osiguranje atomičnih vrijednosti (nema više od jednog predmeta u jednom stupcu)
@@ -922,13 +939,13 @@ Normalne forme
 
 
 
-### Primjer ograničavanja korisnika na samo čitanje iz baze podataka
+### Primjer ograničavanja korisnika na čitanje iz baze podataka
 
 ```
 -- kreiranje korisnika
 CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
 
--- dodjela privilegija za samo čitanje
+-- dodjela privilegija za čitanje
 GRANT SELECT ON database.* TO 'user'@'localhost';
 
 -- opcionalno - oduzimanje drugih privilegija
@@ -1033,11 +1050,13 @@ CREATE DATABASE IF NOT EXISTS banka;
 USE banka;
 
 -- kreiramo tablicu račun
+DROP TABLE IF EXISTS accounts;
 CREATE TABLE IF NOT EXISTS accounts (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     iban VARCHAR(34) UNIQUE NOT NULL, 
     balance DECIMAL(15, 2) DEFAULT 0.00,
 );
+
 
 -- primjer transakcije za prebacivanje iznosa iz jednog računa na drugi
 START TRANSACTION;
@@ -1128,7 +1147,7 @@ BEGIN
             FROM accounts
             WHERE iban = sender_iban;
 
-        IF new_sender_balance <> sender_balance - transfer_amount THEN
+        IF new_sender_balance != sender_balance - transfer_amount THEN
             ROLLBACK;
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Greška pri ažuriranju računa pošiljatelja';
         END IF;
@@ -1143,7 +1162,7 @@ BEGIN
             FROM accounts
             WHERE iban = receiver_iban;
 
-        IF new_receiver_balance <> receiver_balance + transfer_amount THEN
+        IF new_receiver_balance != receiver_balance + transfer_amount THEN
             ROLLBACK;
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Greška pri ažuriranju računa primatelja';
         END IF;
@@ -1190,6 +1209,7 @@ DELIMITER ;
 -- primjer poziva funkcije
 SELECT get_balance('HR4890942042048');
 ```
+
 
 
 ### SQL migracije
@@ -1253,7 +1273,7 @@ find() - kada imate primarni ključ (ID) i želite dohvatiti specifičan zapis (
 view('view_name', $data) - osnovna metoda za prosljeđivanje podataka
 view()->with() - view sa dodatnom metodom za prosljeđivanje podataka
 view()->share() - za dijeljenje globalnih podataka sa svim pogledima
-compact() - prečica za prosljeđivanje varijabli u pogled
+compact() - skraćeni zapis za prosljeđivanje varijabli u pogled
 session() - za podatke koji se čuvaju u sesiji između zahtjeva
 
 // podatci koji se šalju u pogled mogu biti bilo kojeg tipa, skalarni (brojke, string, bool), polja (indeksirana, asocijativna), objekti (instance klasa, kolekcije)
@@ -1342,17 +1362,18 @@ https://laraveldaily.com/lesson/testing-laravel/db-configuration-refreshdatabase
 
 ### Continuous integration
 
+ ```
 - CI/CD pipeline (continuous integration/delivery/deployment) uvodi stalnu automatizaciju i kontinuirani nadzor tokom kompletnog životnog ciklusa aplikacije, od faza integracije i testiranja do isporuke i primjene
 
 - CI je praksa prilikom razvoja aplikacije gdje programeri redovito (ponekad svakodnevno) dodaju vlastite promjene koda na zajednički repozitorij, nakon čega se aplikacija gradi te izvode testovi
-- obavezni koraci koje bi trebalo dodati u CI (Continuous Integration) pipeline:
-    - izvrtiti testove i vidjeti da li prolaze
-    - statički analizirati kod te validirati da nema nikakvih pogrešaka
-    - napraviti cache konfiguracijskih datoteka projekta te provjeriti da nema pogrešaka
 
- ```
-https://group.miletic.net/hr/nastava/materijali/web-kontinuirana-integracija/#tijek-rada-kontinuirane-integracije-12
- ```
+- ključni koraci za integraciju u CI (Continuous Integration) pipeline su:
+    - dohvat koda iz glavne grane repozitorija te instalacija zavisnosti (primjerice composer vendor, npm install, itd.)
+    - build aplikacije (napraviti cache konfiguracijskih datoteka projekta) kako bi se provjerilo hoće li doći do grešaka
+    - pokretanje testova i vidjeti da li prolaze (unit, integration, itd.)
+    - statička analiza i validacija koda da nema nikakvih pogrešaka
+    - izvještaj o greškama (ako bilo koji od prethodnih koraka ne prođe potrebno je generirati izvještaj i obustaviti proces)
+```
 
 
 
@@ -1499,15 +1520,14 @@ Route:controller(AuthController::class)->group(function () {
 ```
 1. Kupimo domenu od nekog pružatelja usluga ili registrara za domene (primjerice Hertzner, Cloudflare) te opcionalno kupimo i fizički poslužitelj, host (recimo VPS).
 
-2. Postavimo web server (u našem primjeru Apache), odnosno instaliramo sve potrebne aplikacije (LAMP stack na Linux serveru) i provjerimo da li ispravno radi, te je li dostupan na internetu. 
+2. Postavimo web server (u našem primjeru Apache), odnosno instaliramo sve potrebne aplikacije (LAMP stack na Linux serveru, Open SSH ako nije instaliran, itd.) i provjerimo da li ispravno radi, te je li dostupan na internetu. 
 
-Ako se koristi dijeljeno hostiranje, VPS ili cloud hosting, pružatelj hostinga bi trebao imati detaljne upute za postavljanje servera (primjerice upute za instalaciju LAMP stacka sa Digital Ocean stranice).
+Ako se koristi dijeljeno hostiranje, VPS ili cloud hosting, pružatelj hostinga bi trebao imati detaljne upute za postavljanje servera (primjerice upute za instalaciju LAMP stacka sa Digital Ocean stranice i slično).
 Javna IP adresa servera dobije se od strane pružatelja hostinga (ali se može saznati i pomoću naredbe 'curl ifconfig.me')
 
 3. Primjer instalacije Apache web servera:
-
 - napravimo update Linux sustava, te potom instaliramo Apache
-sudo apt update && sudo apt upgrade -y
+sudo apt-get update && sudo apt-get upgrade -y
 sudo apt install apache2
 
 - nakon toga pokrenemo Apache i omogućimo da se automatski pokreće prilikom pokretanja Linuxa
@@ -1543,7 +1563,7 @@ Nakon toga treba pričekati propagaciju DNS-a, promjene mogu potrajati od nekoli
 
 5. Konfiguriramo web server da prepozna domenu (primjer za Apache)
 
-- uredite (ili stvorite ako ne postoji) Apache konfiguracijsku datoteku:
+- u Linux CLI uredite (ili stvorite ako ne postoji) Apache konfiguracijsku datoteku:
 sudo nano /etc/apache2/sites-available/ime_domene.conf
 
 - dodajte konfiguraciju za virtualni poslužitelj
@@ -1555,15 +1575,10 @@ sudo nano /etc/apache2/sites-available/ime_domene.conf
         DocumentRoot /var/www/ime_domene
         ErrorLog ${APACHE_LOG_DIR}/error.log
         CustomLog ${APACHE_LOG_DIR}/access.log combined
+
         <Directory /var/www/ime_domene>
             Options Indexes FollowSymLinks
             AllowOverride All
-            Require all granted
-        </Directory>
-        Alias /phpmyadmin /usr/share/phpmyadmin
-        <Directory /usr/share/phpmyadmin>
-            Options FollowSymLinks
-            DirectoryIndex index.php
             Require all granted
         </Directory>
     </VirtualHost>
