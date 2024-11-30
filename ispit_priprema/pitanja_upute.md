@@ -273,12 +273,12 @@ $jsonFile = $dir . '/file.json';
 // TXT
 
 // čitanje cijele .txt datoteke
-if (file_exists($txtFile)) {
-    $txtContent = file_get_contents($txtFile);  // učitava cijeli sadržaj u varijablu
-    echo "Content of file.txt:\n$txtContent\n";
-} else {
+if (!file_exists($txtFile)) {
     exit("file.txt does not exist");  // ako datoteka ne postoji, izlazi iz skripte
 }
+$txtContent = file_get_contents($txtFile);  // učitava cijeli sadržaj u varijablu
+echo "Content of file.txt:\n$txtContent\n";
+
 
 // otvara datoteku u modu za dodavanje i čitanje
 $txtFileHandle = fopen($txtFile, 'a+');  
@@ -300,21 +300,22 @@ fclose($file);  // zatvaramo datoteku
 
 // CSV
 
+// ako csv datoteka ne postoji, izlazi iz skripte
+if (!file_exists($csvFile)) {
+    exit("file.csv does not exist");  
+}
+
 // čitanje .csv datoteke
-if (file_exists($csvFile)) {
-    $csvFileHandle = fopen($csvFile, 'a+');  // otvara csv datoteku u modu za dodavanje i čitanje
-    if ($csvFileHandle === false) {
-        exit("Unable to open file for append and read");  // ako nije moguće otvoriti datoteku, izlazi iz skripte
-    }
+$csvFileHandle = fopen($csvFile, 'a+');  // otvara csv datoteku u modu za dodavanje i čitanje
+if ($csvFileHandle === false) {
+    exit("Unable to open file for append and read");  // ako nije moguće otvoriti datoteku, izlazi iz skripte
+}
 
-    $csvHeader = fgetcsv($csvFileHandle);  // čita zaglavlje csv datoteke
-    echo "CSV Header: " . implode(", ", $csvHeader) . "\n";  // ispisuje zaglavlje
+$csvHeader = fgetcsv($csvFileHandle);  // čita zaglavlje csv datoteke
+echo "CSV Header: " . implode(", ", $csvHeader) . "\n";  // ispisuje zaglavlje
 
-    while (($csvRow = fgetcsv($csvFileHandle)) !== false) {  // čita svaki redak csv datoteke
-        echo "CSV Row: " . implode(", ", $csvRow) . "\n";  // pretvara elemente u string i ispisuje redak
-    }
-} else {
-    exit("file.csv does not exist");  // ako csv datoteka ne postoji, izlazi iz skripte
+while (($csvRow = fgetcsv($csvFileHandle)) !== false) {  // čita svaki redak csv datoteke
+    echo "CSV Row: " . implode(", ", $csvRow) . "\n";  // pretvara elemente u string i ispisuje redak
 }
 
 // pisanje u .csv datoteku
@@ -326,22 +327,24 @@ fclose($file);  // zatvara datoteku
 
 // JSON
 
-// čitanje i dekodiranje .json datoteke
+// ako json datoteka ne postoji, izlazi iz skripte
 if (file_exists($jsonFile)) {
-    $jsonContent = file_get_contents($jsonFile);  // učitava cijeli sadržaj json datoteke
-    if ($jsonContent === false) {
-        exit("Unable to open file for reading");  // ako nije moguće otvoriti datoteku, izlazi iz skripte
-    }
-
-    $jsonData = json_decode($jsonContent, true);  // dekodira json u asocijativno polje
-    if ($jsonData === false) {
-        exit("Unable to decode file for reading");  // ako dođe do greške pri dekodiranju json-a, izlazi iz skripte
-    }
-
-    print_r($jsonData);  // ispisuje sadržaj dekodiranog json-a
-} else {
-    exit("file.json does not exist");  // ako json datoteka ne postoji, izlazi iz skripte
+    exit("file.json does not exist");  
 }
+
+// čitanje i dekodiranje .json datoteke
+$jsonContent = file_get_contents($jsonFile);  // učitava cijeli sadržaj json datoteke
+if ($jsonContent === false) {
+    exit("Unable to open file for reading");  // ako nije moguće otvoriti datoteku, izlazi iz skripte
+}
+
+$jsonData = json_decode($jsonContent, true);  // dekodira json u asocijativno polje
+if ($jsonData === false) {
+    exit("Unable to decode file for reading");  // ako dođe do greške pri dekodiranju json-a, izlazi iz skripte
+}
+
+print_r($jsonData);  // ispisuje sadržaj dekodiranog json-a
+
 
 // enkodiranje i pisanje u .json datoteku
 $jsonData = json_encode($data, JSON_PRETTY_PRINT);  // pretvara podatke u json format, sa "pretty print" formatom
@@ -405,7 +408,8 @@ echo false;  // '' (prazan string / ne ispisuje ništa)
 ### Poziv po referenci
 
 Vrijednosti se funkciji mogu proslijediti kao statične vrijednosti (direktan upis neke vrijednosti, primjerice brojke kao argumenta prilikom poziva funkcije), kao vrijednosti iz varijabli (poziv po vrijednosti) ili po referenci.
-Poziv po referenci omogućava funkciji da izmijeni vrijednost varijable koja je proslijeđena, umjesto da radi s kopijom te varijable. Kada varijablu proslijedite po referenci, promjene koje se naprave nad varijablom u funkciji odražavaju se i izvan funkcije ( jer dijele istu memorijsku lokaciju).
+Poziv po vrijednosti - funkcija radi s kopijom varijable i sve promjene unutar funkcije ne utječu na originalnu varijablu.
+Poziv po referenci - funkcija radi izravno na stvarnoj varijabli i promjene utječu na varijablu i izvan funkcije.
 
 ```
 <?php
@@ -422,9 +426,6 @@ echo $number; // prije poziva funkcije ispisuje 5
 addTen($number);
 echo $number; // nakon poziva funkcije ispisuje 15
 ```
-
-Poziv po vrijednosti - funkcija radi s kopijom varijable i sve promjene unutar funkcije ne utječu na originalnu varijablu.
-Poziv po referenci - funkcija radi izravno na stvarnoj varijabli i promjene utječu na varijablu i izvan funkcije.
 
 
 
@@ -846,7 +847,7 @@ chown -R algebra:algebra ime_direktorija
 // prikaz ip adrese 
 hostname -I 
 
-// provjera konekcije prema navedenoj ip adresom 
+// provjera konekcije prema navedenoj ip adresi
 ping neki_ip
 
 // prikaz id trenutnog korisnika 
@@ -902,11 +903,11 @@ Entiteti su osnovni elementi, objekti koji se pohranjuju u nekoj bazi podataka, 
 Relacije su odnosi, veze između entiteta koje čuvamo u bazi podataka (one mogu biti 1-1, 1-n, n-m).
 
 
-| **Odnos**       | **Opis**                                               | **Implementacija** |
-|-----------------|--------------------------------------------------------|--------------------|
-| `1-1`          | Jedan zapis u tablici A odnosi se na jedan zapis u tablici B. | Dodajte strani ključ u jednu tablicu koji referencira primarni ključ druge tablice. |
-| `1-n`        | Jedan zapis u tablici A odnosi se na više zapisa u tablici B. | Dodajte strani ključ u "n" tablicu koji referencira primarni ključ "1" tablice. |
-| `n-m`     | Više zapisa u tablici A odnosi se na više zapisa u tablici B. | Kreirajte spojnu (pivot) tablicu sa stranim ključevima koji referenciraju obje tablice. |
+| **Odnos**       | **Opis**                                                      | **Implementacija** |
+|-----------------|---------------------------------------------------------------|--------------------|
+| `1-1`           | Jedan zapis u tablici A odnosi se na jedan zapis u tablici B. | Dodajte strani ključ u jednu tablicu koji referencira primarni ključ druge tablice. |
+| `1-n`           | Jedan zapis u tablici A odnosi se na više zapisa u tablici B. | Dodajte strani ključ u "n" tablicu koji referencira primarni ključ "1" tablice. |
+| `n-m`           | Više zapisa u tablici A odnosi se na više zapisa u tablici B. | Kreirajte spojnu (pivot) tablicu sa stranim ključevima koji referenciraju obje tablice. |
 
 
 
@@ -1194,9 +1195,8 @@ BEGIN
         FROM accounts
         WHERE iban = input_iban;
 
-    -- provjera je li dohvat podataka bio uspješan
+    -- provjera je li dohvat podataka bio uspješan (ako nije vraćamo null)
     IF balance IS NULL THEN
-        -- ako nije vraćamo null
         RETURN NULL;
     END IF;
 
@@ -1251,12 +1251,12 @@ Controller (C) - odgovoran za logiku aplikacije, povezuje modele i prikaze
 
 ### Laravel metode za dohvat podataka iz baze
 
-| Metoda   | Opis                                                       | Vraća                     |
-|----------|------------------------------------------------------------|---------------------------|
+| Metoda   | Opis                                                       | Vraća                             |
+|----------|------------------------------------------------------------|-----------------------------------|
 | `all()`  | dohvaća sve zapise iz tablice                              | kolekcija svih modela tablice     |
 | `get()`  | dohvaća kolekciju zapisa s mogućim uvjetima                | kolekcija modela temeljenih na upitu nad tablicom |
-| `first()`| dohvaća prvi zapis koji odgovara uvjetima                  | jedan model ili `null`    |
-| `find()` | dohvaća zapis po njegovom primarnom ključu (ID)            | jedan model ili `null`    |
+| `first()`| dohvaća prvi zapis koji odgovara uvjetima                  | jedan model ili `null`            |
+| `find()` | dohvaća zapis po njegovom primarnom ključu (ID)            | jedan model ili `null`            |
 
 ```
 all() - kada želite dohvatiti sve zapise bez ikakvih uvjeta ili filtera
@@ -1587,7 +1587,7 @@ sudo nano /etc/apache2/sites-available/ime_domene.conf
 - omogućite stranicu: sudo a2ensite ime_domene.conf
 - opcionalno se može onemogućiti defaultna konfiguracija: sudo a2dissite 000-default.conf
 - ponovno učitajte Apache: sudo systemctl reload apache2
-- testiranje apache konfiguracije: sudo apache2ctl configtest
+- testiranje Apache konfiguracije: sudo apache2ctl configtest
 
 6. Testiramo domenu nakon propagacije DNS promjena, otvorimo preglednik i pokušamo otvoriti url (primjerice http://ime_domene.com) kako bi provjerili je li povezana sa serverom i prikazuje li web stranicu
 
