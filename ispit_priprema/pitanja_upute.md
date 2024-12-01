@@ -133,6 +133,25 @@ $result = $statement->fetchAll();
 
 
 
+### Metoda za pripremu sql upita u pdo
+
+```
+// koristimo pripremu SQL upita kako bismo spriječili SQL injekciju i omogućili efikasno izvršavanje upita s parametrima
+$pdo->prepare($sql);
+```
+
+
+
+### Web forme koje se koriste za slanje podataka server (GET i POST)
+
+Dvije najčešće web forme koje se koriste za slanje podataka iz web forme na server su GET i POST metode. Obje metode su dio HTML form elementa, ali se razlikuju u načinu na koji šalju podatke i u njihovim prednostima i nedostacima.
+
+GET metoda šalje podatke putem URL-a što znači da su podaci uključeni u URL adresu kada se forma pošalje te stoga nije siguran za slanje osjetljivih podataka (kao što su lozinke i brojevi kreditnih kartica), postoji ograničenje u veličini podataka koji se mogu poslati, jer URL ima ograničenje duljine (obično oko 2000 znakova).
+
+POST metoda šalje podatke unutar tijela HTTP zahtjeva, znači da podaci nisu vidljivi u URL-u, već su u tijelu zahtjeva, što čini POST sigurnijim za slanje osjetljivih informacija (ali podaci još uvijek mogu biti uhvaćeni ako se ne koristi HTTPS), pritom nema značajnijih ograničenja u veliniči podataka koji se mogu poslati (osim onih postavljenih od strane servera).
+
+
+
 ### HTML forma
 
 - napraviti login formu koja će slati username i password sa POST metodom (potreban je i submit button)
@@ -360,6 +379,18 @@ if (file_put_contents($jsonFile, $jsonData, FILE_APPEND) === false) {  // zapisu
 
 
 
+### Ispravna sintaksa za pokretanje php skripte
+
+```
+// početak PHP koda
+<?php
+
+// kraj PHP koda (nije uvijek obavezno, primjerice ako u datoteci imamo samo PHP kod)
+?>
+```
+
+
+
 ### PHP sesije ($_SESSION)
 
 Sesije omogućuju pohranu podataka između različitih stranica i zahtjeva, koriste se za pohranu podataka o korisnicima, preferencije i druge informacije koje želite pratiti dok korisnik navigira kroz vašu web stranicu.
@@ -379,6 +410,18 @@ session_destroy();  // uništava samu sesiju
 
 
 
+### Kolačić (cookie) u PHP-u
+
+```
+// postavljanje (sa trajanjem 1 sat)
+setcookie("user", "JohnDoe", time() + 3600, "/");
+
+// brisanje (ista naredba uz postavljanje vremena isteka u prošlost)
+setcookie("user", "", time() - 3600, "/");
+```
+
+
+
 ### PHP tipovi podataka
 
 ```
@@ -386,6 +429,13 @@ skalarni tipovi podataka - brojčani (int, float), tekstualni (string), boolean 
 složeni tipovi podataka - polja/nizovi (indeksirana, asocijativna), objekti (instance klasa, kolekcije)
 specijalni tipovi - NULL, resource (primjerice konekcije na baze podataka ili datoteke)
 ```
+
+
+
+### Objekt u PHP-u
+
+U PHP-u, objekt je tip podataka koji pripada objektno orijentiranom programiranju (OOP). 
+Objekt u PHP-u je kombinacija podataka (svojstava) i metoda (funkcija) koji djeluju na tim podacima. 
 
 
 
@@ -462,6 +512,12 @@ spl_autoload_register(function ($class) {
     require_once 'classes/' . $class . '.php';
 });
 ```
+
+
+
+### Imenski prostori (namespace) u PHP datoteci
+
+U istoj PHP datoteci može se definirati više imenskih prostora (namespace). Svaki imenski prostor omogućuje organizaciju koda u zasebne logičke cjeline, čime se smanjuje mogućnost konflikta između klasa, funkcija i varijabli s istim imenom, ali različitim kontekstima.
 
 
 
@@ -636,6 +692,13 @@ array(
 
 https://www.php.net/manual/en/function.array-map.php
  ```
+
+
+
+### Svrha kontrole verzija (varsion control, primjerice Git) u razvoju softvera
+- praćenje promjena koda tijekom vremena - omogućava programerima da vide tko je napravio koju promjenu, kada i zašto
+- dijeljenje koda s drugima - omogućava pristup najnovijoj verziji koda praktično u svakom trenutku
+- suradnja na kodu s drugima - omogućuje više programera da istovremeno rade na istom projektu, kombinirajući njihove promjene bez rizika od gubitka podataka ili konflikta
 
 
 
@@ -897,6 +960,15 @@ git merge feature-remove-echo  # merge u master granu
 
 
 
+### Kardinalnost "jedan i samo jedan"
+
+```
+Kardinalnost "jedan i samo jedan" u kontekstu baza podataka označava odnos između dviju tablica gdje je svaki zapis u jednoj tablici povezan s jednim i samo jednim zapisom u drugoj tablici.
+Ovaj tip odnosa najčešće se prikazuje pomoću "1:1" (jedan na jedan).
+```
+
+
+
 ### MySQL relacije (1-1, 1-n, n-m)
 
 Entiteti su osnovni elementi, objekti koji se pohranjuju u nekoj bazi podataka, o kojima želimo čuvati informacije. Za svaku vrstu entiteta koji će se pohranjivati u bazu podataka stvara se odgovarajuća tablica koja će sadržavati podatke o entitetu.
@@ -908,6 +980,15 @@ Relacije su odnosi, veze između entiteta koje čuvamo u bazi podataka (one mogu
 | `1-1`           | Jedan zapis u tablici A odnosi se na jedan zapis u tablici B. | Dodajte strani ključ u jednu tablicu koji referencira primarni ključ druge tablice. |
 | `1-n`           | Jedan zapis u tablici A odnosi se na više zapisa u tablici B. | Dodajte strani ključ u "n" tablicu koji referencira primarni ključ "1" tablice. |
 | `n-m`           | Više zapisa u tablici A odnosi se na više zapisa u tablici B. | Kreirajte spojnu (pivot) tablicu sa stranim ključevima koji referenciraju obje tablice. |
+
+
+
+### Foreign key (vanjski ključ) u SQL-u
+
+```
+Ograničenje foreign key (vanjski ključ) u SQL-u osigurava referentni integritet između dvije tablice.
+To znači da vanjski ključ veže jednu tablicu (koja sadrži vanjski ključ) za drugu tablicu (koja sadrži primarni ključ ili jedinstveni ključ). Vanjski ključ osigurava da vrijednosti u jednoj tablici odgovaraju vrijednostima u drugoj tablici, čime se sprječavaju nevažeći podaci u bazi.
+```
 
 
 
@@ -940,7 +1021,7 @@ Normalne forme
 
 
 
-### Primjer ograničavanja korisnika na čitanje iz baze podataka
+### Primjer kreiranja korisnika i ograničavanja na čitanje iz baze podataka
 
 ```
 -- kreiranje korisnika
@@ -961,88 +1042,119 @@ SHOW GRANTS FOR 'user'@'localhost';
 
 
 
-### SQL procedura za izmjenu količine
+### SQL transakcija
 
-- mini tutorial za mysql procedure
+SQL transakcija je skup SQL operacija (naredbi) koje se izvršavaju kao jedna cjelina. Sve operacije unutar transakcije moraju biti uspješno izvršene kako bi se promjene bile trajno sačuvane u bazi podataka. Ako bilo koja operacija u okviru transakcije ne uspije, cijela transakcija može biti poništena (tzv. rollback), čime se baza podataka vraća u prethodno stanje, kao da transakcija nikada nije bila izvršena.
 
- ```
- https://www.dolthub.com/blog/2024-01-17-writing-mysql-procedures/
- ```
 
-- napraviti proceduru koja će u tablici proizvodi mijenjati količine ovisno o količini prodanih proizvoda
- 
- ```
-DROP DATABASE IF EXISTS `pekara`;
 
-CREATE DATABASE IF NOT EXISTS `pekara` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `pekara`;
+### Procedura i funkcija za trgovinu
 
-CREATE TABLE IF NOT EXISTS `proizvodi` (
-    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `naziv` VARCHAR(100) COLLATE utf8mb4_general_ci NOT NULL,
-    `kolicina` INT UNSIGNED NOT NULL
+Za ovaj zadatak, prvo ćemo kreirati tablicu za proizvode u trgovini, zatim ćemo implementirati pohranjenu proceduru koja ažurira količinu zaliha kada se proda neki artikl, te funkciju koja vraća trenutačnu količinu proizvoda na zalihi.
+
+
+```
+-- kreiranje baze za trgovinu i tablice za proizvode
+
+DROP DATABASE IF EXISTS trgovina;
+CREATE DATABASE IF NOT EXISTS trgovina;
+USE DATABASE trgovina;
+
+DROP TABLE IF EXISTS proizvodi;
+CREATE TABLE IF NOT EXISTS proizvodi (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    naziv VARCHAR(255) NOT NULL,
+    cijena DECIMAL(10, 2) NOT NULL,
+    kolicina_na_zalihi INT NOT NULL
 );
 
-INSERT INTO `proizvodi` (`naziv`, `kolicina`) VALUES
-    ('kruh', '1000'),
-    ('pecivo', '500'),
-    ('burek', '200'),
-    ('buhtla', '200'),
-    ('sendvic', '100');
 
--- procedura za izmjenu količine
-DROP PROCEDURE IF EXISTS `izmjena_kolicine`;
+-- pohranjena procedura za ažuriranje stanja zaliha
 
-DELIMITER //
+DELIMITER $$
 
-CREATE PROCEDURE IF NOT EXISTS `izmjena_kolicine`(
-    IN prodan_proizvod_id INT UNSIGNED,
-    IN prodana_kolicina INT UNSIGNED
+CREATE PROCEDURE azuriraj_zalihe(
+    IN prod_id INT, 
+    IN prod_kolicina INT
 )
 BEGIN
-    DECLARE stara_kolicina INT UNSIGNED;
+    DECLARE trenutna_kolicina INT;
 
+    -- početak transakcije
     START TRANSACTION;
 
-    -- provjera postoji li dovoljna količina
-    IF prodana_kolicina <= 0 THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Prodana količina mora biti veća od nule';
-    END IF;
-
-    -- provjera postoji li proizvod
-    SELECT kolicina INTO stara_kolicina
-    FROM proizvodi
-    WHERE id = prodan_proizvod_id
-    FOR UPDATE; -- zaključavamo element dok se ne izvrši transakcija
-
-    -- ako ne postoji
-    IF stara_kolicina IS NULL THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Proizvod s tim ID-om ne postoji';
-    END IF;
-
-    -- provjera i ažuriranje količine
-    IF (stara_kolicina - prodana_kolicina) >= 0 THEN
-        UPDATE proizvodi
-            SET kolicina = (stara_kolicina - prodana_kolicina)
-            WHERE id = prodan_proizvod_id;
-
-        -- slanje promjena
-        COMMIT;
-    ELSE
-        -- ako nema dovoljno proizvoda
+    -- dohvati trenutačnu količinu proizvoda
+    SELECT kolicina_na_zalihi INTO trenutna_kolicina
+        FROM proizvodi
+        WHERE id = prod_id;
+    
+    -- provjeri uspjeh dohvata podatka
+    IF trenutna_kolicina IS NULL THEN
+        -- Ako proizvod ne postoji, poništi transakciju
         ROLLBACK;
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Nema dovoljno proizvoda na skladištu';
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Proizvod s danim ID-om ne postoji';
     END IF;
 
-END //
+    -- provjeri je li dovoljno zaliha za prodaju
+    IF trenutna_kolicina >= prod_kolicina THEN
+        -- smanji količinu na zalihi
+        UPDATE proizvodi
+            SET kolicina_na_zalihi = kolicina_na_zalihi - prod_kolicina
+            WHERE id = prod_id;
 
--- poziv procedure
-CALL izmjena_kolicine(2, 5);
- ```
+        -- provjeri je li update uspješan (ako nije, poništi transakciju)
+        IF ROW_COUNT() = 0 THEN
+            ROLLBACK;
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ažuriranje proizvoda nije uspješno';
+        ELSE
+            -- potvrdi transakciju
+            COMMIT;
+        END IF;
+    ELSE
+        -- ako nema dovoljno zaliha, poništi transakciju
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Nema dovoljno zaliha';
+    END IF;
+END $$
+
+DELIMITER ;
+
+-- pozivanje pohranjene procedure
+CALL ažuriraj_zalihe(1, 5);
+
+
+-- funkcija za dohvat trenutačne količine proizvoda
+
+DELIMITER $$
+
+CREATE FUNCTION trenutna_kolicina(prod_id INT) 
+RETURNS INT
+
+BEGIN
+    DECLARE kolicina INT;
+
+    -- dohvati trenutačnu količinu proizvoda
+    SELECT kolicina_na_zalihi INTO kolicina
+        FROM proizvodi
+        WHERE id = prod_id;
+    
+    -- ako proizvod ne postoji vrati NULL
+    IF kolicina IS NULL THEN
+        RETURN NULL;
+    END IF;
+
+    RETURN kolicina;
+END $$
+
+DELIMITER ;
+
+-- pozivanje funkcije
+SELECT trenutna_kolicina(1);
+```
 
 
 
-### SQL transakcija, procedura i funkcija za prijenos i ispis količine
+### SQL transakcija, procedura i funkcija za banku
 
 ```
 -- kreiramo novu bazu podataka
@@ -1249,6 +1361,15 @@ Controller (C) - odgovoran za logiku aplikacije, povezuje modele i prikaze
 
 
 
+### Laravel $fillable i $guarded
+
+U Laravelu, $fillable i $guarded su dva svojstva koja služe za zaštitu modela od napada poznatog kao masovni unos (mass assignment). Ova svojstva omogućuju kontrolu nad tim koji atributi modela mogu biti masovno dodani ili ažurirani, čime se povećava sigurnost aplikacije.
+
+Svojstvo $fillable omogućava developeru da eksplicitno navede koja polja (atributi) modela mogu biti masovno postavljena (npr. putem metode create() ili update()).
+Svojstvo $guarded je suprotno od $fillable. Umjesto da se navode dopuštena polja, $guarded definira koja polja ne smiju biti masovno postavljena.
+
+
+
 ### Laravel metode za dohvat podataka iz baze
 
 | Metoda   | Opis                                                       | Vraća                             |
@@ -1374,6 +1495,24 @@ https://laraveldaily.com/lesson/testing-laravel/db-configuration-refreshdatabase
     - statička analiza i validacija koda da nema nikakvih pogrešaka
     - izvještaj o greškama (ako bilo koji od prethodnih koraka ne prođe potrebno je generirati izvještaj i obustaviti proces)
 ```
+
+
+
+### Završno testiranje projekta
+
+Završno testiranje projekta je ključni korak u razvoju softverskog proizvoda, jer omogućava provjeru svih funkcionalnosti, sigurnosnih mjera, performansi i korisničkog iskustva prije nego što projekt postane dostupan krajnjim korisnicima.
+
+1. Planiranje završnog testiranja -identifikacija ciljeva testiranja, izbor testnih scenarija i testova, definiranje resursa
+
+2. Testiranja koje je potrebno provesti - funkcionalno testiranje (radi li aplikacija u skladu s poslovnim zahtjevima), sigurnosno testiranje (otkrivanje ranjivosti), testiranje performansi (load testing), testiranje kompatibilnosti (podržavanje rada na svim platformama), testiranje korisničkog sučelja (UI) i iskustva (UX), testiranje prijelaza i migracija podataka
+
+3. Automatizirano testiranje (implementacija može značajno ubrzati proces testiranja, a pisanje automatiziranih testova omogućuje ponovljivo testiranje različitih scenarija bez potrebe za ručnim radom)
+
+4. Testiranje završne verzije (finalno testiranje verzije kako bi se provjerila stabilnost i usklađenost sa svim poslovnim i tehničkim zahtjevima)
+
+5. Izvještaj o testiranju
+
+6. Korisničko prihvaćanje (UAT) - testiranje s krajnjim korisnicima (gdje korisnici testiraju aplikaciju u stvarnom okruženju)
 
 
 
