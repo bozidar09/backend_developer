@@ -1,41 +1,4 @@
-## RADNO OKRUŽENJE
-
-
-### Hyper-V virtualka (na ispitu)
-
-- login na fizičko računalo ispred vas (user: STUDENT | pass: STUDENT)
-
-- na računalu će biti 2 Hyper-V virtualke, Ubuntu Server i Windows virtualka na kojoj ćete u Chromeu otvoriti Algebra polaznički portal (sa vlastitim usernameom i passwordom) te pokrenuti ispit
-
-- upute za teže zadatke ćete dobiti u pdf obliku na Downloads linku ispod teksta zadatka (ako dobijete zadatak sa slikom - klik na nju za povećanje)
-
-- način za provjeru rješenja - prepisati pitanje iz testne aplikacije u VS Code pa potom provjeriti sa AI kroz web browser (prepisivanje u VS Code jer ćete izuzev dodatnih pdf datoteka sa objašnjenjima imati problema sa direktnim copy/paste iz ispitne aplikacije u web browser - klik u prazno prebacuje na prethodno/iduće pitanje)
-
- ```
- // chatgpt
- https://chatgpt.com/
- ```
-
- - hint - ALT + F4 i odabir opcije shutdown za gašenje kompjutera (ako vas zatraže na kraju)
-
-
-
-### Spajanje xampp i vscode (na ispitu)
-
-- otvorite vaš VSCode, kliknite na Open Folder i dođite putanjom C:\xampp\htdocs do htdocs foldera u kojem kreirate direktorij za vaš projekt, nakon toga možete stvoriti .php stranicu i krenuti sa kodiranjem (ovaj dio je moguće već namješten tako da ćete moći odmah kreirati datoteku u VS Code i baciti se na rad)
-
-- rezultate možete provjeriti otvaranjem localhost stranice u web browseru (localhost/ime_stranice ako ih imate više)
-
-- preporuka instalirati PHP Intelephense ekstenziju ako već nije instalirana
-
-- ako je potrebno doći do datoteke (kako bi je zapakirali u zip), klik desnom tipkom miša na ime datoteke u VS Code i odaberete opciju - reveal in file explorer, kako bi došli do Windows direktorija u kojem je datoteka spremljena
-
-
-
-## PITANJA
-
-
-### Document root (korijenska mapa)
+## Document root (korijenska mapa)
 
 ```
 - korijenska mapa Linux Ubuntu sustava predstavljena je kosom linijom / 
@@ -46,7 +9,7 @@
 
 
 
-### Spajanje na bazu (i dohvat podataka) pomoću Mysqli funkcije - proceduralno
+## Spajanje na bazu (i dohvat podataka) pomoću Mysqli funkcije - proceduralno
 
  ```
 $hostname = localhost;
@@ -79,7 +42,7 @@ $result = mysqli_execute_query($connection, $query, $param);
 
 
 
-### Spajanje na bazu (i dohvat podataka) pomoću PDO klase
+## Spajanje na bazu (i dohvat podataka) pomoću PDO klase
 
  ```
 // potrebni podaci
@@ -119,7 +82,7 @@ $result = $statement->fetchAll();
 
 
 
-### Metoda za pripremu sql upita u pdo
+## Metoda za pripremu sql upita u pdo
 
 ```
 // koristimo pripremu SQL upita kako bismo spriječili SQL injekciju i omogućili efikasno izvršavanje upita s parametrima
@@ -128,7 +91,7 @@ $pdo->prepare($sql);
 
 
 
-### Web forme koje se koriste za slanje podataka server (GET i POST)
+## Web forme koje se koriste za slanje podataka server (GET i POST)
 
 Dvije najčešće web forme koje se koriste za slanje podataka iz web forme na server su GET i POST metode. Obje metode su dio HTML form elementa, ali se razlikuju u načinu na koji šalju podatke i u njihovim prednostima i nedostacima.
 
@@ -138,7 +101,7 @@ POST metoda šalje podatke unutar tijela HTTP zahtjeva, znači da podaci nisu vi
 
 
 
-### HTML forma
+## HTML forma
 
 - napraviti login formu koja će slati username i password sa POST metodom (potreban je i submit button)
  
@@ -222,7 +185,7 @@ POST metoda šalje podatke unutar tijela HTTP zahtjeva, znači da podaci nisu vi
 
 
 
-### Sortiranje
+## Sortiranje
 
 ```
 // funkcije za sortiranje nizova:
@@ -249,7 +212,7 @@ natcasesort() - osjetljivo na velika i mala slova
 
 
 
-### .txt .csv .json datoteke
+## .txt .csv .json datoteke
 
 Kreiranje direktorija, otvaranje, čitanje i pisanje u datoteke
 
@@ -365,7 +328,7 @@ if (file_put_contents($jsonFile, $jsonData, FILE_APPEND) === false) {  // zapisu
 
 
 
-### Ispravna sintaksa za pokretanje php skripte
+## Ispravna sintaksa za pokretanje php skripte
 
 ```
 // početak PHP koda
@@ -377,7 +340,7 @@ if (file_put_contents($jsonFile, $jsonData, FILE_APPEND) === false) {  // zapisu
 
 
 
-### PHP sesije ($_SESSION)
+## PHP sesije ($_SESSION)
 
 Sesije omogućuju pohranu podataka između različitih stranica i zahtjeva, koriste se za pohranu podataka o korisnicima, preferencije i druge informacije koje želite pratiti dok korisnik navigira kroz vašu web stranicu.
 Uništavaju se prilikom zatvaranja preglednika, ako od posljednjeg zahtjeva prođe određeno vrijeme (24 minute za PHP), sesija će se automatski zatvoriti.
@@ -396,7 +359,7 @@ session_destroy();  // uništava samu sesiju
 
 
 
-### Kolačić (cookie) u PHP-u
+## Kolačić (cookie) u PHP-u
 
 ```
 // postavljanje (sa trajanjem 1 sat)
@@ -408,7 +371,7 @@ setcookie("user", "", time() - 3600, "/");
 
 
 
-### PHP tipovi podataka
+## PHP tipovi podataka
 
 ```
 skalarni tipovi podataka - brojčani (int, float), tekstualni (string), boolean (true ili false)
@@ -418,21 +381,21 @@ specijalni tipovi - NULL, resource (primjerice konekcije na baze podataka ili da
 
 
 
-### Objekt u PHP-u
+## Objekt u PHP-u
 
 U PHP-u, objekt je tip podataka koji pripada objektno orijentiranom programiranju (OOP). 
 Objekt u PHP-u je kombinacija podataka (svojstava) i metoda (funkcija) koji djeluju na tim podacima. 
 
 
 
-### Varijable
+## Varijable
 
 Varijabla je imenovana memorijska lokacija koja sadrži podatke kojima je moguće manipulirati izvođenjem programa.
 Lokalne varijable su deklarirane u funkciji, globalnim varijablama nije moguće direktno pristupiti unutar funkcije (mora im se dodati GLOBAL ili ih predati prilikom poziva funkcije), statične varijable (oznaka STATIC) zadržavaju svoju vrijednost i nakon izlaska iz funkcije, superglobalne varijable su dostupne bilo gdje unutar aplikacije (primjer $_SERVER).
 
 
 
-### echo bool tipa podataka
+## echo bool tipa podataka
 
 ```
 echo true;  // ispisuje 1
@@ -441,7 +404,7 @@ echo false;  // '' (prazan string / ne ispisuje ništa)
 
 
 
-### Poziv po referenci
+## Poziv po referenci
 
 Vrijednosti se funkciji mogu proslijediti kao statične vrijednosti (direktan upis neke vrijednosti, primjerice brojke kao argumenta prilikom poziva funkcije), kao vrijednosti iz varijabli (poziv po vrijednosti) ili po referenci.
 Poziv po vrijednosti - funkcija radi s kopijom varijable i sve promjene unutar funkcije ne utječu na originalnu varijablu.
@@ -465,7 +428,7 @@ echo $number; // nakon poziva funkcije ispisuje 15
 
 
 
-### Programske petlje (foreach, for, while)
+## Programske petlje (foreach, for, while)
 
 ```
 - programske petlje su strukture koje omogućavaju da se dijelovi programa/koda izvrše, odnosno iteriraju više puta (zadani broj ili sve dok je određeni uvjet ispunjen), te na taj način ubrzavaju/automatiziraju obradu podataka (izbjegavamo repetitivno ponavljanje koda), posebno su korisne kada treba obaviti akciju nad nizom elemenata (primjerice prilikom pretraživanja lista, polja i slično).
@@ -473,7 +436,7 @@ echo $number; // nakon poziva funkcije ispisuje 15
 
 
 
-### do-while petlja
+## do-while petlja
 
 ```
 <?php
@@ -488,7 +451,7 @@ echo $number; // nakon poziva funkcije ispisuje 15
 
 
 
-### spl_autoload_register
+## spl_autoload_register
 
 Funkcija `spl_autoload_register()` pojednostavljuje proces uključivanja datoteka klasa u PHP-u, ona se koristi za definiranje i registraciju autoload funkcije, te zajedno sa njom čini mehanizam koji automatski učitava PHP klase kada su potrebne, bez potrebe za ručnim uključivanjem ili zahtijevanjem datoteka s klasama.
 
@@ -501,13 +464,13 @@ spl_autoload_register(function ($class) {
 
 
 
-### Imenski prostori (namespace) u PHP datoteci
+## Imenski prostori (namespace) u PHP datoteci
 
 U istoj PHP datoteci može se definirati više imenskih prostora (namespace). Svaki imenski prostor omogućuje organizaciju koda u zasebne logičke cjeline, čime se smanjuje mogućnost konflikta između klasa, funkcija i varijabli s istim imenom, ali različitim kontekstima.
 
 
 
-### OOP $this-> i self::
+## OOP $this-> i self::
 
 ```
 $this - odnosi se na trenutnu instancu klase (objekt), koristi se za pristupanje svojstvima i metodama koje nisu označene kao static
@@ -521,7 +484,7 @@ self - odnosi se na trenutnu klasu (ne na instancu klase/objekt) i koristi se za
 
 
 
-### Pretvaranje funkcije zbroj u klasu
+## Pretvaranje funkcije zbroj u klasu
 
 - u klasi kroz konstruktor definiramo dvije privatne varijable, numberA i numberB, dvije public metode za dohvaćanje/promjenu njihovih vrijednosti (settere), te public funkciju za zbrajanje
  
@@ -568,7 +531,7 @@ $zbroj->sum(4, 5);  // vratit će 9
 
 
 
-### Klasa kalkulator
+## Klasa kalkulator
 
  ```
  <?php
@@ -646,7 +609,7 @@ try {
 
 
 
-### array_map()
+## array_map()
 
 - funkcija array_map() kao prvi argument može primiti callback ili anonimnu funkciju, a kao ostale argumente prima jedno ili više polja vrijednosti (koje onda redom koristi u funkciji danoj sa prvim argumentom)
  
@@ -681,14 +644,14 @@ https://www.php.net/manual/en/function.array-map.php
 
 
 
-### Svrha kontrole verzija (varsion control, primjerice Git) u razvoju softvera
+## Svrha kontrole verzija (varsion control, primjerice Git) u razvoju softvera
 - praćenje promjena koda tijekom vremena - omogućava programerima da vide tko je napravio koju promjenu, kada i zašto
 - dijeljenje koda s drugima - omogućava pristup najnovijoj verziji koda praktično u svakom trenutku
 - suradnja na kodu s drugima - omogućuje više programera da istovremeno rade na istom projektu, kombinirajući njihove promjene bez rizika od gubitka podataka ili konflikta
 
 
 
-### Git naredbe
+## Git naredbe
  
  ```
 // inicijalizacija 
@@ -774,7 +737,7 @@ git branch -d nova
 
 
 
-### Prikaz, kreiranje, brisanje direktorija i datoteka u Linux terminalu
+## Prikaz, kreiranje, brisanje direktorija i datoteka u Linux terminalu
 
  ```
 // prikaz svih datoteka i poddirektorija unutar navedenog direktorija, -al određuje prikaz svih elemenata (i onih skrivenih - a kao all), i to poredanih u listu sa prikazom ovlasti (l kao list)  
@@ -804,7 +767,7 @@ vim ime_datoteke
 
 
 
-### Zapisivanje u file kroz Linux terminal
+## Zapisivanje u file kroz Linux terminal
 
  ```
 // sa operatorom >> i naredbom echo dodajemo tekst kao novu liniju na kraj datoteke 
@@ -821,7 +784,7 @@ https://www.baeldung.com/linux/file-append-text-no-redirection
 
 
 
-### Provjera PHP verzije u Linux terminalu
+## Provjera PHP verzije u Linux terminalu
 
  ```
 php -v
@@ -837,7 +800,7 @@ php --ini
 
 
 
-### Ostale Linux terminal naredbe
+## Ostale Linux terminal naredbe
 
  ```
 // prikaz putanje direktorija u kojem se trenutno nalazimo 
@@ -916,7 +879,7 @@ exit
 
 
 
-### Git/Linux zadatak
+## Git/Linux zadatak
 
 ```
 1. Kreirajte datoteku `app.php` i dodajte u nju liniju teksta sa echo naredbom:
@@ -946,7 +909,7 @@ git merge feature-remove-echo  # merge u master granu
 
 
 
-### Kardinalnost "jedan i samo jedan"
+## Kardinalnost "jedan i samo jedan"
 
 ```
 Kardinalnost "jedan i samo jedan" u kontekstu baza podataka označava odnos između dviju tablica gdje je svaki zapis u jednoj tablici povezan s jednim i samo jednim zapisom u drugoj tablici.
@@ -955,7 +918,7 @@ Ovaj tip odnosa najčešće se prikazuje pomoću "1:1" (jedan na jedan).
 
 
 
-### MySQL relacije (1-1, 1-n, n-m)
+## MySQL relacije (1-1, 1-n, n-m)
 
 Entiteti su osnovni elementi, objekti koji se pohranjuju u nekoj bazi podataka, o kojima želimo čuvati informacije. Za svaku vrstu entiteta koji će se pohranjivati u bazu podataka stvara se odgovarajuća tablica koja će sadržavati podatke o entitetu.
 Relacije su odnosi, veze između entiteta koje čuvamo u bazi podataka (one mogu biti 1-1, 1-n, n-m).
@@ -969,7 +932,7 @@ Relacije su odnosi, veze između entiteta koje čuvamo u bazi podataka (one mogu
 
 
 
-### Foreign key (vanjski ključ) u SQL-u
+## Foreign key (vanjski ključ) u SQL-u
 
 ```
 Ograničenje foreign key (vanjski ključ) u SQL-u osigurava referentni integritet između dvije tablice.
@@ -978,7 +941,7 @@ To znači da vanjski ključ veže jednu tablicu (koja sadrži vanjski ključ) za
 
 
 
-### Normalizacija
+## Normalizacija
 
 ```
 MySQL normalizacija odnosi se na proces organiziranja podataka u relacijskim bazama kako bi se smanjila redundantnost i poboljšao integritet podataka te učinkovitosti upita.
@@ -992,7 +955,7 @@ Normalne forme
 
 
 
-### SQL pretvaranje entiteta u relacije
+## SQL pretvaranje entiteta u relacije
 
 - zaposlenik može tokom vremena odraditi više poslova, a na svakom poslu može raditi više zaposlenika
 
@@ -1007,7 +970,7 @@ Normalne forme
 
 
 
-### Primjer kreiranja korisnika i ograničavanja na čitanje iz baze podataka
+## Primjer kreiranja korisnika i ograničavanja na čitanje iz baze podataka
 
 ```
 -- kreiranje korisnika
@@ -1028,13 +991,13 @@ SHOW GRANTS FOR 'user'@'localhost';
 
 
 
-### SQL transakcija
+## SQL transakcija
 
 SQL transakcija je skup SQL operacija (naredbi) koje se izvršavaju kao jedna cjelina. Sve operacije unutar transakcije moraju biti uspješno izvršene kako bi se promjene bile trajno sačuvane u bazi podataka. Ako bilo koja operacija u okviru transakcije ne uspije, cijela transakcija može biti poništena (tzv. rollback), čime se baza podataka vraća u prethodno stanje, kao da transakcija nikada nije bila izvršena.
 
 
 
-### Procedura i funkcija za trgovinu
+## Procedura i funkcija za trgovinu
 
 Za ovaj zadatak, prvo ćemo kreirati tablicu za proizvode u trgovini, zatim ćemo implementirati pohranjenu proceduru koja ažurira količinu zaliha kada se proda neki artikl, te funkciju koja vraća trenutačnu količinu proizvoda na zalihi.
 
@@ -1140,7 +1103,7 @@ SELECT trenutna_kolicina(1);
 
 
 
-### SQL transakcija, procedura i funkcija za banku
+## SQL transakcija, procedura i funkcija za banku
 
 ```
 -- kreiramo novu bazu podataka
@@ -1310,13 +1273,13 @@ SELECT get_balance('HR4890942042048');
 
 
 
-### SQL migracije
+## SQL migracije
 
 - prijenos sheme (database schema migration - tablice, indeksi, veze) i podataka (sql data migration - podaci, retci) iz jedne u drugu (početne u ciljnu) bazu
 
 
 
-### Laravel migracije
+## Laravel migracije
 
 - služe za definiranje sheme baze podataka određene aplikacije (kreiranje i modificiranje tablica/entiteta i njenih atributa) sa ciljem olakšavanja prijenosa i rada u timu (primjerice laka dostupnost najnovije verzije baze i u slučaju promjena od strane drugog člana tima koji radi na istoj aplikaciji)
  
@@ -1335,7 +1298,7 @@ php artisan migrate:fresh --seed
 
 
 
-### Laravel MVC arhitektura
+## Laravel MVC arhitektura
 
 Laravel koristi MVC arhitekturu za jasno odvajanje odgovornosti i bolju organizaciju koda, čineći razvoj aplikacija lakšim i održivijim.
 
@@ -1347,7 +1310,7 @@ Controller (C) - odgovoran za logiku aplikacije, povezuje modele i prikaze
 
 
 
-### Laravel $fillable i $guarded
+## Laravel $fillable i $guarded
 
 U Laravelu, $fillable i $guarded su dva svojstva koja služe za zaštitu modela od napada poznatog kao masovni unos (mass assignment). Ova svojstva omogućuju kontrolu nad tim koji atributi modela mogu biti masovno dodani ili ažurirani, čime se povećava sigurnost aplikacije.
 
@@ -1356,7 +1319,7 @@ Svojstvo $guarded je suprotno od $fillable. Umjesto da se navode dopuštena polj
 
 
 
-### Laravel metode za dohvat podataka iz baze
+## Laravel metode za dohvat podataka iz baze
 
 | Metoda   | Opis                                                       | Vraća                             |
 |----------|------------------------------------------------------------|-----------------------------------|
@@ -1374,7 +1337,7 @@ find() - kada imate primarni ključ (ID) i želite dohvatiti specifičan zapis (
 
 
 
-### Laravel funkcije za prosljeđivanje podataka iz controllera u view
+## Laravel funkcije za prosljeđivanje podataka iz controllera u view
 
 ```
 view('view_name', $data) - osnovna metoda za prosljeđivanje podataka
@@ -1388,7 +1351,7 @@ session() - za podatke koji se čuvaju u sesiji između zahtjeva
 
 
 
-### Blade {{ }} sintaksa
+## Blade {{ }} sintaksa
 
 {{ }} u Bladeu koristi se za echo (ispisivanje) podataka/varijabli
 
@@ -1399,7 +1362,7 @@ session() - za podatke koji se čuvaju u sesiji između zahtjeva
 
 
 
-### Laravel Dusk - click()
+## Laravel Dusk - click()
 
 ```
 Laravel Dusk je alat za testiranje koji omogućava interakciju sa web stranicama imitiranjem stvarnog korisnika.
@@ -1408,7 +1371,7 @@ Njegova funkcija click() koristi se za simuliranje klika na HTML element na stra
 
 
 
-### PHP Unit config xml
+## PHP Unit config xml
 
 - napraviti PHPUnit config xml koji će napraviti include/exclude određenih datoteka
  
@@ -1467,7 +1430,7 @@ https://laraveldaily.com/lesson/testing-laravel/db-configuration-refreshdatabase
 
 
 
-### Continuous integration
+## Continuous integration
 
  ```
 - CI/CD pipeline (continuous integration/delivery/deployment) uvodi stalnu automatizaciju i kontinuirani nadzor tokom kompletnog životnog ciklusa aplikacije, od faza integracije i testiranja do isporuke i primjene
@@ -1484,7 +1447,7 @@ https://laraveldaily.com/lesson/testing-laravel/db-configuration-refreshdatabase
 
 
 
-### Završno testiranje projekta
+## Završno testiranje projekta
 
 Završno testiranje projekta je ključni korak u razvoju softverskog proizvoda, jer omogućava provjeru svih funkcionalnosti, sigurnosnih mjera, performansi i korisničkog iskustva prije nego što projekt postane dostupan krajnjim korisnicima.
 
@@ -1502,7 +1465,7 @@ Završno testiranje projekta je ključni korak u razvoju softverskog proizvoda, 
 
 
 
-### Laravel kontroler i auth middleware (bearer token, API JSON response sa status kodom)
+## Laravel kontroler i auth middleware (bearer token, API JSON response sa status kodom)
 
 - napravljeno prema ovim primjerima (ovo je u biti jednostavna simulacija Laravel Passport/Sanctum)
  ```
@@ -1640,7 +1603,7 @@ Route:controller(AuthController::class)->group(function () {
  
 
 
-### Spajanje domene s web poslužiteljem (Apache) na Linux Ubuntu
+## Spajanje domene s web poslužiteljem (Apache) na Linux Ubuntu
 
 ```
 1. Kupimo domenu od nekog pružatelja usluga ili registrara za domene (primjerice Hertzner, Cloudflare) te opcionalno kupimo i fizički poslužitelj, host (recimo VPS).
@@ -1724,7 +1687,7 @@ sudo nano /etc/apache2/sites-available/ime_domene.conf
 
 
 
-### Instalacija wsl i ubuntu na virtualnim Windowsima
+## Instalacija wsl i ubuntu na virtualnim Windowsima
 
 - upute za instalaciju wsl i Ubuntu iz command prompta (Windows+R, pa upišite cmd, te potom ctrl+shift+enter da bi ga otvorili sa administratorskim ovlastima)
 
@@ -1756,7 +1719,7 @@ setup.sh
 
 
 
-### Instaliranje Laravel projekta pomoću Composera
+## Instaliranje Laravel projekta pomoću Composera
 
 - s obzirom da već imamo instalirane php i composer (ako smo instalirali LAMP stack pomoću setup.sh datoteke), Laravel možemo instalirati ovom naredbom:
 
@@ -1778,7 +1741,7 @@ laravel new ime_aplikacije
 
 
 
-### Postavljanje aplikacije na server
+## Postavljanje aplikacije na server
 
 - ulogirajte se na udaljeni server sa danim podacima (username i password)
 
@@ -1908,5 +1871,3 @@ php artisan migrate --seed
 ```
 192.168.1.225:8000
 ```
-
-
