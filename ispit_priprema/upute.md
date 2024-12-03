@@ -6,7 +6,7 @@
 
 - upute za teže zadatke ćete dobiti u pdf obliku na Downloads linku ispod teksta zadatka (ako dobijete zadatak sa slikom - klik na nju za povećanje)
 
-- način za provjeru rješenja - prepisati pitanje iz testne aplikacije u VS Code pa potom provjeriti sa AI kroz web browser (prepisivanje u VS Code jer ćete izuzev dodatnih pdf datoteka sa objašnjenjima imati problema sa direktnim copy/paste iz ispitne aplikacije u web browser - klik u prazno prebacuje na prethodno/iduće pitanje)
+- način za provjeru rješenja - kopirati ili prepisati pitanje iz testne aplikacije u VS Code pa potom provjeriti sa AI kroz web browser (opcije - označiti mali dio teksta pa sa SHIFT + strelica dolje odabrati sve što treba i C/P ili označiti sve sa CTRL + A pa C/P)
 
  ```
  // chatgpt
